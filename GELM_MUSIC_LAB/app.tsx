@@ -68,6 +68,61 @@ function makeId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+/* ---------------------------------------------------------
+   UTILIDADES DE ARCHIVOS
+--------------------------------------------------------- */
+
+function safeFileName(name: string) {
+  const cleaned = name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[<>:"/\\|?*\x00-\x1F]/g, "")
+    .replace(/\s+/g, "_")
+    .trim();
+
+  return cleaned || "GELM_LETRA";
+}
+
+function downloadTextFile(name: string, lyrics: string) {
+  if (!lyrics.trim()) {
+    return false;
+  }
+
+  const content = `GELM MUSIC LAB
+GT-GELM
+==============================
+
+${lyrics.trim()}
+
+==============================
+Archivo generado por GELM MUSIC LAB
+`;
+
+  const blob = new Blob(["\uFEFF", content], {
+    type: "text/plain;charset=utf-8",
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = `${safeFileName(name)}.txt`;
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  window.setTimeout(() => {
+    URL.revokeObjectURL(url);
+  }, 1000);
+
+  return true;
+}
+
+/* ---------------------------------------------------------
+   APLICACIÓN
+--------------------------------------------------------- */
+
 function App() {
   const [name, setName] = useState("");
   const [language, setLanguage] = useState("Español");
@@ -108,6 +163,10 @@ function App() {
     .split(/\s+/)
     .filter(Boolean).length;
 
+  /* ---------------------------------------------------------
+     GUARDAR PROYECTO
+  --------------------------------------------------------- */
+
   const saveProject = () => {
     const project: Project = {
       id: makeId(),
@@ -125,6 +184,7 @@ function App() {
     const updated = [project, ...projects].slice(0, 50);
 
     setProjects(updated);
+
     localStorage.setItem(
       "gelm_music_lab_projects",
       JSON.stringify(updated),
@@ -137,6 +197,35 @@ function App() {
       setSavedMessage("");
     }, 3000);
   };
+
+  /* ---------------------------------------------------------
+     DESCARGAR LETRA TXT
+  --------------------------------------------------------- */
+
+  const downloadCurrentLyrics = () => {
+    if (!lyrics.trim()) {
+      setStatus("Escribe la letra antes de descargar el TXT.");
+      return;
+    }
+
+    const ok = downloadTextFile(
+      name.trim() || "GELM_LETRA",
+      lyrics,
+    );
+
+    if (ok) {
+      setSavedMessage("✓ Letra descargada como archivo TXT.");
+      setStatus("Copia de la letra creada correctamente.");
+
+      window.setTimeout(() => {
+        setSavedMessage("");
+      }, 3000);
+    }
+  };
+
+  /* ---------------------------------------------------------
+     LIMPIAR
+  --------------------------------------------------------- */
 
   const clearProject = () => {
     setName("");
@@ -151,6 +240,10 @@ function App() {
     setStatus("Formulario limpio.");
     setSavedMessage("");
   };
+
+  /* ---------------------------------------------------------
+     PREPARAR GENERACIÓN
+  --------------------------------------------------------- */
 
   const prepareGeneration = () => {
     if (!name.trim()) {
@@ -168,6 +261,10 @@ function App() {
     );
   };
 
+  /* ---------------------------------------------------------
+     CARGAR PROYECTO
+  --------------------------------------------------------- */
+
   const loadProject = (project: Project) => {
     setName(project.name);
     setLanguage(project.language);
@@ -183,10 +280,32 @@ function App() {
     setStatus(`Proyecto "${project.name}" cargado.`);
   };
 
+  /* ---------------------------------------------------------
+     DESCARGAR TXT DESDE BIBLIOTECA
+  --------------------------------------------------------- */
+
+  const downloadProjectLyrics = (project: Project) => {
+    const ok = downloadTextFile(project.name, project.lyrics);
+
+    if (ok) {
+      setStatus(`TXT de "${project.name}" descargado correctamente.`);
+      setSavedMessage("✓ Archivo TXT descargado.");
+
+      window.setTimeout(() => {
+        setSavedMessage("");
+      }, 3000);
+    }
+  };
+
+  /* ---------------------------------------------------------
+     ELIMINAR
+  --------------------------------------------------------- */
+
   const deleteProject = (id: string) => {
     const updated = projects.filter((project) => project.id !== id);
 
     setProjects(updated);
+
     localStorage.setItem(
       "gelm_music_lab_projects",
       JSON.stringify(updated),
@@ -194,6 +313,10 @@ function App() {
 
     setStatus("Proyecto eliminado de la biblioteca.");
   };
+
+  /* ---------------------------------------------------------
+     ESTILOS
+  --------------------------------------------------------- */
 
   const inputStyle: React.CSSProperties = {
     width: "100%",
@@ -224,6 +347,10 @@ function App() {
     boxShadow: "0 0 25px rgba(0, 255, 120, 0.07)",
     backdropFilter: "blur(8px)",
   };
+
+  /* ---------------------------------------------------------
+     INTERFAZ
+  --------------------------------------------------------- */
 
   return (
     <main
@@ -280,7 +407,7 @@ function App() {
                   fontSize: "13px",
                 }}
               >
-                Laboratorio musical local · GT-GELM · V0.4
+                Laboratorio musical · GT-GELM · V0.4
               </div>
             </div>
 
@@ -328,7 +455,10 @@ function App() {
                 }}
               >
                 <div>
-                  <label style={labelStyle}>NOMBRE DE LA CANCIÓN</label>
+                  <label style={labelStyle}>
+                    NOMBRE DE LA CANCIÓN
+                  </label>
+
                   <input
                     value={name}
                     onChange={(event) => setName(event.target.value)}
@@ -338,10 +468,15 @@ function App() {
                 </div>
 
                 <div>
-                  <label style={labelStyle}>IDIOMA VOCAL</label>
+                  <label style={labelStyle}>
+                    IDIOMA VOCAL
+                  </label>
+
                   <select
                     value={language}
-                    onChange={(event) => setLanguage(event.target.value)}
+                    onChange={(event) =>
+                      setLanguage(event.target.value)
+                    }
                     style={inputStyle}
                   >
                     <option>Español</option>
@@ -357,7 +492,9 @@ function App() {
               </div>
 
               <div style={{ marginTop: "14px" }}>
-                <label style={labelStyle}>ESTILO / MUSIC CAPTION</label>
+                <label style={labelStyle}>
+                  ESTILO / MUSIC CAPTION
+                </label>
 
                 <textarea
                   value={style}
@@ -372,18 +509,23 @@ function App() {
               </div>
 
               <div style={{ marginTop: "14px" }}>
-                <label style={labelStyle}>LETRA</label>
+                <label style={labelStyle}>
+                  LETRA
+                </label>
 
                 <textarea
                   value={lyrics}
-                  onChange={(event) => setLyrics(event.target.value)}
+                  onChange={(event) =>
+                    setLyrics(event.target.value)
+                  }
                   rows={18}
                   placeholder="Escribe aquí la letra..."
                   style={{
                     ...inputStyle,
                     resize: "vertical",
                     lineHeight: 1.55,
-                    fontFamily: "ui-monospace, SFMono-Regular, Consolas, monospace",
+                    fontFamily:
+                      "ui-monospace, SFMono-Regular, Consolas, monospace",
                   }}
                 />
 
@@ -399,8 +541,10 @@ function App() {
                   }}
                 >
                   <span>{wordCount} palabras</span>
+
                   <span>
-                    Estimación automática: {formatDuration(estimatedDuration)}
+                    Estimación automática:{" "}
+                    {formatDuration(estimatedDuration)}
                   </span>
                 </div>
               </div>
@@ -414,8 +558,15 @@ function App() {
                   marginTop: "14px",
                 }}
               >
-                <div style={{ ...panelStyle, padding: "14px" }}>
-                  <label style={labelStyle}>DURACIÓN</label>
+                <div
+                  style={{
+                    ...panelStyle,
+                    padding: "14px",
+                  }}
+                >
+                  <label style={labelStyle}>
+                    DURACIÓN
+                  </label>
 
                   <label
                     style={{
@@ -434,6 +585,7 @@ function App() {
                         setAutoDuration(event.target.checked)
                       }
                     />
+
                     Automática según la letra
                   </label>
 
@@ -441,10 +593,16 @@ function App() {
                     type="number"
                     min={30}
                     max={480}
-                    value={autoDuration ? estimatedDuration : duration}
+                    value={
+                      autoDuration
+                        ? estimatedDuration
+                        : duration
+                    }
                     disabled={autoDuration}
                     onChange={(event) =>
-                      setDuration(Number(event.target.value))
+                      setDuration(
+                        Number(event.target.value),
+                      )
                     }
                     style={{
                       ...inputStyle,
@@ -463,14 +621,25 @@ function App() {
                   </div>
                 </div>
 
-                <div style={{ ...panelStyle, padding: "14px" }}>
-                  <label style={labelStyle}>BPM</label>
+                <div
+                  style={{
+                    ...panelStyle,
+                    padding: "14px",
+                  }}
+                >
+                  <label style={labelStyle}>
+                    BPM
+                  </label>
+
                   <input
                     value={bpm}
-                    onChange={(event) => setBpm(event.target.value)}
+                    onChange={(event) =>
+                      setBpm(event.target.value)
+                    }
                     placeholder="Auto"
                     style={inputStyle}
                   />
+
                   <div
                     style={{
                       marginTop: "7px",
@@ -482,11 +651,21 @@ function App() {
                   </div>
                 </div>
 
-                <div style={{ ...panelStyle, padding: "14px" }}>
-                  <label style={labelStyle}>TONALIDAD</label>
+                <div
+                  style={{
+                    ...panelStyle,
+                    padding: "14px",
+                  }}
+                >
+                  <label style={labelStyle}>
+                    TONALIDAD
+                  </label>
+
                   <select
                     value={key}
-                    onChange={(event) => setKey(event.target.value)}
+                    onChange={(event) =>
+                      setKey(event.target.value)
+                    }
                     style={inputStyle}
                   >
                     <option>Auto</option>
@@ -500,14 +679,25 @@ function App() {
                   </select>
                 </div>
 
-                <div style={{ ...panelStyle, padding: "14px" }}>
-                  <label style={labelStyle}>SEMILLA</label>
+                <div
+                  style={{
+                    ...panelStyle,
+                    padding: "14px",
+                  }}
+                >
+                  <label style={labelStyle}>
+                    SEMILLA
+                  </label>
+
                   <input
                     value={seed}
-                    onChange={(event) => setSeed(event.target.value)}
+                    onChange={(event) =>
+                      setSeed(event.target.value)
+                    }
                     placeholder="Aleatoria"
                     style={inputStyle}
                   />
+
                   <div
                     style={{
                       marginTop: "7px",
@@ -525,7 +715,8 @@ function App() {
                   marginTop: "16px",
                   padding: "14px",
                   borderRadius: "12px",
-                  border: "1px solid rgba(42,255,133,0.22)",
+                  border:
+                    "1px solid rgba(42,255,133,0.22)",
                   background: "rgba(0,0,0,0.2)",
                 }}
               >
@@ -539,7 +730,12 @@ function App() {
                   ESTADO DEL MOTOR
                 </div>
 
-                <div style={{ color: "#c6efd3", fontSize: "13px" }}>
+                <div
+                  style={{
+                    color: "#c6efd3",
+                    fontSize: "13px",
+                  }}
+                >
                   {status}
                 </div>
               </div>
@@ -566,6 +762,14 @@ function App() {
                   style={buttonStyle(false)}
                 >
                   💾 GUARDAR BORRADOR
+                </button>
+
+                <button
+                  type="button"
+                  onClick={downloadCurrentLyrics}
+                  style={buttonStyle(false)}
+                >
+                  📄 DESCARGAR TXT
                 </button>
 
                 <button
@@ -656,8 +860,8 @@ function App() {
                 marginBottom: "16px",
               }}
             >
-              Por ahora guarda proyectos y configuraciones. Más adelante aquí
-              estarán también los audios generados.
+              Por ahora guarda proyectos y configuraciones.
+              Más adelante aquí estarán también los audios generados.
             </div>
 
             {projects.length === 0 ? (
@@ -681,7 +885,8 @@ function App() {
                   <article
                     key={project.id}
                     style={{
-                      border: "1px solid rgba(42,255,133,0.2)",
+                      border:
+                        "1px solid rgba(42,255,133,0.2)",
                       borderRadius: "12px",
                       padding: "14px",
                       background: "rgba(0,0,0,0.18)",
@@ -712,8 +917,9 @@ function App() {
                             fontSize: "12px",
                           }}
                         >
-                          {project.language} · {formatDuration(project.duration)}{" "}
-                          · {project.createdAt}
+                          {project.language} ·{" "}
+                          {formatDuration(project.duration)} ·{" "}
+                          {project.createdAt}
                         </div>
                       </div>
 
@@ -721,11 +927,14 @@ function App() {
                         style={{
                           display: "flex",
                           gap: "8px",
+                          flexWrap: "wrap",
                         }}
                       >
                         <button
                           type="button"
-                          onClick={() => loadProject(project)}
+                          onClick={() =>
+                            loadProject(project)
+                          }
                           style={buttonStyle(false)}
                         >
                           Abrir
@@ -733,7 +942,19 @@ function App() {
 
                         <button
                           type="button"
-                          onClick={() => deleteProject(project.id)}
+                          onClick={() =>
+                            downloadProjectLyrics(project)
+                          }
+                          style={buttonStyle(false)}
+                        >
+                          📄 TXT
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            deleteProject(project.id)
+                          }
                           style={buttonStyle(false)}
                         >
                           Eliminar
@@ -762,6 +983,10 @@ function App() {
   );
 }
 
+/* ---------------------------------------------------------
+   BOTONES
+--------------------------------------------------------- */
+
 function buttonStyle(primary: boolean): React.CSSProperties {
   return {
     border: primary
@@ -769,8 +994,12 @@ function buttonStyle(primary: boolean): React.CSSProperties {
       : "1px solid rgba(70,220,130,0.35)",
     borderRadius: "10px",
     padding: "11px 15px",
-    background: primary ? "#32f58b" : "rgba(5,35,21,0.8)",
-    color: primary ? "#001b0d" : "#dfffea",
+    background: primary
+      ? "#32f58b"
+      : "rgba(5,35,21,0.8)",
+    color: primary
+      ? "#001b0d"
+      : "#dfffea",
     fontWeight: 800,
     cursor: "pointer",
     boxShadow: primary
