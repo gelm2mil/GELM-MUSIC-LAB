@@ -1,194 +1,782 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const ASSET = "https://ext.same-assets.com/195461215";
-
-function Icon({ name, size = 18 }: { name: "play" | "pause" | "arrow" | "plus" | "menu" | "close" | "check" | "chevron" | "spark"; size?: number }) {
-  const paths = {
-    play: <path d="m8 5 11 7-11 7V5Z" fill="currentColor" />,
-    pause: <><path d="M8 5h3v14H8z" fill="currentColor"/><path d="M15 5h3v14h-3z" fill="currentColor"/></>,
-    arrow: <><path d="M5 12h14"/><path d="m14 7 5 5-5 5"/></>,
-    plus: <><path d="M12 5v14"/><path d="M5 12h14"/></>,
-    menu: <><path d="M4 8h16"/><path d="M4 16h16"/></>,
-    close: <><path d="m6 6 12 12"/><path d="m18 6-12 12"/></>,
-    check: <path d="m5 12 4 4L19 6"/>,
-    chevron: <path d="m8 10 4 4 4-4"/>,
-    spark: <path d="m12 3 1.4 4.1L17 9l-3.6 1.9L12 15l-1.4-4.1L7 9l3.6-1.9L12 3Z"/>,
-  };
-  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>;
-}
-
-const tracks = [
-  { title: "1nes and zer0s", artist: "INJURY", plays: "528K", art: `${ASSET}/3963228610.webp`, tone: "rust" },
-  { title: "deadstar", artist: "madebyanubis", plays: "371K", art: `${ASSET}/3573864744.webp`, tone: "cream" },
-  { title: "Stay or Leave", artist: "M.F[T.O] Beats", plays: "254K", art: `${ASSET}/4277065667.jpeg`, tone: "amber" },
-  { title: "Dancing With My Eyes Closed", artist: "Raymond", plays: "384K", art: `${ASSET}/2107761695.jpeg`, tone: "red" },
-  { title: "pick [n]one", artist: "MC Escher", plays: "392K", art: `${ASSET}/3916462203.jpeg`, tone: "gold" },
-  { title: "Porch Light On", artist: "kealix", plays: "463K", art: `${ASSET}/971927431.webp`, tone: "tan" },
-];
-
-const features = [
-  { kicker: "10 free songs, daily", text: "Turn any moment into customized music instantly—from your commute to inside jokes. Express what words can't.", art: `${ASSET}/2932514276.png` },
-  { kicker: "Free AI music generator", text: "Discover what's possible when anyone can make music. Explore millions of songs, remixes, jokes, and raw emotion.", art: `${ASSET}/3028591071.png` },
-  { kicker: "Share it with the world", text: "Make music that matters to you, then share it with people who'll feel it too.", art: `${ASSET}/4026718836.png` },
-];
-
-const planDetails = {
-  Free: ["Access to our free models", "50 credits per day", "Standard features only", "Upload up to 8 min of audio", "Shared creation queue"],
-  Pro: ["Access to our best models", "2,500 credits per month", "20 song downloads per month", "Commercial use rights", "Standard + Pro features", "Priority queue; up to 10 songs at once"],
-  Premier: ["Access to Suno Studio", "10,000 credits per month", "60 song downloads per month", "Commercial use rights", "Advanced stem separation", "Early access to new features"],
+type Project = {
+  id: string;
+  name: string;
+  language: string;
+  style: string;
+  lyrics: string;
+  duration: number;
+  bpm: string;
+  key: string;
+  seed: string;
+  createdAt: string;
 };
 
-const faqs = [
-  ["What makes Suno different from other AI music generators?", "Most AI music generators produce short instrumental loops. Suno helps you create complete, original songs—vocals, lyrics, and full production—from a single text prompt in under a minute, across every genre."],
-  ["How do I make a song with Suno?", "Describe the song you want: genre, mood, theme, or your own lyrics, then hit Create. From there you can regenerate, extend, or refine your track."],
-  ["Do I need music experience to use Suno?", "No experience needed. Suno is built for everyone, from people making music for the first time to working songwriters and producers."],
-  ["Can AI really create a full song?", "Yes. Start with a genre, mood, or idea and build a full track with vocals, lyrics, instrumentation, and production."],
-  ["Is Suno free to use?", "Yes. The free tier lets you create songs daily, with paid plans available for more credits, advanced tools, and commercial rights."],
-];
+const BANNER =
+  "https://gelm2mil.github.io/GT-GELM/img/banner-principal-gtgelm.png";
+
+const DEFAULT_STYLE =
+  "Guatemalan folk-pop, emotional historical storytelling, warm acoustic guitar, traditional marimba accents, subtle native flute, organic percussion, warm orchestral strings, expressive clear male lead vocals, intimate verses, uplifting communal chorus, respectful cultural atmosphere, cinematic but natural production, medium tempo, vocals front and center, no heavy metal, no hard rock, no screaming, no distorted guitars";
+
+const DEFAULT_LYRICS = `[INTRO]
+
+Guatemala...
+tierra de muchas voces,
+tierra de muchas memorias.
+
+[VERSE 1]
+
+Escribe aquí la primera parte de tu canción.
+
+[CHORUS]
+
+Escribe aquí el coro.
+
+[VERSE 2]
+
+Continúa aquí la historia.
+
+[FINAL CHORUS]
+
+Cierra aquí tu canción.`;
+
+function formatDuration(seconds: number) {
+  const safe = Math.max(0, Math.round(seconds));
+  const minutes = Math.floor(safe / 60);
+  const secs = safe % 60;
+
+  return `${minutes}:${secs.toString().padStart(2, "0")}`;
+}
+
+function estimateDuration(lyrics: string) {
+  const words = lyrics
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+
+  if (!words) return 60;
+
+  // Estimación aproximada para planificación.
+  // El motor real podrá producir una duración diferente.
+  const estimated = Math.round(words / 2.25);
+
+  return Math.min(480, Math.max(30, estimated));
+}
+
+function makeId() {
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
 
 function App() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [playing, setPlaying] = useState<number | null>(null);
-  const [yearly, setYearly] = useState(true);
-  const [openFaq, setOpenFaq] = useState(0);
-  const [promptIndex, setPromptIndex] = useState(0);
-  const prompts = ["quitting your job", "dancing through heartbreak", "a midnight drive", "your best friend's wedding"];
+  const [name, setName] = useState("");
+  const [language, setLanguage] = useState("Español");
+  const [style, setStyle] = useState(DEFAULT_STYLE);
+  const [lyrics, setLyrics] = useState("");
+  const [autoDuration, setAutoDuration] = useState(true);
+  const [duration, setDuration] = useState(180);
+  const [bpm, setBpm] = useState("");
+  const [key, setKey] = useState("Auto");
+  const [seed, setSeed] = useState("Aleatoria");
+
+  const [activeTab, setActiveTab] = useState<"crear" | "biblioteca">("crear");
+  const [status, setStatus] = useState("Listo para configurar.");
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [savedMessage, setSavedMessage] = useState("");
 
   useEffect(() => {
-    const timer = window.setInterval(() => setPromptIndex((value) => (value + 1) % prompts.length), 2800);
-    return () => window.clearInterval(timer);
+    const saved = localStorage.getItem("gelm_music_lab_projects");
+
+    if (!saved) return;
+
+    try {
+      setProjects(JSON.parse(saved));
+    } catch {
+      localStorage.removeItem("gelm_music_lab_projects");
+    }
   }, []);
 
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    setMobileOpen(false);
+  const estimatedDuration = useMemo(
+    () => estimateDuration(lyrics),
+    [lyrics],
+  );
+
+  const finalDuration = autoDuration ? estimatedDuration : duration;
+
+  const wordCount = lyrics
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+
+  const saveProject = () => {
+    const project: Project = {
+      id: makeId(),
+      name: name.trim() || "Sin nombre",
+      language,
+      style,
+      lyrics,
+      duration: finalDuration,
+      bpm,
+      key,
+      seed,
+      createdAt: new Date().toLocaleString("es-GT"),
+    };
+
+    const updated = [project, ...projects].slice(0, 50);
+
+    setProjects(updated);
+    localStorage.setItem(
+      "gelm_music_lab_projects",
+      JSON.stringify(updated),
+    );
+
+    setSavedMessage("✓ Proyecto guardado en este navegador.");
+    setStatus("Borrador guardado correctamente.");
+
+    window.setTimeout(() => {
+      setSavedMessage("");
+    }, 3000);
+  };
+
+  const clearProject = () => {
+    setName("");
+    setLanguage("Español");
+    setStyle(DEFAULT_STYLE);
+    setLyrics("");
+    setAutoDuration(true);
+    setDuration(180);
+    setBpm("");
+    setKey("Auto");
+    setSeed("Aleatoria");
+    setStatus("Formulario limpio.");
+    setSavedMessage("");
+  };
+
+  const prepareGeneration = () => {
+    if (!name.trim()) {
+      setStatus("Escribe primero el nombre de la canción.");
+      return;
+    }
+
+    if (!lyrics.trim()) {
+      setStatus("Escribe la letra antes de continuar.");
+      return;
+    }
+
+    setStatus(
+      `Configuración lista: ${formatDuration(finalDuration)}. Motor musical pendiente de conexión.`,
+    );
+  };
+
+  const loadProject = (project: Project) => {
+    setName(project.name);
+    setLanguage(project.language);
+    setStyle(project.style);
+    setLyrics(project.lyrics);
+    setAutoDuration(false);
+    setDuration(project.duration);
+    setBpm(project.bpm);
+    setKey(project.key);
+    setSeed(project.seed);
+
+    setActiveTab("crear");
+    setStatus(`Proyecto "${project.name}" cargado.`);
+  };
+
+  const deleteProject = (id: string) => {
+    const updated = projects.filter((project) => project.id !== id);
+
+    setProjects(updated);
+    localStorage.setItem(
+      "gelm_music_lab_projects",
+      JSON.stringify(updated),
+    );
+
+    setStatus("Proyecto eliminado de la biblioteca.");
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    boxSizing: "border-box",
+    background: "rgba(2, 18, 11, 0.86)",
+    color: "#eafff3",
+    border: "1px solid rgba(42, 255, 133, 0.45)",
+    borderRadius: "10px",
+    padding: "13px 14px",
+    outline: "none",
+    fontSize: "14px",
+  };
+
+  const labelStyle: React.CSSProperties = {
+    display: "block",
+    marginBottom: "8px",
+    fontSize: "12px",
+    fontWeight: 700,
+    color: "#59ff9b",
+    letterSpacing: "0.04em",
+  };
+
+  const panelStyle: React.CSSProperties = {
+    background: "rgba(2, 20, 12, 0.88)",
+    border: "1px solid rgba(42, 255, 133, 0.35)",
+    borderRadius: "16px",
+    padding: "18px",
+    boxShadow: "0 0 25px rgba(0, 255, 120, 0.07)",
+    backdropFilter: "blur(8px)",
   };
 
   return (
-    <main>
-      <section className="hero" id="top">
-        <nav className="nav shell">
-          <button className="wordmark" onClick={() => scrollTo("top")} aria-label="Suno home">Suno</button>
-          <div className={`nav-links ${mobileOpen ? "open" : ""}`}>
-            <button onClick={() => scrollTo("features")}>Studio</button>
-            <button onClick={() => scrollTo("pricing")}>Pricing</button>
-            <button onClick={() => scrollTo("footer")}>Careers</button>
+    <main
+      style={{
+        minHeight: "100vh",
+        color: "#edfff4",
+        background:
+          "linear-gradient(rgba(0,12,7,0.82), rgba(0,12,7,0.94)), url(" +
+          BANNER +
+          ") center top / cover fixed",
+        fontFamily:
+          "Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      }}
+    >
+      <div
+        style={{
+          width: "min(1120px, calc(100% - 28px))",
+          margin: "0 auto",
+          padding: "26px 0 50px",
+        }}
+      >
+        <header
+          style={{
+            ...panelStyle,
+            marginBottom: "16px",
+            padding: "22px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "14px",
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  color: "#44ff91",
+                  fontSize: "30px",
+                  fontWeight: 900,
+                  letterSpacing: "0.04em",
+                }}
+              >
+                GELM MUSIC LAB
+              </div>
+
+              <div
+                style={{
+                  marginTop: "5px",
+                  color: "#9affbd",
+                  fontSize: "13px",
+                }}
+              >
+                Laboratorio musical local · GT-GELM · V0.4
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                gap: "8px",
+                flexWrap: "wrap",
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => setActiveTab("crear")}
+                style={{
+                  ...buttonStyle(true),
+                  opacity: activeTab === "crear" ? 1 : 0.72,
+                }}
+              >
+                🎵 Crear
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab("biblioteca")}
+                style={{
+                  ...buttonStyle(false),
+                  opacity: activeTab === "biblioteca" ? 1 : 0.72,
+                }}
+              >
+                📚 Biblioteca ({projects.length})
+              </button>
+            </div>
           </div>
-          <button className="nav-cta" onClick={() => scrollTo("pricing")}>Make a song <Icon name="arrow" /></button>
-          <button className="mobile-menu" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle navigation"><Icon name={mobileOpen ? "close" : "menu"} size={24} /></button>
-        </nav>
+        </header>
 
-        <div className="hero-track hero-track-left">
-          <img src={tracks[0].art} alt="1nes and zer0s cover" />
-          <button onClick={() => setPlaying(playing === 0 ? null : 0)}><Icon name={playing === 0 ? "pause" : "play"} size={15}/></button>
-          <span><strong>{tracks[0].title}</strong>{tracks[0].artist}</span>
-        </div>
-        <div className="hero-track hero-track-right">
-          <img src={tracks[1].art} alt="deadstar cover" />
-          <button onClick={() => setPlaying(playing === 1 ? null : 1)}><Icon name={playing === 1 ? "pause" : "play"} size={15}/></button>
-          <span><strong>{tracks[1].title}</strong>{tracks[1].artist}</span>
-        </div>
+        {activeTab === "crear" ? (
+          <>
+            <section style={panelStyle}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns:
+                    "repeat(auto-fit, minmax(240px, 1fr))",
+                  gap: "14px",
+                }}
+              >
+                <div>
+                  <label style={labelStyle}>NOMBRE DE LA CANCIÓN</label>
+                  <input
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder="Ej. LA VOZ XINKA"
+                    style={inputStyle}
+                  />
+                </div>
 
-        <div className="hero-copy shell">
-          <p className="eyebrow">Ideas become music</p>
-          <h1>Make a <em>house song</em><br />about <span key={promptIndex}>{prompts[promptIndex]}</span></h1>
-          <p className="hero-sub">Start with a simple prompt or dive into our pro editing tools.<br/>Your next track is just a step away.</p>
-          <button className="primary-btn" onClick={() => scrollTo("features")}><Icon name="spark"/> Start creating <Icon name="arrow"/></button>
-        </div>
-        <div className="scroll-note">Scroll to discover <span>↓</span></div>
-      </section>
+                <div>
+                  <label style={labelStyle}>IDIOMA VOCAL</label>
+                  <select
+                    value={language}
+                    onChange={(event) => setLanguage(event.target.value)}
+                    style={inputStyle}
+                  >
+                    <option>Español</option>
+                    <option>K'iche'</option>
+                    <option>Kaqchikel</option>
+                    <option>Q'eqchi'</option>
+                    <option>Mam</option>
+                    <option>Xinka</option>
+                    <option>Garífuna</option>
+                    <option>Instrumental</option>
+                  </select>
+                </div>
+              </div>
 
-      <section className="press">
-        <p>Heard around the world</p>
-        <div className="press-loop">
-          <span>COMPLEX</span><span className="editorial-logo">Rolling Stone</span><span>WIRED</span><span>VARIETY</span><span>billboard</span><span>FORBES</span>
-        </div>
-      </section>
+              <div style={{ marginTop: "14px" }}>
+                <label style={labelStyle}>ESTILO / MUSIC CAPTION</label>
 
-      <section className="quality-section">
-        <div className="section-heading shell">
-          <p className="eyebrow">Your sound, fully realized</p>
-          <h2>Mind blowing<br/><em>song quality</em></h2>
-          <p>Whether you have a melody in your head, lyrics you've written, or just a feeling you want to hear—high-quality music creation is open to all.</p>
-        </div>
-        <div className="track-marquee">
-          <div className="track-row">
-            {tracks.concat(tracks.slice(0, 3)).map((track, index) => (
-              <article className={`song-card ${track.tone}`} key={`${track.title}-${index}`}>
-                <div className="song-art"><img src={track.art} alt="" /><button onClick={() => setPlaying(playing === index ? null : index)} aria-label={`Play ${track.title}`}><Icon name={playing === index ? "pause" : "play"}/></button></div>
-                <div className="song-meta"><div><strong>{track.title}</strong><span>{track.artist}</span></div><small>{track.plays}</small></div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+                <textarea
+                  value={style}
+                  onChange={(event) => setStyle(event.target.value)}
+                  rows={5}
+                  style={{
+                    ...inputStyle,
+                    resize: "vertical",
+                    lineHeight: 1.5,
+                  }}
+                />
+              </div>
 
-      <section className="features-section" id="features">
-        <div className="section-heading centered shell">
-          <p className="eyebrow">Built for every kind of creator</p>
-          <h2>Everything you need<br/>to make music <em>your way</em></h2>
-        </div>
-        <div className="feature-grid shell">
-          {features.map((feature, index) => (
-            <article className={`feature-card feature-${index + 1}`} key={feature.kicker}>
-              <div className="feature-copy"><span>0{index + 1}</span><h3>{feature.kicker}</h3><p>{feature.text}</p></div>
-              <img src={feature.art} alt="" />
-            </article>
-          ))}
-        </div>
-        <div className="capability-list shell">
-          {[
-            ["Granular creation controls", "Steer your style with voices, inspirations, exclusions and detailed creative controls."],
-            ["Commercial rights to your songs", "Songs made as a paid subscriber are yours to use—from videos to a published album."],
-            ["Your complete creative workspace", "A generative audio workstation combining traditional production with AI music creation."],
-            ["Extract stems. Drop into your DAW.", "Export time-aligned WAV stems for Ableton, Logic, or any professional workflow."],
-          ].map(([title, text], index) => <article key={title}><span>0{index + 4}</span><h3>{title}</h3><p>{text}</p><button aria-label={`Learn about ${title}`}><Icon name="arrow"/></button></article>)}
-        </div>
-      </section>
+              <div style={{ marginTop: "14px" }}>
+                <label style={labelStyle}>LETRA</label>
 
-      <section className="pricing-section" id="pricing">
-        <div className="pricing-head shell">
-          <div><p className="eyebrow">Pick your frequency</p><h2>Start making<br/>music <em>for free</em></h2></div>
-          <div className="billing"><button className={!yearly ? "active" : ""} onClick={() => setYearly(false)}>Monthly</button><button className={yearly ? "active" : ""} onClick={() => setYearly(true)}>Yearly <span>save 20%</span></button></div>
-        </div>
-        <div className="plans shell">
-          {(Object.keys(planDetails) as Array<keyof typeof planDetails>).map((name, index) => {
-            const prices = yearly ? ["$0", "$8", "$24"] : ["$0", "$10", "$30"];
-            return <article className={`plan ${name === "Pro" ? "featured" : ""}`} key={name}>
-              {name === "Pro" && <div className="popular">Most popular</div>}
-              <div className="plan-top"><span>0{index + 1}</span><h3>{name}</h3><p>{name === "Free" ? "Our starter plan." : name === "Pro" ? "Our best models and editing tools." : "Maximum credits. Every feature."}</p></div>
-              <div className="price"><strong>{prices[index]}</strong><span>/month</span></div>
-              <button onClick={() => window.alert(`${name} plan selected — this demo does not process sign-ups.`)}>{name === "Free" ? "Start creating" : `Choose ${name}`} <Icon name="arrow"/></button>
-              <ul>{planDetails[name].map((item) => <li key={item}><Icon name="check" size={16}/>{item}</li>)}</ul>
-            </article>;
-          })}
-        </div>
-      </section>
+                <textarea
+                  value={lyrics}
+                  onChange={(event) => setLyrics(event.target.value)}
+                  rows={18}
+                  placeholder="Escribe aquí la letra..."
+                  style={{
+                    ...inputStyle,
+                    resize: "vertical",
+                    lineHeight: 1.55,
+                    fontFamily: "ui-monospace, SFMono-Regular, Consolas, monospace",
+                  }}
+                />
 
-      <section className="app-section">
-        <div className="app-copy shell"><p className="eyebrow">Make music anywhere</p><h2>The #1<br/><em>AI music app</em></h2><p>Discover, create, and share from anywhere—because music has no boundaries.</p><div className="ratings"><div><strong>4.9</strong><span>App Store · 363k+ reviews</span></div><div><strong>4.8</strong><span>Google Play · 653k+ reviews</span></div></div></div>
-        <div className="phone" aria-label="Suno mobile app preview"><div className="phone-bar">9:41 <span>● ●</span></div><h3>Trending now</h3><img src={`${ASSET}/3759767780.png`} alt="Music app artwork"/><div className="phone-player"><button><Icon name="play"/></button><div><strong>Anything you dream</strong><span>Made with Suno</span></div></div></div>
-      </section>
+                <div
+                  style={{
+                    marginTop: "8px",
+                    color: "#8dd9aa",
+                    fontSize: "12px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    gap: "10px",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <span>{wordCount} palabras</span>
+                  <span>
+                    Estimación automática: {formatDuration(estimatedDuration)}
+                  </span>
+                </div>
+              </div>
 
-      <section className="community-section">
-        <div className="section-heading centered shell"><p className="eyebrow">A world of new sound</p><h2>Explore and<br/><em>get inspired</em></h2><p>Join millions of creators making songs, remixing tracks, and sharing music freely.</p></div>
-        <div className="creator-grid shell">
-          {[['3856895542.png','@timbaland'],['3482343672.png','@spellspellspell'],['3659524038.png','@nickfloats'],['1292785304.png','@milesmusickid']].map(([art, name], index) => <article key={name}><img src={`${ASSET}/${art}`} alt=""/><div><span>{name}</span><button onClick={() => setPlaying(playing === 20 + index ? null : 20 + index)}><Icon name={playing === 20 + index ? "pause" : "play"}/></button></div></article>)}
-        </div>
-      </section>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns:
+                    "repeat(auto-fit, minmax(180px, 1fr))",
+                  gap: "14px",
+                  marginTop: "14px",
+                }}
+              >
+                <div style={{ ...panelStyle, padding: "14px" }}>
+                  <label style={labelStyle}>DURACIÓN</label>
 
-      <section className="faq-section shell">
-        <div className="faq-title"><p className="eyebrow">Questions, answered</p><h2>Frequently<br/>asked <em>questions</em></h2><p>Everything you need to know about making music.</p></div>
-        <div className="faq-list">{faqs.map(([question, answer], index) => <article className={openFaq === index ? "open" : ""} key={question}><button onClick={() => setOpenFaq(openFaq === index ? -1 : index)}><span>{question}</span><Icon name={openFaq === index ? "close" : "plus"}/></button><div><p>{answer}</p></div></article>)}</div>
-      </section>
+                  <label
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      fontSize: "13px",
+                      marginBottom: "10px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={autoDuration}
+                      onChange={(event) =>
+                        setAutoDuration(event.target.checked)
+                      }
+                    />
+                    Automática según la letra
+                  </label>
 
-      <footer id="footer">
-        <div className="footer-cta shell"><h2>Every song starts<br/>with <em>an idea.</em></h2><button className="primary-btn" onClick={() => scrollTo("top")}>Make your first song <Icon name="arrow"/></button></div>
-        <div className="footer-main shell"><div className="footer-brand"><button className="wordmark" onClick={() => scrollTo("top")}>Suno</button><p>Make any song you can imagine.</p></div><div><strong>Brand</strong><a href="#top">About</a><a href="#footer">Careers</a><a href="#features">Blog</a><a href="#pricing">Pricing</a></div><div><strong>Support</strong><a href="#faq">Help</a><a href="#footer">Contact us</a><a href="#footer">Community guidelines</a><a href="#footer">Privacy</a></div></div>
-        <div className="legal shell"><span>© 2026 Suno, Inc.</span><span>UI recreation for demonstration purposes</span></div>
-      </footer>
+                  <input
+                    type="number"
+                    min={30}
+                    max={480}
+                    value={autoDuration ? estimatedDuration : duration}
+                    disabled={autoDuration}
+                    onChange={(event) =>
+                      setDuration(Number(event.target.value))
+                    }
+                    style={{
+                      ...inputStyle,
+                      opacity: autoDuration ? 0.6 : 1,
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      marginTop: "7px",
+                      color: "#74ffa6",
+                      fontSize: "12px",
+                    }}
+                  >
+                    Máximo GELM: 8:00
+                  </div>
+                </div>
+
+                <div style={{ ...panelStyle, padding: "14px" }}>
+                  <label style={labelStyle}>BPM</label>
+                  <input
+                    value={bpm}
+                    onChange={(event) => setBpm(event.target.value)}
+                    placeholder="Auto"
+                    style={inputStyle}
+                  />
+                  <div
+                    style={{
+                      marginTop: "7px",
+                      color: "#74ffa6",
+                      fontSize: "12px",
+                    }}
+                  >
+                    Déjalo vacío para automático.
+                  </div>
+                </div>
+
+                <div style={{ ...panelStyle, padding: "14px" }}>
+                  <label style={labelStyle}>TONALIDAD</label>
+                  <select
+                    value={key}
+                    onChange={(event) => setKey(event.target.value)}
+                    style={inputStyle}
+                  >
+                    <option>Auto</option>
+                    <option>C</option>
+                    <option>D</option>
+                    <option>E</option>
+                    <option>F</option>
+                    <option>G</option>
+                    <option>A</option>
+                    <option>B</option>
+                  </select>
+                </div>
+
+                <div style={{ ...panelStyle, padding: "14px" }}>
+                  <label style={labelStyle}>SEMILLA</label>
+                  <input
+                    value={seed}
+                    onChange={(event) => setSeed(event.target.value)}
+                    placeholder="Aleatoria"
+                    style={inputStyle}
+                  />
+                  <div
+                    style={{
+                      marginTop: "7px",
+                      color: "#74ffa6",
+                      fontSize: "12px",
+                    }}
+                  >
+                    La usaremos después para reproducibilidad.
+                  </div>
+                </div>
+              </div>
+
+              <div
+                style={{
+                  marginTop: "16px",
+                  padding: "14px",
+                  borderRadius: "12px",
+                  border: "1px solid rgba(42,255,133,0.22)",
+                  background: "rgba(0,0,0,0.2)",
+                }}
+              >
+                <div
+                  style={{
+                    color: "#59ff9b",
+                    fontWeight: 800,
+                    marginBottom: "5px",
+                  }}
+                >
+                  ESTADO DEL MOTOR
+                </div>
+
+                <div style={{ color: "#c6efd3", fontSize: "13px" }}>
+                  {status}
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "10px",
+                  marginTop: "16px",
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={prepareGeneration}
+                  style={buttonStyle(true)}
+                >
+                  🚀 PREPARAR GENERACIÓN
+                </button>
+
+                <button
+                  type="button"
+                  onClick={saveProject}
+                  style={buttonStyle(false)}
+                >
+                  💾 GUARDAR BORRADOR
+                </button>
+
+                <button
+                  type="button"
+                  onClick={clearProject}
+                  style={buttonStyle(false)}
+                >
+                  🧹 LIMPIAR
+                </button>
+              </div>
+
+              {savedMessage && (
+                <div
+                  style={{
+                    marginTop: "12px",
+                    color: "#58ff96",
+                    fontSize: "13px",
+                  }}
+                >
+                  {savedMessage}
+                </div>
+              )}
+            </section>
+
+            <section
+              style={{
+                ...panelStyle,
+                marginTop: "16px",
+                textAlign: "center",
+              }}
+            >
+              <div
+                style={{
+                  color: "#59ff9b",
+                  fontSize: "14px",
+                  fontWeight: 800,
+                }}
+              >
+                🎧 REPRODUCTOR GELM
+              </div>
+
+              <div
+                style={{
+                  marginTop: "10px",
+                  color: "#88aa96",
+                  fontSize: "13px",
+                }}
+              >
+                Aquí aparecerá el audio real cuando conectemos el motor.
+              </div>
+
+              <div
+                style={{
+                  marginTop: "14px",
+                  height: "8px",
+                  borderRadius: "99px",
+                  background: "rgba(100,255,160,0.1)",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    width: "0%",
+                    height: "100%",
+                    background: "#38ff91",
+                  }}
+                />
+              </div>
+            </section>
+          </>
+        ) : (
+          <section style={panelStyle}>
+            <div
+              style={{
+                fontSize: "22px",
+                fontWeight: 900,
+                color: "#59ff9b",
+                marginBottom: "6px",
+              }}
+            >
+              📚 Biblioteca GELM
+            </div>
+
+            <div
+              style={{
+                color: "#93b9a1",
+                fontSize: "13px",
+                marginBottom: "16px",
+              }}
+            >
+              Por ahora guarda proyectos y configuraciones. Más adelante aquí
+              estarán también los audios generados.
+            </div>
+
+            {projects.length === 0 ? (
+              <div
+                style={{
+                  padding: "30px 10px",
+                  textAlign: "center",
+                  color: "#789383",
+                }}
+              >
+                Todavía no hay proyectos guardados.
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "grid",
+                  gap: "10px",
+                }}
+              >
+                {projects.map((project) => (
+                  <article
+                    key={project.id}
+                    style={{
+                      border: "1px solid rgba(42,255,133,0.2)",
+                      borderRadius: "12px",
+                      padding: "14px",
+                      background: "rgba(0,0,0,0.18)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: "12px",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div>
+                        <div
+                          style={{
+                            fontWeight: 900,
+                            color: "#eafff3",
+                          }}
+                        >
+                          {project.name}
+                        </div>
+
+                        <div
+                          style={{
+                            marginTop: "4px",
+                            color: "#84b996",
+                            fontSize: "12px",
+                          }}
+                        >
+                          {project.language} · {formatDuration(project.duration)}{" "}
+                          · {project.createdAt}
+                        </div>
+                      </div>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "8px",
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => loadProject(project)}
+                          style={buttonStyle(false)}
+                        >
+                          Abrir
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => deleteProject(project.id)}
+                          style={buttonStyle(false)}
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        <footer
+          style={{
+            marginTop: "18px",
+            textAlign: "center",
+            color: "#668675",
+            fontSize: "11px",
+          }}
+        >
+          GELM MUSIC LAB · GT-GELM · Laboratorio musical personal y educativo
+        </footer>
+      </div>
     </main>
   );
+}
+
+function buttonStyle(primary: boolean): React.CSSProperties {
+  return {
+    border: primary
+      ? "1px solid rgba(80,255,150,0.8)"
+      : "1px solid rgba(70,220,130,0.35)",
+    borderRadius: "10px",
+    padding: "11px 15px",
+    background: primary ? "#32f58b" : "rgba(5,35,21,0.8)",
+    color: primary ? "#001b0d" : "#dfffea",
+    fontWeight: 800,
+    cursor: "pointer",
+    boxShadow: primary
+      ? "0 0 18px rgba(50,245,139,0.18)"
+      : "none",
+  };
 }
 
 export default App;
