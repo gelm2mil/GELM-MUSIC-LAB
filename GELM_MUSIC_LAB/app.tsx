@@ -6,6 +6,7 @@ type Project = {
   language: string;
   style: string;
   lyrics: string;
+  autoDuration: boolean;
   duration: number;
   bpm: string;
   key: string;
@@ -174,6 +175,7 @@ function App() {
       language,
       style,
       lyrics,
+      autoDuration,
       duration: finalDuration,
       bpm,
       key,
@@ -270,7 +272,7 @@ function App() {
     setLanguage(project.language);
     setStyle(project.style);
     setLyrics(project.lyrics);
-    setAutoDuration(false);
+    setAutoDuration(project.autoDuration ?? true);
     setDuration(project.duration);
     setBpm(project.bpm);
     setKey(project.key);
