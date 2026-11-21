@@ -1,36 +1,16 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#07111d"><meta name="description" content="GELM Music Lab — manuscritos GT-GELM"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon.svg"><link rel="stylesheet" href="styles.css"><title>GT-GELM · Guatemala, tu nombre inmortal</title></head>
-<body><header class="topbar"><a class="brand" href="#"><span><b>GT-GELM</b><small>GUATEMALA, TU NOMBRE INMORTAL</small><span class="brand-note" aria-hidden="true">♫</span></span></a><div><button id="themeBtn" class="btn">☼</button></div></header>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#07111d"><meta name="description" content="Reproductor oficial de música GT-GELM"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon.svg"><link rel="stylesheet" href="styles.css"><title>GT-GELM · Reproductor</title></head>
+<body>
+<header class="topbar"><a class="brand" href="./"><span class="brand-note">♫</span><span><b>GT-GELM</b><small>GUATEMALA, TU NOMBRE INMORTAL</small></span></a><div class="head-actions"><button id="lyricsBtn" class="btn">♫ Letras</button><button id="installBtn" class="btn install">⇩ Instalar</button></div></header>
 <main class="shell">
-<section class="toolbar panel"><div class="actions"><button id="newBtn" class="btn primary">＋ Nueva canción</button><button id="openBtn" class="btn">Abrir TXT</button><button id="saveTxtBtn" class="btn">Exportar TXT</button><button id="installBtn" class="btn install-action">⇩ Instalar</button><button id="lyricsWindowBtn" class="btn">♫ Letras</button><input id="fileInput" type="file" accept=".txt,.md,.text" hidden></div><span id="saveStatus" class="muted">● Guardado local</span></section>
-<section class="workspace"><aside class="panel sidebar">
-  <details class="library-details">
-    <summary class="library-summary">
-      <span class="library-summary-title"><span class="library-icon">♫</span><span><b>Biblioteca de letras</b><small>Explora los manuscritos GT-GELM</small></span></span>
-      <span class="library-summary-meta"><span id="songCount">150</span><span class="library-chevron">⌄</span></span>
-    </summary>
-    <div class="library-content">
-      <input id="searchInput" class="search" placeholder="Buscar letra…">
-      <div id="songList" class="song-list"></div>
-      <p class="muted tiny">Selecciona un título para abrir su letra. Tus cambios se guardan en este dispositivo.</p>
-    </div>
-  </details>
-</aside>
-<section class="panel editor"><div class="song-heading"><div><label for="songTitle">TÍTULO DEL MANUSCRITO</label><input id="songTitle" class="title-input" value="Mi primera canción" maxlength="120"></div><span id="lineCounter" class="counter">Línea 1 / 1</span></div>
-<div class="reader-tools"><div class="tabs"><button class="tab active" data-mode="read">Lectura guiada</button><button class="tab" data-mode="edit">Edición</button></div><div class="actions"><button id="prevBtn" class="btn small">↑</button><button id="nextBtn" class="btn small">↓</button><button id="autoBtn" class="btn small">▶ Avance</button><button id="markBtn" class="btn small">⚑ Marcar</button></div></div>
-<div id="reader" class="reader" tabindex="0"></div><textarea id="editorText" class="editor-area" hidden spellcheck="true" placeholder="Escribe o pega aquí la letra completa…"></textarea>
-
-<div class="audio-library">
-  <div class="audio-head"><div><b>♫ Reproductor GT-GELM</b><small id="audioStatus">Conectando con la biblioteca oficial GT-GELM…</small></div><span class="audio-count" id="audioCount">0 pistas</span></div>
-  <div class="audio-controls">
-    <button id="audioPrev" class="btn small" title="Anterior">|◀</button>
-    <button id="audioPlay" class="btn primary small">▶ Reproducir</button>
-    <button id="audioNext" class="btn small" title="Siguiente">▶|</button>
-    <select id="audioSelect" class="audio-select"><option value="">Selecciona una canción…</option></select>
-  </div>
-  <audio id="audioElement" controls preload="metadata"></audio>
-  <div class="audio-now"><span id="audioNowTitle">Ninguna pista seleccionada</span><span id="audioTime">00:00 / 00:00</span></div>
-  <div class="audio-foot">Selecciona una pista y usa los controles para escuchar. Las letras completas se consultan en la biblioteca lateral.</div>
-</div>
-<div class="progress-wrap"><div id="progressBar"></div></div><div class="footmeta"><span id="progressText">0% recorrido</span><span id="bookmarkText">Sin marcador</span></div><p class="muted tiny">Toca una línea para seleccionarla. Usa ↑ y ↓ para moverte. Tu posición se conserva automáticamente.</p></section></section>
-<footer>GT-GELM · Hecho con inspiración, sentimiento y orgullo chapín.</footer></main><script src="app.js"></script></body></html>
+<section class="intro"><div class="eyebrow">REPRODUCTOR OFICIAL</div><h1>Lugares, historias y tradiciones<br><span>hechos canción.</span></h1><p>La música de GT-GELM, en un espacio limpio y dedicado a escuchar.</p></section>
+<section class="player panel">
+<div class="audio-head"><div><b>♫ Reproductor GT-GELM</b><small id="audioStatus">Conectando con la biblioteca…</small></div><span id="audioCount" class="count">— pistas</span></div>
+<div class="controls"><button id="audioPrev" class="btn control" aria-label="Anterior" title="Anterior">|◀</button><button id="audioPlay" class="btn primary play">▶ Reproducir</button><button id="audioNext" class="btn control" aria-label="Siguiente aleatoria" title="Siguiente aleatoria">▶|</button></div>
+<label class="select-label" for="audioSelect">Elegir canción del catálogo</label><select id="audioSelect" class="audio-select"><option value="">Preparando catálogo…</option></select>
+<audio id="audioElement" controls preload="none"></audio>
+<div class="now"><span id="audioNowTitle">Ninguna pista seleccionada</span><span id="audioTime">00:00 / 00:00</span></div>
+<p class="note">La reproducción continúa en modo aleatorio, evitando repetir canciones hasta recorrer el catálogo. Puedes elegir una pista manualmente cuando quieras.</p>
+</section>
+<footer>GT-GELM · Guatemala, tu nombre inmortal.</footer>
+</main><script src="app.js"></script></body></html>
