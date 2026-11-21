@@ -19,7 +19,7 @@ function metadata(track){
  try{
   navigator.mediaSession.metadata=new MediaMetadata({
    title:track.title,artist:'GT-GELM',album:'Guatemala, tu nombre inmortal',
-   artwork:[{src:'icons/icon-192.png',sizes:'192x192',type:'image/png'},{src:'icons/icon-512.png',sizes:'512x512',type:'image/png'}]
+   artwork:[{src:'icons/icon.svg',sizes:'any',type:'image/svg+xml'}]
   });
   navigator.mediaSession.playbackState=audio.paused?'paused':'playing';
  }catch(e){}
