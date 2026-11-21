@@ -1,6 +1,6 @@
 {
-  "name": "GELM MUSIC LAB — Manuscritos GT-GELM",
-  "short_name": "GELM LAB",
+  "name": "GT-GELM — Guatemala, tu nombre inmortal",
+  "short_name": "GT-GELM",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -10,9 +10,10 @@
   "icons": [
     {
       "src": "icons/icon.svg",
-      "sizes": "192x192 512x512 any",
+      "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
-  ]
+  ],
+  "description": "Lugares, historias, cuentos y tradiciones hechos canción. Laboratorio de manuscritos GT-GELM."
 }
