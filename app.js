@@ -4,7 +4,7 @@ const audio=$('audioElement');
 const BASE='https://divine-king-c86b.chapin7839.workers.dev/';
 let tracks=[],current=-1,bag=[],history=[],deferredInstall=null,playingRequest=0;
 const time=n=>!Number.isFinite(n)?'00:00':String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0');
-const trackURL=file=>/^https?:\\/\\//i.test(file)?file:BASE+file.split('/').map(encodeURIComponent).join('/');
+const trackURL=file=>file.startsWith('http://')||file.startsWith('https://')?file:BASE+file.split('/').map(encodeURIComponent).join('/');
 function status(message){$('audioStatus').textContent=message;}
 function shuffleBag(exclude=current){
  bag=tracks.map((_,i)=>i).filter(i=>i!==exclude);
