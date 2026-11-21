@@ -18,8 +18,9 @@ button{background:#132b40;cursor:pointer;font-weight:700}button.primary{backgrou
 .title{font-size:clamp(17px,3vw,25px);font-weight:800;margin:8px 0 3px;overflow-wrap:anywhere}.sub{color:var(--muted);font-size:11px}
 .reader{margin-top:14px;padding:clamp(10px,2vw,22px);height:min(68vh,760px);min-height:320px;overflow:auto;background:#050f19;border:1px solid #18384b;border-radius:11px;font:clamp(13px,1.6vw,16px)/2 'DM Mono',monospace}
 .line{display:block;user-select:text;-webkit-user-select:text;touch-action:pan-y;padding:3px 10px;border-left:3px solid transparent;white-space:pre-wrap;overflow-wrap:anywhere;cursor:pointer;border-radius:3px;min-height:1.8em}
-.line.current{background:linear-gradient(90deg,#00eaff28,#00ffc80d);border-left-color:var(--cyan);color:#fff;text-shadow:0 0 12px #00eaff35}
+.line.current{background:linear-gradient(90deg,#00eaff55,#00ffc82b);border-left:4px solid var(--green);color:#fff;text-shadow:0 0 14px #00eaff75,0 0 24px #00ffc840;box-shadow:inset 0 0 18px #00eaff12;outline:1px solid #00eaff55}
 .line.section{color:var(--gold)}
+.reader:focus{outline:2px solid #00eaff66;outline-offset:2px}
 .status{display:flex;justify-content:space-between;gap:10px;margin-top:10px;color:var(--muted);font-size:11px}.progress{height:4px;background:#1a3042;border-radius:9px;margin-top:10px;overflow:hidden}.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--green))}
 .hint{font-size:10px;color:var(--muted);line-height:1.6;margin:10px 2px 0}
 @media(max-width:650px){header{padding:10px 12px}.brand b{font-size:13px}.controls{grid-template-columns:1fr 1fr}.controls input{grid-column:1/-1}.controls select{grid-column:1/-1}.controls button{padding:10px 7px;font-size:12px}.panel{padding:10px}.reader{height:65vh;min-height:280px;padding:9px;font-size:13px;line-height:1.85}.status{font-size:10px}}
@@ -38,7 +39,7 @@ button{background:#132b40;cursor:pointer;font-weight:700}button.primary{backgrou
 <div id="reader" class="reader" tabindex="0"><div class="sub">Cargando biblioteca de letras GT-GELM…</div></div>
 <div class="progress"><div id="bar"></div></div>
 <div class="status"><span id="percent">0% recorrido</span><span id="saved">Tu avance se guarda en este dispositivo</span></div>
-<p class="hint">Toca cualquier verso para resaltarlo. Usa ↑ y ↓ para avanzar línea por línea. El botón Avance mueve el resaltado automáticamente; puedes pausarlo cuando necesites copiar.</p>
+<p class="hint">Haz clic en el texto y usa ↑ / ↓ para moverte línea por línea; Re Pág / Av Pág avanza 10 líneas. Inicio / Fin va al principio o al final. ← / → cambia de manuscrito. El resaltado neón indica dónde vas. Puedes seleccionar y copiar texto normalmente.</p>
 </section></main>
 <script>
 (()=>{'use strict';
@@ -71,7 +72,7 @@ function select(i,scroll=true){
  const box=$('reader'),oldEl=box.children[old],newEl=box.children[position];
  oldEl?.classList.remove('current');newEl?.classList.add('current');
  updateInfo();stateSave();
- if(scroll)newEl?.scrollIntoView({block:'nearest',behavior:'smooth'});
+ if(scroll)newEl?.scrollIntoView({block:'center',behavior:'smooth'});
 }
 async function openFile(file){
  const item=catalog.find(x=>x.file===file);if(!item)return;
@@ -91,7 +92,37 @@ $('songSelect').addEventListener('change',e=>{if(e.target.value)openFile(e.targe
 $('prev').addEventListener('click',()=>select(position-1));$('next').addEventListener('click',()=>select(position+1));
 function stop(){if(timer)clearInterval(timer);timer=null;$('auto').textContent='▶ Avance';}
 $('auto').addEventListener('click',()=>{if(timer){stop();return;}if(!lines.length)return;$('auto').textContent='Ⅱ Pausar';timer=setInterval(()=>{if(position>=lines.length-1){stop();return;}select(position+1);},2200);});
-// Las flechas del teclado conservan el comportamiento nativo para desplazarse y seleccionar texto.
+// Navegación de teclado: solo actúa cuando el lector tiene el foco.
+window.addEventListener('keydown',e=>{
+ const target=e.target;
+ if(target&&(/INPUT|SELECT|TEXTAREA|BUTTON/.test(target.tagName)))return;
+ const reader=$('reader');
+ const focused=target===reader||reader.contains(target);
+ if(!focused)return;
+ if(window.getSelection?.().toString())return;
+ let handled=true;
+ switch(e.key){
+  case 'ArrowDown': select(position+1); break;
+  case 'ArrowUp': select(position-1); break;
+  case 'PageDown': select(position+10); break;
+  case 'PageUp': select(position-10); break;
+  case 'Home': select(0); break;
+  case 'End': select(lines.length-1); break;
+  case 'ArrowRight': changeManuscript(1); break;
+  case 'ArrowLeft': changeManuscript(-1); break;
+  default: handled=false;
+ }
+ if(handled)e.preventDefault();
+});
+function changeManuscript(direction){
+ if(!catalog.length||!current)return;
+ const i=catalog.findIndex(x=>x.file===current.file);
+ const nextIndex=(i+direction+catalog.length)%catalog.length;
+ const item=catalog[nextIndex];
+ $('songSelect').value=item.file;
+ openFile(item.file);
+}
+$('reader').addEventListener('click',()=>$('reader').focus({preventScroll:true}));
 window.addEventListener('storage',e=>{if(e.key===KEY&&current){try{const s=JSON.parse(e.newValue||'{}');if(s.file===current.file&&Number.isFinite(s.position)){position=Math.min(s.position,lines.length-1);paint();}}catch(err){}}});
 fetch('./lyrics-index.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error();return r.json();}).then(data=>{catalog=data;fill(catalog);$('total').textContent=catalog.length+' manuscritos';let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){}const first=catalog.find(x=>x.file===saved.file)||catalog[0];if(first){$('songSelect').value=first.file;openFile(first.file);}}).catch(()=>$('reader').textContent='No se pudo cargar la biblioteca de letras.');
 })();
