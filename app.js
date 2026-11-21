@@ -72,7 +72,7 @@ async function loadCatalog(){
   if(!response.ok)throw new Error('HTTP '+response.status);
   const data=await response.json();
   const source=Array.isArray(data)?data:(data.songs||data.tracks||[]);
-  tracks=source.filter(item=>item&&item.file).map(item=>({title:String(item.title||item.file),file:String(item.file),url:trackURL(String(item.file))}));
+  tracks=source.filter(item=>item&&(item.url||item.file)).map(item=>({title:String(item.title||item.file||item.url),file:String(item.file||''),url:item.url?String(item.url):trackURL(String(item.file))}));
   if(!tracks.length)throw new Error('No se encontraron canciones válidas en musica.json.');
   const select=$('audioSelect');select.replaceChildren(new Option('Selecciona una canción…',''));
   tracks.forEach((track,index)=>select.add(new Option(track.title,String(index))));
