@@ -1,0 +1,53 @@
+[Style Prompt]
+Historical folk, expressive clear male lead vocals, moderate narrative ballad pulse, traditional Guatemalan marimba carrying the melody over emotional acoustic guitar, ceremonial drums and subtle hand percussion; organic live instrumentation, rich natural production with vocals front and center.
+
+[Intro]
+
+[Verse 1]
+En las cumbres del reino de Xelajú,
+donde el viento susurra bajo el cielo azul,
+se alza el viejo gigante, el Santa María,
+que en mil novecientos dos su fuerza erupcionaba.
+
+[Verse 2]
+De la herida profunda que el monte guardó,
+un vástago de fuego y ceniza nació.
+En mil novecientos veintidós vio la luz,
+el Santiaguito bravío bajo la blanca cruz.
+
+[Chorus]
+¡Ay, volcanes de mi tierra, dinastía de carbón!
+Que retumban en el pecho de nuestra nación.
+Nacidos de la entraña, despiertos al amanecer,
+¡el fuego de Guatemala que no deja de crecer!
+
+[Verse 3]
+Y en el seno del hijo florece otro ser,
+el domo "El Caliente" que no para de crecer.
+Roca viva que brota día tras día,
+la cuna ardiente de la patria mía.
+
+[Verse 4]
+Guardián del occidente, fuerza de la heredad,
+retumbo de la tierra en la inmensidad.
+Las comunidades miran con respeto el hogar,
+donde la montaña nunca deja de hablar.
+
+[Bridge]
+Abuelo de piedra, hijo de ceniza y vapor...
+Nieto de lava pura que arde con furor...
+Tres generaciones de un solo corazón,
+escriben en la roca la historia de mi nación.
+
+[Chorus]
+¡Ay, volcanes de mi tierra, dinastía de carbón!
+Que retumban en el pecho de nuestra nación.
+Nacidos de la entraña, despiertos al amanecer,
+¡el fuego de Guatemala que no deja de crecer!
+
+[Outro]
+Santa María en el recuerdo...
+Santiaguito en la memoria...
+El Caliente en el presente...
+Fuego eterno de Xelajú.
+GT-GELM.
