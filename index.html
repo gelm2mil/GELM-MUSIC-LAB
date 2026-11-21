@@ -1,9 +1,14 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#07111d"><meta name="description" content="GELM Music Lab — manuscritos GT-GELM"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon.svg"><link rel="stylesheet" href="styles.css"><title>GELM MUSIC LAB</title></head>
-<body><header class="topbar"><a class="brand" href="#"><span class="brand-mark">G</span><span><b>GELM MUSIC LAB</b><small>GT-GELM · Guatemala, tu nombre inmortal</small></span></a><div><button id="installBtn" class="btn" hidden>＋ Instalar</button> <button id="themeBtn" class="btn">☼</button></div></header>
+<body><header class="topbar"><a class="brand" href="#"><span class="brand-mark">G</span><span><b>GELM MUSIC LAB</b><small>GT-GELM · Guatemala, tu nombre inmortal</small></span></a><div><button id="themeBtn" class="btn">☼</button></div></header>
 <main class="shell"><section class="hero"><div><p class="eyebrow">LABORATORIO DE MANUSCRITOS</p><h1>Tu historia.<br><span>Tu voz. Tu canción.</span></h1><p class="muted">Escribe, conserva y sigue cada verso sin perder el lugar donde te quedaste.</p></div><div class="emblem">♫<small>GT</small></div></section>
-<section class="toolbar panel"><div class="actions"><button id="newBtn" class="btn primary">＋ Nueva canción</button><button id="openBtn" class="btn">Abrir TXT</button><button id="saveTxtBtn" class="btn">Exportar TXT</button><input id="fileInput" type="file" accept=".txt,.md,.text" hidden></div><span id="saveStatus" class="muted">● Guardado local</span></section>
-<section class="workspace"><aside class="panel sidebar"><div class="head"><h2>Mis canciones</h2><span id="songCount">0</span></div><input id="searchInput" class="search" placeholder="Buscar canción…"><div id="songList" class="song-list"></div><p class="muted tiny">Tus letras se guardan en este dispositivo. Exporta copias TXT para respaldarlas.</p></aside>
+<section class="toolbar panel"><div class="actions"><button id="newBtn" class="btn primary">＋ Nueva canción</button><button id="openBtn" class="btn">Abrir TXT</button><button id="saveTxtBtn" class="btn">Exportar TXT</button><button id="installBtn" class="btn install-action">⇩ Instalar</button><input id="fileInput" type="file" accept=".txt,.md,.text" hidden></div><span id="saveStatus" class="muted">● Guardado local</span></section>
+<section class="workspace"><aside class="panel sidebar">
+  <div class="head"><h2>Biblioteca de letras</h2><span id="songCount">150</span></div>
+  <input id="searchInput" class="search" placeholder="Buscar letra…">
+  <div id="songList" class="song-list"></div>
+  <p class="muted tiny">Selecciona cualquier título para abrir su letra en el lector principal. Tus cambios se guardan en este dispositivo.</p>
+</aside>
 <section class="panel editor"><div class="song-heading"><div><label for="songTitle">TÍTULO DEL MANUSCRITO</label><input id="songTitle" class="title-input" value="Mi primera canción" maxlength="120"></div><span id="lineCounter" class="counter">Línea 1 / 1</span></div>
 <div class="reader-tools"><div class="tabs"><button class="tab active" data-mode="read">Lectura guiada</button><button class="tab" data-mode="edit">Edición</button></div><div class="actions"><button id="prevBtn" class="btn small">↑</button><button id="nextBtn" class="btn small">↓</button><button id="autoBtn" class="btn small">▶ Avance</button><button id="markBtn" class="btn small">⚑ Marcar</button></div></div>
 <div id="reader" class="reader" tabindex="0"></div><textarea id="editorText" class="editor-area" hidden spellcheck="true" placeholder="Escribe o pega aquí la letra completa…"></textarea>
@@ -17,19 +22,8 @@
     <select id="audioSelect" class="audio-select"><option value="">Selecciona una canción…</option></select>
   </div>
   <audio id="audioElement" controls preload="metadata"></audio>
-  <div class="track-list-head"><b>♫ Lista de reproducción</b><span id="audioListCount">0 canciones</span></div>
-  <input id="audioSearch" class="lyrics-search" type="search" placeholder="Buscar canción…">
-  <div id="audioTrackList" class="audio-track-list"></div>
   <div class="audio-now"><span id="audioNowTitle">Ninguna pista seleccionada</span><span id="audioTime">00:00 / 00:00</span></div>
-  <section class="lyrics-library">
-    <div class="lyrics-library-head"><b>♫ Biblioteca de letras GT-GELM</b><span id="lyricsCount">150 manuscritos</span></div>
-    <input id="lyricsSearch" class="lyrics-search" type="search" placeholder="Buscar letra por título…">
-    <select id="lyricsSelect" class="lyrics-select" aria-label="Seleccionar manuscrito">
-      <option value="">Cargando letras…</option>
-    </select>
-    <pre id="lyricsViewer" class="lyrics-viewer">Selecciona un título para leer su manuscrito completo.</pre>
-  </section>
-  <div class="audio-foot">Los MP3 y manuscritos importados se guardan en este navegador. No se publican en GitHub.</div>
+  <div class="audio-foot">Selecciona una pista y usa los controles para escuchar. Las letras completas se consultan en la biblioteca lateral.</div>
 </div>
 <div class="progress-wrap"><div id="progressBar"></div></div><div class="footmeta"><span id="progressText">0% recorrido</span><span id="bookmarkText">Sin marcador</span></div><p class="muted tiny">Toca una línea para seleccionarla. Usa ↑ y ↓ para moverte. Tu posición se conserva automáticamente.</p></section></section>
 <section class="bottom-grid"><div class="panel mini"><b>⌁ Modo concentración</b><p class="muted">Una línea destacada para seguir la lectura.</p></div><div class="panel mini"><b>▣ Tu manuscrito</b><p class="muted">Guardado local y exportación TXT.</p></div><div class="panel mini"><b>⇧ Listo para instalar</b><p class="muted">Agrégalo a la pantalla de inicio del móvil.</p></div></section><footer>GT-GELM · Hecho con inspiración, sentimiento y orgullo chapín.</footer></main><script src="app.js"></script></body></html>
