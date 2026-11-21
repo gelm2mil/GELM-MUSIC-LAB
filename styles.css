@@ -17,3 +17,24 @@
 .lyrics-search,.lyrics-select{width:100%;box-sizing:border-box;background:#06111d;color:#d7e8f4;border:1px solid #24475e;border-radius:7px;padding:9px;font:inherit;font-size:12px;margin-bottom:7px}
 .lyrics-select{height:38px;cursor:pointer}
 .lyrics-viewer{max-height:260px;min-height:100px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#050f19;color:#c5d7e5;border:1px solid #18384b;border-radius:8px;padding:12px;font:12px/1.75 'DM Mono',monospace;margin:0}
+
+/* Reproductor compacto y pensado primero para teléfono */
+.track-list-head{display:flex;justify-content:space-between;gap:8px;margin:12px 0 6px;color:var(--cyan);font-size:11px}
+.track-list-head span{color:var(--muted);font-size:10px}
+.audio-track-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;max-height:170px;overflow:auto;padding:2px}
+.track-item{min-width:0;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:#ffffff08;color:var(--text);border:1px solid transparent;border-radius:7px;padding:8px;font-size:10px;cursor:pointer}
+.track-item.active{border-color:var(--cyan);background:#00eaff18;color:#fff}
+@media(max-width:600px){
+ .topbar{height:54px;padding:0 12px}.brand-mark{font-size:18px;padding:5px 9px}
+ .shell{padding:12px 9px}.hero{padding:4px 0 12px}.hero h1{font-size:27px}.eyebrow{font-size:8px}.emblem{display:none}
+ .workspace{grid-template-columns:minmax(0,1fr);gap:9px}.sidebar,.editor{padding:9px}
+ .song-list{grid-template-columns:repeat(2,minmax(0,1fr));max-height:115px}
+ .song-item{padding:8px}.song-item b{font-size:10px}
+ .title-input{font-size:17px}.reader,.editor-area{height:34vh;min-height:190px;max-height:320px;font-size:12px;line-height:1.65;padding:8px}
+ .reader-tools{margin:9px 0 7px}.reader-tools>.actions .btn{padding:7px 8px;font-size:10px}
+ .audio-library{margin:9px 0 4px;padding:9px}.audio-controls{display:grid;grid-template-columns:42px 1fr 42px;gap:6px}
+ .audio-controls .audio-select{grid-column:1/-1;min-width:0;width:100%;order:initial}
+ #audioElement{height:34px}.audio-track-list{grid-template-columns:1fr;max-height:145px}
+ .lyrics-viewer{max-height:32vh;min-height:130px;font-size:11px;line-height:1.55;padding:8px}
+ .bottom-grid{display:none}footer{padding:12px 0}
+}
