@@ -38,3 +38,36 @@
  .lyrics-viewer{max-height:32vh;min-height:130px;font-size:11px;line-height:1.55;padding:8px}
  .bottom-grid{display:none}footer{padding:12px 0}
 }
+
+/* Diseño final: biblioteca de letras a la izquierda, un único lector y MP3 compacto */
+.song-list{display:grid;grid-template-columns:1fr;gap:5px;max-height:62vh;overflow:auto;margin-top:10px;padding-right:3px}
+.song-item{padding:8px 9px;min-width:0}
+.song-item b{font-size:10px;line-height:1.35;overflow-wrap:anywhere}
+.song-item small{font-size:9px}
+.install-action{border-color:var(--green);color:var(--green)}
+.audio-track-list,.track-list-head,.lyrics-library{display:none!important}
+@media(max-width:800px){
+ .workspace{grid-template-columns:minmax(0,1fr)}
+ .sidebar{order:2}
+ .editor{order:1}
+ .song-list{grid-template-columns:repeat(2,minmax(0,1fr));max-height:30vh}
+}
+@media(max-width:520px){
+ .shell{padding:8px 7px}
+ .hero{display:none}
+ .topbar{height:48px}
+ .toolbar{padding:8px;margin-bottom:8px;flex-direction:row;align-items:center}
+ .actions{gap:4px}
+ .actions .btn{font-size:10px;padding:7px 8px}
+ .install-action{display:inline-flex}
+ .workspace{display:flex;flex-direction:column;gap:8px}
+ .editor{order:1;padding:8px}
+ .sidebar{order:2;padding:8px}
+ .reader,.editor-area{height:32vh;min-height:180px;max-height:300px}
+ .audio-library{padding:8px;margin:8px 0 2px}
+ .audio-controls{display:grid;grid-template-columns:38px 1fr 38px;gap:5px}
+ .audio-select{grid-column:1/-1;order:4;width:100%;min-width:0}
+ #audioElement{height:32px}
+ .song-list{grid-template-columns:repeat(2,minmax(0,1fr));max-height:28vh}
+ .bottom-grid{display:none}
+}
