@@ -38,7 +38,7 @@ una canción para recordar.
     $("songCount").textContent = found.length;
     found.forEach(item => {
       const b = document.createElement("button");
-      b.className = "song-item" + (s.id === activeId ? " active" : "");
+      b.className = "song-item" + (activeId === "library:" + item.file ? " active" : "");
       const title = document.createElement("b");
       const meta = document.createElement("small");
       title.textContent = item.name;
@@ -212,10 +212,6 @@ una canción para recordar.
     $("audioCount").textContent=audioTracks.length+" pistas";
   }
 
-  function renderLyricsOptions(){
-
-  }
-
   function updateTrackUI(){
     $("audioSelect").value=currentTrack>=0?String(currentTrack):"";
     $("audioNowTitle").textContent=currentTrack>=0?audioTracks[currentTrack].title:"Ninguna pista seleccionada";
@@ -269,7 +265,7 @@ una canción para recordar.
       const r=await fetch("./lyrics-index.json",{cache:"no-cache"});
       if(!r.ok)throw Error("No se pudo leer el índice de letras.");
       lyricFiles=await r.json();renderList();
-    }catch(e){$("lyricsCount").textContent="Error";$("lyricsViewer").textContent=e.message;}
+    }catch(e){$("songCount").textContent="Error";$("songList").textContent=e.message;}
   }
   $("audioSelect").addEventListener("change",e=>{if(e.target.value!=="")chooseTrack(Number(e.target.value),true);});
   $("audioPlay").addEventListener("click",()=>{
