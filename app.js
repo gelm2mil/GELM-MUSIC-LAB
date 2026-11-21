@@ -325,12 +325,14 @@ una canción para recordar.
   }
   loadCloudLibrary();loadLyricsLibrary();
 
-  window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;});
+  window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;const b=$("installBtn");if(b){b.hidden=false;b.textContent="⇩ Instalar";b.dataset.ready="1";}});
+  window.addEventListener("appinstalled",()=>{deferred=null;const b=$("installBtn");if(b){b.textContent="✓ Instalada";b.disabled=true;}});
+
   $("installBtn").addEventListener("click",async()=>{
-    if(deferred){deferred.prompt();await deferred.userChoice;deferred=null;return;}
+    if(deferred){deferred.prompt();const choice=await deferred.userChoice;if(choice?.outcome==="accepted"){$("installBtn").textContent="✓ Instalando";}deferred=null;return;}
     const ua=navigator.userAgent;
     let msg="Abre el menú del navegador y elige Instalar aplicación o Añadir a pantalla de inicio.";
-    if(/SamsungBrowser/i.test(ua))msg="Samsung Internet: menú ☰ → Añadir página a → Pantalla Inicio. Si aparece Instalar aplicación, también puedes elegirla.";
+    if(/SamsungBrowser/i.test(ua))msg="Samsung Internet: abre el menú ☰ → Añadir página a → Pantalla Inicio. Confirma Añadir. Si no aparece, actualiza la página desde HTTPS y vuelve a intentarlo.";
     else if(/Android/i.test(ua))msg="Android: menú ⋮ → Instalar aplicación o Añadir a pantalla de inicio.";
     else if(/iPhone|iPad|iPod/i.test(ua))msg="Safari → Compartir → Añadir a pantalla de inicio.";
     alert(msg);
