@@ -1,0 +1,602 @@
+[
+  {
+    "file": "1-GUATEMALA-22-CORAZONES.txt",
+    "name": "1-GUATEMALA-22-CORAZONES"
+  },
+  {
+    "file": "10-ANTIGUA-DE-MI-VIDA.txt",
+    "name": "10-ANTIGUA-DE-MI-VIDA"
+  },
+  {
+    "file": "11-LAS-CUATRO-CAPITALES-DE-GUATEMALA.txt",
+    "name": "11-LAS-CUATRO-CAPITALES-DE-GUATEMALA"
+  },
+  {
+    "file": "12-BASTIONES-DE-LA-ETERNIDAD.txt",
+    "name": "12-BASTIONES-DE-LA-ETERNIDAD"
+  },
+  {
+    "file": "13-LAS-LUCES-DE-LA-SIERRA-1.txt",
+    "name": "13-LAS-LUCES-DE-LA-SIERRA-1"
+  },
+  {
+    "file": "14-LAS-LUCES-DE-LA-SIERRA-2.txt",
+    "name": "14-LAS-LUCES-DE-LA-SIERRA-2"
+  },
+  {
+    "file": "15-CHIMALTENANGO-CIUDAD-DE-LOS-ESCUDOS.txt",
+    "name": "15-CHIMALTENANGO-CIUDAD-DE-LOS-ESCUDOS"
+  },
+  {
+    "file": "16-EL-ZUMBIDO-DEL-RIEL.txt",
+    "name": "16-EL-ZUMBIDO-DEL-RIEL"
+  },
+  {
+    "file": "17-LAS-QUINCE-JORNADAS-DEL-VIEJO-1.txt",
+    "name": "17-LAS-QUINCE-JORNADAS-DEL-VIEJO-1"
+  },
+  {
+    "file": "18-LAS-QUINCE-JORNADAS-DEL-VIEJO-2.txt",
+    "name": "18-LAS-QUINCE-JORNADAS-DEL-VIEJO-2"
+  },
+  {
+    "file": "19-LOS-PIONEROS-DEL-IXCAN.txt",
+    "name": "19-LOS-PIONEROS-DEL-IXCAN"
+  },
+  {
+    "file": "2 KAIBIL BALAM _ El Jaguar de Zaculeu _ GT-GELM (lyrics) - usesuno.com.txt",
+    "name": "2 KAIBIL BALAM _ El Jaguar de Zaculeu _ GT-GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "2-RECORDANDO-EL-ROCK-NACIONAL.txt",
+    "name": "2-RECORDANDO-EL-ROCK-NACIONAL"
+  },
+  {
+    "file": "20-EL-IXCAN-INDOMABLE.txt",
+    "name": "20-EL-IXCAN-INDOMABLE"
+  },
+  {
+    "file": "21-SOBRE-EL-BOSQUE-VOY.txt",
+    "name": "21-SOBRE-EL-BOSQUE-VOY"
+  },
+  {
+    "file": "22-LA-LEYENDA-DEL-76.txt",
+    "name": "22-LA-LEYENDA-DEL-76"
+  },
+  {
+    "file": "23-RI AQ-OMANEL-NAWAL.txt",
+    "name": "23-RI AQ-OMANEL-NAWAL"
+  },
+  {
+    "file": "24 de junio 2026 dia de la esposa de don chente (lyrics) - usesuno.com.txt",
+    "name": "24 de junio 2026 dia de la esposa de don chente (lyrics) - usesuno.com"
+  },
+  {
+    "file": "24-ORIENTE-QUERIDO-POZAS-VIVAS.txt",
+    "name": "24-ORIENTE-QUERIDO-POZAS-VIVAS"
+  },
+  {
+    "file": "25-EL-GAVILAN-DE-IZABAL.txt",
+    "name": "25-EL-GAVILAN-DE-IZABAL"
+  },
+  {
+    "file": "26-QUETZALTENANGO-ETERNO.txt",
+    "name": "26-QUETZALTENANGO-ETERNO"
+  },
+  {
+    "file": "27-LOS-CANTOS-DE-MI-ESCUELA.txt",
+    "name": "27-LOS-CANTOS-DE-MI-ESCUELA"
+  },
+  {
+    "file": "28-VOCES-DEL-QUICHE.txt",
+    "name": "28-VOCES-DEL-QUICHE"
+  },
+  {
+    "file": "29-QUMARKAJ.txt",
+    "name": "29-QUMARKAJ"
+  },
+  {
+    "file": "3-CAMION-REAL-DEL-ANCESTRO.txt",
+    "name": "3-CAMION-REAL-DEL-ANCESTRO"
+  },
+  {
+    "file": "30 de junio Día del ejercito (lyrics) - usesuno.com.txt",
+    "name": "30 de junio Día del ejercito (lyrics) - usesuno.com"
+  },
+  {
+    "file": "30-EL-MAPA-DE-ORO-21-MUNICIPIO-DE-QUICHE.txt",
+    "name": "30-EL-MAPA-DE-ORO-21-MUNICIPIO-DE-QUICHE"
+  },
+  {
+    "file": "31-SOMPOPOS-Y-BARRILETES.txt",
+    "name": "31-SOMPOPOS-Y-BARRILETES"
+  },
+  {
+    "file": "32-CHUPIL-LUCIERNAGA-DE-MI-PUEBLO.txt",
+    "name": "32-CHUPIL-LUCIERNAGA-DE-MI-PUEBLO"
+  },
+  {
+    "file": "33-SAQKOROWACH-EL-AVE-DE-LOS-OCHO-PUEBLOS.txt",
+    "name": "33-SAQKOROWACH-EL-AVE-DE-LOS-OCHO-PUEBLOS"
+  },
+  {
+    "file": "34-HUEHUETENANGO-TIERRA-DE-ZACULEU-CUCHUMATANES.txt",
+    "name": "34-HUEHUETENANGO-TIERRA-DE-ZACULEU-CUCHUMATANES"
+  },
+  {
+    "file": "35-KAIBIL-BALAM-EL-JAGUAR-DE-ZACULEU.txt",
+    "name": "35-KAIBIL-BALAM-EL-JAGUAR-DE-ZACULEU"
+  },
+  {
+    "file": "36-LOS-GUARDIANES-DE-LOS-CUCHUMATANES.txt",
+    "name": "36-LOS-GUARDIANES-DE-LOS-CUCHUMATANES"
+  },
+  {
+    "file": "37-HUEHUETENANGO-TIERRA-DE-LOS-VIEJOS-SABIOS.txt",
+    "name": "37-HUEHUETENANGO-TIERRA-DE-LOS-VIEJOS-SABIOS"
+  },
+  {
+    "file": "38-CONOCES-TU-GUATEMALA-UN-VIAJE-POR-NUESTRA-TIERRA.txt",
+    "name": "38-CONOCES-TU-GUATEMALA-UN-VIAJE-POR-NUESTRA-TIERRA"
+  },
+  {
+    "file": "39-FELIZ-DIA-DEL-PADRE.txt",
+    "name": "39-FELIZ-DIA-DEL-PADRE"
+  },
+  {
+    "file": "4-HISTORIA-DE-MI-TIERRA-BELLA-GUATEMALA.txt",
+    "name": "4-HISTORIA-DE-MI-TIERRA-BELLA-GUATEMALA"
+  },
+  {
+    "file": "40-NAJ-TUNICH-DESCENSO-AL-XIBALBA.txt",
+    "name": "40-NAJ-TUNICH-DESCENSO-AL-XIBALBA"
+  },
+  {
+    "file": "41-RIO-ENCANTADO-HIJO-DE-LEMOA.txt",
+    "name": "41-RIO-ENCANTADO-HIJO-DE-LEMOA"
+  },
+  {
+    "file": "42-MADRE-VIEJA-EL-MISTERIO-DE-MADRE-VIEJA.txt",
+    "name": "42-MADRE-VIEJA-EL-MISTERIO-DE-MADRE-VIEJA"
+  },
+  {
+    "file": "43-ATITLAN-DONDE-EL-CIELO-Y-XIBALBA-SE-TOCABAN.txt",
+    "name": "43-ATITLAN-DONDE-EL-CIELO-Y-XIBALBA-SE-TOCABAN"
+  },
+  {
+    "file": "44-SAMABAJ-LA-CIUDAD-PERDIDA-BAJO-ATITLAN.txt",
+    "name": "44-SAMABAJ-LA-CIUDAD-PERDIDA-BAJO-ATITLAN"
+  },
+  {
+    "file": "45-POZO-VIVO-EL-MISTERIO-QUE-RESPONDE-AL-SONIDO.txt",
+    "name": "45-POZO-VIVO-EL-MISTERIO-QUE-RESPONDE-AL-SONIDO"
+  },
+  {
+    "file": "46-BELICE-RAICES-DE-UNA-MISMA-MEMORIA.txt",
+    "name": "46-BELICE-RAICES-DE-UNA-MISMA-MEMORIA"
+  },
+  {
+    "file": "47-CRIQUE-PABLO-IZABAL-RECUERDOS-DE-DON-CHENTE.txt",
+    "name": "47-CRIQUE-PABLO-IZABAL-RECUERDOS-DE-DON-CHENTE"
+  },
+  {
+    "file": "48-GUATEMALA-PROFUNDA-EL-MAPA-SECRETO.txt",
+    "name": "48-GUATEMALA-PROFUNDA-EL-MAPA-SECRETO"
+  },
+  {
+    "file": "49-LOS-SEMDEROS-OLVIDADOS.txt",
+    "name": "49-LOS-SEMDEROS-OLVIDADOS"
+  },
+  {
+    "file": "5-EL-VALOR-DE-UN-SUEÑO.txt",
+    "name": "5-EL-VALOR-DE-UN-SUEÑO"
+  },
+  {
+    "file": "50-VEINTICUATRO-DE-JUNIO-CUMPLE-ESPOSA-DE-DON-CHENTE.txt",
+    "name": "50-VEINTICUATRO-DE-JUNIO-CUMPLE-ESPOSA-DE-DON-CHENTE"
+  },
+  {
+    "file": "6-ASI-ERA-EL-CAMINAR-EN-MI-TIERRA.txt",
+    "name": "6-ASI-ERA-EL-CAMINAR-EN-MI-TIERRA"
+  },
+  {
+    "file": "7-COMO-ME-LO-CONTARON.txt",
+    "name": "7-COMO-ME-LO-CONTARON"
+  },
+  {
+    "file": "8-EL-CALLEJON-DEL-MISTERIO.txt",
+    "name": "8-EL-CALLEJON-DEL-MISTERIO"
+  },
+  {
+    "file": "9-EL-CANTO-DE-LOS-BOHEMIOS.txt",
+    "name": "9-EL-CANTO-DE-LOS-BOHEMIOS"
+  },
+  {
+    "file": "AL VOLANTE POR LA VIDA (lyrics) - usesuno.com.txt",
+    "name": "AL VOLANTE POR LA VIDA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "AMATITLÁN _ El Espejo Sagrado del Fuego (lyrics) - usesuno.com.txt",
+    "name": "AMATITLÁN _ El Espejo Sagrado del Fuego (lyrics) - usesuno.com"
+  },
+  {
+    "file": "ANTES DE MIRAR AL OTRO (lyrics) - usesuno.com.txt",
+    "name": "ANTES DE MIRAR AL OTRO (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Alotenango 1 (lyrics) - usesuno.com.txt",
+    "name": "Alotenango 1 (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Amatitlan 4 _ GT - GELM (lyrics) - usesuno.com.txt",
+    "name": "Amatitlan 4 _ GT - GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Amatitlán – Capítulo II (lyrics) - usesuno.com.txt",
+    "name": "Amatitlán – Capítulo II (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Amatitlán – Capítulo II _ Cuando la Vida Despertó en sus Orillas 🇬🇹 (lyrics) - usesuno.com.txt",
+    "name": "Amatitlán – Capítulo II _ Cuando la Vida Despertó en sus Orillas 🇬🇹 (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Amatitlán – Capítulo III _ Donde un Pueblo Encontró su Hogar 🇬🇹 (lyrics) - usesuno.com.txt",
+    "name": "Amatitlán – Capítulo III _ Donde un Pueblo Encontró su Hogar 🇬🇹 (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Aprendiendo Guatemala (lyrics) - usesuno.com.txt",
+    "name": "Aprendiendo Guatemala (lyrics) - usesuno.com"
+  },
+  {
+    "file": "BAJO EL CIELO DE LA PATRIA Y EL ABISMO (lyrics) - usesuno.com.txt",
+    "name": "BAJO EL CIELO DE LA PATRIA Y EL ABISMO (lyrics) - usesuno.com"
+  },
+  {
+    "file": "CAMINO REAL DEL ORIENTE DE LA VEREDA A LA CARRETERA (lyrics) - usesuno.com.txt",
+    "name": "CAMINO REAL DEL ORIENTE DE LA VEREDA A LA CARRETERA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "CAMINOS DE AYER Y HOY LA RUTA DEL SURORIENTE (lyrics) - usesuno.com.txt",
+    "name": "CAMINOS DE AYER Y HOY LA RUTA DEL SURORIENTE (lyrics) - usesuno.com"
+  },
+  {
+    "file": "CENTINELA - La memoria de piedra (lyrics) - usesuno.com.txt",
+    "name": "CENTINELA - La memoria de piedra (lyrics) - usesuno.com"
+  },
+  {
+    "file": "CONOCES TU GUATEMALA_ (lyrics) - usesuno.com.txt",
+    "name": "CONOCES TU GUATEMALA_ (lyrics) - usesuno.com"
+  },
+  {
+    "file": "CRIQUE-PABLO-IZABAL-RELATO-DE-DON-CHENTE (lyrics) - usesuno.com.txt",
+    "name": "CRIQUE-PABLO-IZABAL-RELATO-DE-DON-CHENTE (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Chisec (lyrics) - usesuno.com.txt",
+    "name": "Chisec (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Con amor a todos los padres del mundo (lyrics) - usesuno.com.txt",
+    "name": "Con amor a todos los padres del mundo (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Crique pablo (lyrics) - usesuno.com.txt",
+    "name": "Crique pablo (lyrics) - usesuno.com"
+  },
+  {
+    "file": "EL CORAZÓN DE GUATEMALA (lyrics) - usesuno.com.txt",
+    "name": "EL CORAZÓN DE GUATEMALA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "EL RÍO ENCANTADO _ El Hijo de Lemoa (lyrics) - usesuno.com.txt",
+    "name": "EL RÍO ENCANTADO _ El Hijo de Lemoa (lyrics) - usesuno.com"
+  },
+  {
+    "file": "ESTA ES MI GUATEMALA 1 (lyrics) - usesuno.com.txt",
+    "name": "ESTA ES MI GUATEMALA 1 (lyrics) - usesuno.com"
+  },
+  {
+    "file": "El Vado de los Valientes (lyrics) - usesuno.com.txt",
+    "name": "El Vado de los Valientes (lyrics) - usesuno.com"
+  },
+  {
+    "file": "El tiempo dejó su nombre (lyrics) - usesuno.com.txt",
+    "name": "El tiempo dejó su nombre (lyrics) - usesuno.com"
+  },
+  {
+    "file": "El vuelo del quetzal (lyrics) - usesuno.com.txt",
+    "name": "El vuelo del quetzal (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Espejo Sagrado del Fuego (lyrics) - usesuno.com.txt",
+    "name": "Espejo Sagrado del Fuego (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Feria Titular chimaltenango (lyrics) - usesuno.com.txt",
+    "name": "Feria Titular chimaltenango (lyrics) - usesuno.com"
+  },
+  {
+    "file": "GRACIAS A DIOS — LA FRONTERA Y LA MEMORIA (lyrics) - usesuno.com.txt",
+    "name": "GRACIAS A DIOS — LA FRONTERA Y LA MEMORIA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "GT patzun (lyrics) - usesuno.com.txt",
+    "name": "GT patzun (lyrics) - usesuno.com"
+  },
+  {
+    "file": "GT-15 DE SEPTIEMBRE-1 (lyrics) - usesuno.com.txt",
+    "name": "GT-15 DE SEPTIEMBRE-1 (lyrics) - usesuno.com"
+  },
+  {
+    "file": "GUARDIAN DEL OCCIDENTE (lyrics) - usesuno.com.txt",
+    "name": "GUARDIAN DEL OCCIDENTE (lyrics) - usesuno.com"
+  },
+  {
+    "file": "GUATEMALA ENTRE DOS MARES (lyrics) - usesuno.com.txt",
+    "name": "GUATEMALA ENTRE DOS MARES (lyrics) - usesuno.com"
+  },
+  {
+    "file": "GUATEMALA LIBRE Y SOBERANA (lyrics) - usesuno.com.txt",
+    "name": "GUATEMALA LIBRE Y SOBERANA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "GUATEMALA LIBRE Y SOBERANA-2 (lyrics) - usesuno.com.txt",
+    "name": "GUATEMALA LIBRE Y SOBERANA-2 (lyrics) - usesuno.com"
+  },
+  {
+    "file": "GUATEMALA TOCA EL CIELO (lyrics) - usesuno.com.txt",
+    "name": "GUATEMALA TOCA EL CIELO (lyrics) - usesuno.com"
+  },
+  {
+    "file": "GUATEMALA, UNA TIERRA INESPERADA (lyrics) - usesuno.com.txt",
+    "name": "GUATEMALA, UNA TIERRA INESPERADA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "GUATEMALA-PROFUNDO-LUGARES-SECRETOS (lyrics) - usesuno.com.txt",
+    "name": "GUATEMALA-PROFUNDO-LUGARES-SECRETOS (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Genrin hijo mio (lyrics) - usesuno.com.txt",
+    "name": "Genrin hijo mio (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Guatemala Ruge septiembre (lyrics) - usesuno.com.txt",
+    "name": "Guatemala Ruge septiembre (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Guatemala inmortaal (lyrics) - usesuno.com.txt",
+    "name": "Guatemala inmortaal (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Guatemala muchos mundoS (lyrics) - usesuno.com.txt",
+    "name": "Guatemala muchos mundoS (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Guatemala tierra de volcanes 1 (lyrics) - usesuno.com.txt",
+    "name": "Guatemala tierra de volcanes 1 (lyrics) - usesuno.com"
+  },
+  {
+    "file": "HISTORIAS DE MONTE Y RIELES (lyrics) - usesuno.com.txt",
+    "name": "HISTORIAS DE MONTE Y RIELES (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Hunahpú e Ixbalanqué (lyrics) - usesuno.com.txt",
+    "name": "Hunahpú e Ixbalanqué (lyrics) - usesuno.com"
+  },
+  {
+    "file": "IXQUISIS — ENTRE RÍOS Y PIEDRA CALIZA (lyrics) - usesuno.com.txt",
+    "name": "IXQUISIS — ENTRE RÍOS Y PIEDRA CALIZA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "LA ASUNCIÓN ESTÁ DE FIESTA (lyrics) - usesuno.com.txt",
+    "name": "LA ASUNCIÓN ESTÁ DE FIESTA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "LA CIVILIZACIÓN QUE LA SELVA GUARDÓ (lyrics) - usesuno.com.txt",
+    "name": "LA CIVILIZACIÓN QUE LA SELVA GUARDÓ (lyrics) - usesuno.com"
+  },
+  {
+    "file": "LA LAGUNA DEL MACHETE _ El Encanto de Madre Vieja (lyrics) - usesuno.com.txt",
+    "name": "LA LAGUNA DEL MACHETE _ El Encanto de Madre Vieja (lyrics) - usesuno.com"
+  },
+  {
+    "file": "LA RUTA DE LOS RECUERDOS (lyrics) - usesuno.com.txt",
+    "name": "LA RUTA DE LOS RECUERDOS (lyrics) - usesuno.com"
+  },
+  {
+    "file": "LA RUTA DEL ALTIPLANO_ DE LAS CAÑAS HASTA CASA (lyrics) - usesuno.com.txt",
+    "name": "LA RUTA DEL ALTIPLANO_ DE LAS CAÑAS HASTA CASA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "LA VOZ GARÍFUNA (lyrics) - usesuno.com.txt",
+    "name": "LA VOZ GARÍFUNA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "LA VOZ K'ICHE (lyrics) - usesuno.com.txt",
+    "name": "LA VOZ K'ICHE (lyrics) - usesuno.com"
+  },
+  {
+    "file": "LA VOZ XINKA (lyrics) - usesuno.com.txt",
+    "name": "LA VOZ XINKA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "LOS CAMINOS DEL PUEBLO CHUJ (lyrics) - usesuno.com.txt",
+    "name": "LOS CAMINOS DEL PUEBLO CHUJ (lyrics) - usesuno.com"
+  },
+  {
+    "file": "LOS GUARDIANES DEL ORIENTE (lyrics) - usesuno.com.txt",
+    "name": "LOS GUARDIANES DEL ORIENTE (lyrics) - usesuno.com"
+  },
+  {
+    "file": "LOS QUE GUATEMALA GUARDA (lyrics) - usesuno.com.txt",
+    "name": "LOS QUE GUATEMALA GUARDA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "LOS SENDEROS OLVIDADOS (lyrics) - usesuno.com.txt",
+    "name": "LOS SENDEROS OLVIDADOS (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Las 25 vices de Guatemala (lyrics) - usesuno.com.txt",
+    "name": "Las 25 vices de Guatemala (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Mientras Estamos Aquí (lyrics) - usesuno.com.txt",
+    "name": "Mientras Estamos Aquí (lyrics) - usesuno.com"
+  },
+  {
+    "file": "NUEVA GENERACIÓN MAYA (lyrics) - usesuno.com.txt",
+    "name": "NUEVA GENERACIÓN MAYA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "PUEDES SEGUIR CAMINANDO (lyrics) - usesuno.com.txt",
+    "name": "PUEDES SEGUIR CAMINANDO (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Plan del Molino GT (lyrics) - usesuno.com.txt",
+    "name": "Plan del Molino GT (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Por la mañana (lyrics) - usesuno.com.txt",
+    "name": "Por la mañana (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Por la noche (lyrics) - usesuno.com.txt",
+    "name": "Por la noche (lyrics) - usesuno.com"
+  },
+  {
+    "file": "QUE-ONDA-MUCHA-SALUDOS-AL-BUEN-CHAPIN (lyrics) - usesuno.com.txt",
+    "name": "QUE-ONDA-MUCHA-SALUDOS-AL-BUEN-CHAPIN (lyrics) - usesuno.com"
+  },
+  {
+    "file": "RIO-CHUCIATE-TECUN UMAN -TIERRA DE FRONTETA Y MEMORIA (lyrics) - usesuno.com.txt",
+    "name": "RIO-CHUCIATE-TECUN UMAN -TIERRA DE FRONTETA Y MEMORIA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Rincon olvidado de GT (lyrics) - usesuno.com.txt",
+    "name": "Rincon olvidado de GT (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Suchiate – Capítulo I _ El Río de las Flores 🇬🇹 (lyrics) - usesuno.com.txt",
+    "name": "Suchiate – Capítulo I _ El Río de las Flores 🇬🇹 (lyrics) - usesuno.com"
+  },
+  {
+    "file": "TITÁN DE BARRO Y MEMORIA GT-GELM (lyrics) - usesuno.com.txt",
+    "name": "TITÁN DE BARRO Y MEMORIA GT-GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "TITÁN DE BARRO Y MEMORIA GT-GELM-2 (lyrics) - usesuno.com.txt",
+    "name": "TITÁN DE BARRO Y MEMORIA GT-GELM-2 (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Tecun Uman 1 (lyrics) - usesuno.com.txt",
+    "name": "Tecun Uman 1 (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Tecun Uman 2 (lyrics) - usesuno.com.txt",
+    "name": "Tecun Uman 2 (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Tecun Uman 3 (lyrics) - usesuno.com.txt",
+    "name": "Tecun Uman 3 (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Tecun Uman IV (lyrics) - usesuno.com.txt",
+    "name": "Tecun Uman IV (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Tecun Uman V (lyrics) - usesuno.com.txt",
+    "name": "Tecun Uman V (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Title_ 🇬🇹 Aprendiendo de Nuestra Bella Guatemala (lyrics) - usesuno.com.txt",
+    "name": "Title_ 🇬🇹 Aprendiendo de Nuestra Bella Guatemala (lyrics) - usesuno.com"
+  },
+  {
+    "file": "Tulate (lyrics) - usesuno.com.txt",
+    "name": "Tulate (lyrics) - usesuno.com"
+  },
+  {
+    "file": "UNA ANTORCHA EN LA MANO ESPECIAL FIESTAS PATRIAS (lyrics) - usesuno.com.txt",
+    "name": "UNA ANTORCHA EN LA MANO ESPECIAL FIESTAS PATRIAS (lyrics) - usesuno.com"
+  },
+  {
+    "file": "YOLNABAJ — LAGUNA BRAVA (lyrics) - usesuno.com.txt",
+    "name": "YOLNABAJ — LAGUNA BRAVA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "_Los Caminantes de Caite (lyrics) - usesuno.com.txt",
+    "name": "_Los Caminantes de Caite (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🇧🇿 BELICE _ Raíces de una Misma Historia _ GT - GELM (lyrics) - usesuno.com.txt",
+    "name": "🇧🇿 BELICE _ Raíces de una Misma Historia _ GT - GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🇬🇹 CHINAUTLA _ El Barro que (lyrics) - usesuno.com.txt",
+    "name": "🇬🇹 CHINAUTLA _ El Barro que (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🇬🇹 DONDE EL LAGO ENCUENTRA AL CARIBE GT-GELM (lyrics) - usesuno.com.txt",
+    "name": "🇬🇹 DONDE EL LAGO ENCUENTRA AL CARIBE GT-GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🇬🇹 DONDE VIVE EL QUETZAL GT-GELM (lyrics) - usesuno.com.txt",
+    "name": "🇬🇹 DONDE VIVE EL QUETZAL GT-GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🇬🇹 DONDE VIVE EL QUETZAL GT-GELM-2 (lyrics) - usesuno.com.txt",
+    "name": "🇬🇹 DONDE VIVE EL QUETZAL GT-GELM-2 (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🇬🇹 EL DESIERTO QUE GUATEMALA ESCONDE GT-GELM (lyrics) - usesuno.com.txt",
+    "name": "🇬🇹 EL DESIERTO QUE GUATEMALA ESCONDE GT-GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🇬🇹 EL TEJAR DE MI TIERRA (lyrics) - usesuno.com.txt",
+    "name": "🇬🇹 EL TEJAR DE MI TIERRA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🇬🇹 GUATEMALA PROFUNDA _ El Mapa Secreto de Nuestra Tierra _ GT - GELM (lyrics) - usesuno.com.txt",
+    "name": "🇬🇹 GUATEMALA PROFUNDA _ El Mapa Secreto de Nuestra Tierra _ GT - GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🇬🇹 LA RUTA DE LA LÍNEA (lyrics) - usesuno.com.txt",
+    "name": "🇬🇹 LA RUTA DE LA LÍNEA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🇬🇹 MANIFIESTO GT - GELM (lyrics) - usesuno.com.txt",
+    "name": "🇬🇹 MANIFIESTO GT - GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🇬🇹 TIKAL, LA CIUDAD SOBRE LA SELVA (lyrics) - usesuno.com.txt",
+    "name": "🇬🇹 TIKAL, LA CIUDAD SOBRE LA SELVA (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🌊 ATITLÁN _ Donde el Cielo y Xibalbá se Tocaban _ GT - GELM (lyrics) - usesuno.com.txt",
+    "name": "🌊 ATITLÁN _ Donde el Cielo y Xibalbá se Tocaban _ GT - GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🏔️ HUEHUETENANGO _ Tierra de Zaculeu y Cuchumatanes _ GT-GELM (lyrics) - usesuno.com.txt",
+    "name": "🏔️ HUEHUETENANGO _ Tierra de Zaculeu y Cuchumatanes _ GT-GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🏔️ HUEHUETENANGO _ Tierra de los Viejos Sabios _ GT-GELM (lyrics) - usesuno.com.txt",
+    "name": "🏔️ HUEHUETENANGO _ Tierra de los Viejos Sabios _ GT-GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🏔️ LOS GUARDIANES DE LOS CUCHUMATANES _ Tradiciones de Todos Santos _ GT-GELM (lyrics) - usesuno.com.txt",
+    "name": "🏔️ LOS GUARDIANES DE LOS CUCHUMATANES _ Tradiciones de Todos Santos _ GT-GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🏺 SAMABAJ _ La Ciudad Perdida Bajo Atitlán _ GT - GELM (lyrics) - usesuno.com.txt",
+    "name": "🏺 SAMABAJ _ La Ciudad Perdida Bajo Atitlán _ GT - GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "💧 POZO VIVO _ El Misterio que Responde al Sonido _ GT - GELM (lyrics) - usesuno.com.txt",
+    "name": "💧 POZO VIVO _ El Misterio que Responde al Sonido _ GT - GELM (lyrics) - usesuno.com"
+  },
+  {
+    "file": "🦇 NAJ TÚNICH _ El Descenso al Xibalbá _ GT-GELM (lyrics) - usesuno.com.txt",
+    "name": "🦇 NAJ TÚNICH _ El Descenso al Xibalbá _ GT-GELM (lyrics) - usesuno.com"
+  }
+]
