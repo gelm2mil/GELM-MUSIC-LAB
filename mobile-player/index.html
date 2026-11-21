@@ -1,40 +1,40 @@
-<!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07111d">
-<meta name="description" content="GT-GELM · Reproductor móvil">
-<link rel="manifest" href="./manifest.webmanifest">
-<title>GT-GELM · Música</title>
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111318"><link rel="manifest" href="./manifest.webmanifest">
+<title>GT-GELM · Reproductor MP3</title>
 <style>
-:root{color-scheme:dark;--bg:#07111d;--panel:#0d1d2d;--line:#1d4056;--cyan:#00eaff;--green:#00ffc8;--muted:#91a8ba}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#102c43 0,var(--bg) 58%);color:#eaf5ff;font:16px system-ui,-apple-system,Segoe UI,sans-serif;display:grid;place-items:center;padding:22px 16px}
-main{width:min(100%,440px)}header{display:flex;align-items:center;gap:13px;margin:0 0 28px}.mark{width:48px;height:48px;border:1px solid var(--cyan);border-radius:50%;display:grid;place-items:center;color:var(--cyan);font-size:25px;box-shadow:0 0 18px #00eaff30}.brand{font-weight:900;letter-spacing:3px;font-size:22px}.sub{font-size:10px;color:var(--muted);letter-spacing:1px}
-.player{background:linear-gradient(145deg,#10263a,#091522);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 18px 55px #0005}
-.status{color:var(--green);font-size:12px;font-weight:700;letter-spacing:1px}.title{font-size:20px;font-weight:750;line-height:1.35;min-height:56px;margin:16px 0 7px;overflow-wrap:anywhere}.counter{color:var(--muted);font-size:12px;margin-bottom:22px}
-.controls{display:grid;grid-template-columns:64px 1fr 64px;gap:10px}.btn{border:1px solid #31536b;background:#142d42;color:#eefaff;border-radius:14px;min-height:58px;font-size:24px;font-weight:800;cursor:pointer}.btn.main{background:#006d79;border-color:var(--cyan);font-size:17px}.btn:active{transform:scale(.97)}
-audio{width:100%;margin:22px 0 4px;height:42px}.foot{margin-top:18px;color:var(--muted);font-size:12px;text-align:center}.install{display:block;margin:18px auto 0;background:transparent;border:1px solid var(--green);color:var(--green);border-radius:10px;padding:10px 16px;font-weight:700}
-@media(max-width:360px){.player{padding:17px}.controls{grid-template-columns:54px 1fr 54px}.btn{min-height:54px}}
-</style>
-</head>
-<body>
-<main>
-<header><div class="mark">♫</div><div><div class="brand">GT-GELM</div><div class="sub">GUATEMALA, TU NOMBRE INMORTAL</div></div></header>
-<section class="player" aria-label="Reproductor de música">
-<div class="status" id="status">CARGANDO 118 CANCIONES</div>
-<div class="title" id="title">Preparando música…</div>
-<div class="counter" id="counter">Catálogo GT-GELM</div>
-<div class="controls">
-<button class="btn" id="prev" aria-label="Anterior">|◀</button>
-<button class="btn main" id="toggle">▶ Reproducir</button>
-<button class="btn" id="next" aria-label="Siguiente">▶|</button>
-</div>
-<audio id="audio" controls preload="none" playsinline></audio>
-</section>
-<button class="install" id="install" hidden>＋ Instalar GT-GELM</button>
-<div class="foot">Reproducción aleatoria · 118 pistas</div>
-</main>
-<script src="./player.js"></script>
-</body>
-</html>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#111318;color:#fff;display:flex;align-items:center;justify-content:center;padding:16px}
+.player{width:100%;max-width:420px;background:#1b1f27;border-radius:22px;padding:22px;box-shadow:0 20px 60px #0007}.cover{width:100%;aspect-ratio:1;border-radius:16px;background:#2a2f3a;display:grid;place-items:center;overflow:hidden;margin-bottom:18px}.cover img{width:100%;height:100%;object-fit:cover}.cover span{font-size:52px;opacity:.45}
+h1{margin:0;font-size:21px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.artist{margin:6px 0 16px;color:#9aa4b2;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{height:6px;background:#2c313c;border-radius:99px;overflow:hidden;cursor:pointer;touch-action:pan-y}.progress{height:100%;width:0;background:#4f8cff}.times{display:flex;justify-content:space-between;font-size:12px;color:#9aa4b2;margin:8px 0 18px}
+.controls{display:flex;align-items:center;justify-content:center;gap:18px}button{border:0;background:#2a2f3a;color:#fff;width:52px;height:52px;border-radius:50%;font-size:20px;cursor:pointer}#play{width:68px;height:68px;background:#4f8cff;font-size:26px}
+.shuffle{margin-top:18px;width:100%;height:44px;border-radius:12px;font-size:14px;background:#232833;color:#cbd3e1}.shuffle.on{background:#4f8cff;color:#fff}.status{margin-top:14px;text-align:center;font-size:13px;color:#9aa4b2;min-height:20px}
+@media(max-height:700px){.cover{width:min(45vh,100%);margin-left:auto;margin-right:auto}.player{padding:16px}}
+</style></head><body>
+<div class="player"><div class="cover" id="cover"><span>🎵</span></div><h1 id="titulo">Cargando música…</h1><div class="artist" id="artista"></div>
+<div class="bar" id="barra"><div class="progress" id="progreso"></div></div><div class="times"><span id="tiempoActual">0:00</span><span id="tiempoTotal">0:00</span></div>
+<div class="controls"><button id="anterior" aria-label="Anterior">⏮</button><button id="play" aria-label="Reproducir">▶</button><button id="siguiente" aria-label="Siguiente">⏭</button></div>
+<button id="aleatorio" class="shuffle on">🔀 Modo aleatorio: activado</button><div class="status" id="estado">Leyendo catálogo…</div></div>
+<audio id="audio" preload="metadata" playsinline></audio>
+<script>
+const $=id=>document.getElementById(id),audio=$("audio");let canciones=[],orden=[],posicion=0,aleatorio=true;
+function formatoTiempo(n){if(!Number.isFinite(n))return"0:00";return Math.floor(n/60)+":"+String(Math.floor(n%60)).padStart(2,"0")}
+function mezclar(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function indiceActual(){return orden[posicion]??-1}function cancionActual(){return canciones[indiceActual()]}
+function crearOrden(){const actual=indiceActual();orden=canciones.map((_,i)=>i);if(aleatorio)orden=mezclar(orden);if(orden.length>1&&orden[0]===actual)[orden[0],orden[1]]=[orden[1],orden[0]]}
+function media(c){if(!("mediaSession"in navigator)||!c)return;try{navigator.mediaSession.metadata=new MediaMetadata({title:c.titulo||"Sin título",artist:c.artista||"GT-GELM",album:"Guatemala, tu nombre inmortal"});navigator.mediaSession.setActionHandler("play",reproducir);navigator.mediaSession.setActionHandler("pause",()=>audio.pause());navigator.mediaSession.setActionHandler("nexttrack",siguiente);navigator.mediaSession.setActionHandler("previoustrack",anterior)}catch(e){}}
+function cargarCancion(i,auto=true){if(!orden.length)return;posicion=(i+orden.length)%orden.length;const c=cancionActual();audio.src=c.archivo;audio.load();$("titulo").textContent=c.titulo||"Sin título";$("artista").textContent=c.artista||"GT-GELM";$("cover").innerHTML=c.portada?'<img src="'+c.portada+'" alt="">':"<span>🎵</span>";$("progreso").style.width="0";$("tiempoActual").textContent="0:00";$("tiempoTotal").textContent="0:00";media(c);if(auto)reproducir();else{$("play").textContent="▶";$("estado").textContent="Catálogo listo · toca reproducir"}}
+function reproducir(){audio.play().then(()=>{$("play").textContent="⏸";$("estado").textContent="Reproduciendo"}).catch(()=>{$("play").textContent="▶";$("estado").textContent="Toca reproducir para iniciar el audio"})}
+function siguiente(){if(!orden.length)return;let n=posicion+1;if(n>=orden.length){crearOrden();n=0}cargarCancion(n)}
+function anterior(){if(!orden.length)return;if(audio.currentTime>3){audio.currentTime=0;return}cargarCancion(posicion-1)}
+$("play").addEventListener("click",()=>audio.paused?reproducir():audio.pause());audio.addEventListener("play",()=>{$("play").textContent="⏸";$("estado").textContent="Reproduciendo"});audio.addEventListener("pause",()=>{$("play").textContent="▶";if(!audio.ended)$("estado").textContent="Pausado"});
+$("siguiente").addEventListener("click",siguiente);$("anterior").addEventListener("click",anterior);audio.addEventListener("ended",siguiente);
+$("aleatorio").addEventListener("click",()=>{aleatorio=!aleatorio;$("aleatorio").classList.toggle("on",aleatorio);$("aleatorio").textContent=aleatorio?"🔀 Modo aleatorio: activado":"🔁 Modo aleatorio: desactivado";crearOrden();posicion=0;cargarCancion(0,false)});
+audio.addEventListener("timeupdate",()=>{if(audio.duration){$("progreso").style.width=(audio.currentTime/audio.duration*100)+"%";$("tiempoActual").textContent=formatoTiempo(audio.currentTime)}});
+audio.addEventListener("loadedmetadata",()=>{$("tiempoTotal").textContent=formatoTiempo(audio.duration);media(cancionActual())});
+$("barra").addEventListener("click",e=>{if(!Number.isFinite(audio.duration))return;const r=$("barra").getBoundingClientRect();audio.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*audio.duration});
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&!audio.paused)$("estado").textContent="Sonando en segundo plano"});
+fetch("./musica.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("No se pudo cargar musica.json");return r.json()}).then(d=>{if(!Array.isArray(d)||!d.length)throw Error("Catálogo vacío");canciones=d.filter(c=>c.archivo&&/^https:\/\//.test(c.archivo));if(!canciones.length)throw Error("No hay MP3 válidos");crearOrden();cargarCancion(0,false);$("estado").textContent=canciones.length+" canciones listas · toca ▶"}).catch(e=>{$("titulo").textContent="Error";$("artista").textContent=e.message;$("estado").textContent="Revisa musica.json"});
+if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script></body></html>
