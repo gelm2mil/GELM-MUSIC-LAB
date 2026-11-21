@@ -1,0 +1,10 @@
+{
+  "name": "GT-GELM Música",
+  "short_name": "GT-GELM",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#07111d",
+  "theme_color": "#07111d",
+  "description": "Reproductor móvil GT-GELM"
+}
