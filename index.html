@@ -17,8 +17,10 @@
     <select id="audioSelect" class="audio-select"><option value="">Selecciona una canción…</option></select>
   </div>
   <audio id="audioElement" controls preload="metadata"></audio>
+  <div class="track-list-head"><b>♫ Lista de reproducción</b><span id="audioListCount">0 canciones</span></div>
+  <input id="audioSearch" class="lyrics-search" type="search" placeholder="Buscar canción…">
+  <div id="audioTrackList" class="audio-track-list"></div>
   <div class="audio-now"><span id="audioNowTitle">Ninguna pista seleccionada</span><span id="audioTime">00:00 / 00:00</span></div>
-  <div id="syncLyrics" class="sync-lyrics">La letra vinculada al MP3 aparecerá aquí cuando esté disponible.</div>
   <section class="lyrics-library">
     <div class="lyrics-library-head"><b>♫ Biblioteca de letras GT-GELM</b><span id="lyricsCount">150 manuscritos</span></div>
     <input id="lyricsSearch" class="lyrics-search" type="search" placeholder="Buscar letra por título…">
