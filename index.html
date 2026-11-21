@@ -9,12 +9,7 @@
 <div id="reader" class="reader" tabindex="0"></div><textarea id="editorText" class="editor-area" hidden spellcheck="true" placeholder="Escribe o pega aquí la letra completa…"></textarea>
 
 <div class="audio-library">
-  <div class="audio-head"><div><b>♫ Reproductor GT-GELM</b><small id="audioStatus">Biblioteca local · importa tu catálogo y tus MP3</small></div><span class="audio-count" id="audioCount">0 pistas</span></div>
-  <div class="audio-imports">
-    <label class="btn small">＋ Catálogo JSON<input id="catalogInput" type="file" accept=".json,application/json" hidden></label>
-    <label class="btn small">＋ Carpeta MP3<input id="audioFilesInput" type="file" accept="audio/*,.mp3" multiple webkitdirectory directory hidden></label>
-    <label class="btn small">＋ Letras TXT/LRC<input id="lyricFilesInput" type="file" accept=".txt,.lrc,text/plain" multiple webkitdirectory directory hidden></label>
-  </div>
+  <div class="audio-head"><div><b>♫ Reproductor GT-GELM</b><small id="audioStatus">Conectando con la biblioteca oficial GT-GELM…</small></div><span class="audio-count" id="audioCount">0 pistas</span></div>
   <div class="audio-controls">
     <button id="audioPrev" class="btn small" title="Anterior">|◀</button>
     <button id="audioPlay" class="btn primary small">▶ Reproducir</button>
@@ -23,7 +18,7 @@
   </div>
   <audio id="audioElement" controls preload="metadata"></audio>
   <div class="audio-now"><span id="audioNowTitle">Ninguna pista seleccionada</span><span id="audioTime">00:00 / 00:00</span></div>
-  <div id="syncLyrics" class="sync-lyrics">Cuando importes tus archivos, podrás reproducirlos aquí. Las letras con marcas de tiempo LRC se sincronizan automáticamente.</div>
+  <div id="syncLyrics" class="sync-lyrics">La biblioteca GT-GELM se carga automáticamente desde Cloudflare. Las letras disponibles se buscan en la carpeta privada del laboratorio.</div>
   <div class="audio-foot">Los MP3 y manuscritos importados se guardan en este navegador. No se publican en GitHub.</div>
 </div>
 <div class="progress-wrap"><div id="progressBar"></div></div><div class="footmeta"><span id="progressText">0% recorrido</span><span id="bookmarkText">Sin marcador</span></div><p class="muted tiny">Toca una línea para seleccionarla. Usa ↑ y ↓ para moverte. Tu posición se conserva automáticamente.</p></section></section>
