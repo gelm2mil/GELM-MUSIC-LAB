@@ -200,111 +200,145 @@ una canción para recordar.
   loadSong(songs[0]);
 
 
-  // Reproductor GT-GELM: catálogo Cloudflare y biblioteca completa de letras.
+  // MOTOR DE AUDIO GT-GELM · reproducción aleatoria sin repeticiones
   const audioTracks=[];
-  let currentTrack=-1, advancing=false;
   const audioEl=$("audioElement");
   const AUDIO_BASE="https://divine-king-c86b.chapin7839.workers.dev/";
-  const audioUrl=file=>/^https?:\/\//i.test(file)?file:AUDIO_BASE+String(file).split("/").map(encodeURIComponent).join("/");
+  let currentTrack=-1, shuffleBag=[], history=[], isChanging=false, errorSkipLock=false;
+  const audioUrl=file=>(String(file).startsWith("http://")||String(file).startsWith("https://"))?file:AUDIO_BASE+String(file).split("/").map(encodeURIComponent).join("/");
+  const fmtAudio=n=>!Number.isFinite(n)? "00:00":String(Math.floor(n/60)).padStart(2,"0")+":"+String(Math.floor(n%60)).padStart(2,"0");
+  function shuffleRefill(exclude=currentTrack){
+    const pool=audioTracks.map((_,i)=>i).filter(i=>i!==exclude);
+    for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+    shuffleBag=pool;
+  }
+  function nextRandomIndex(){
+    if(!shuffleBag.length)shuffleRefill(currentTrack);
+    if(!shuffleBag.length)return currentTrack;
+    return shuffleBag.pop();
+  }
   function renderTrackSelect(){
     const sel=$("audioSelect");sel.innerHTML='<option value="">Selecciona una canción…</option>';
     audioTracks.forEach((t,i)=>sel.add(new Option(t.title+(t.category?" · "+t.category:""),String(i))));
     $("audioCount").textContent=audioTracks.length+" pistas";
   }
-
   function updateTrackUI(){
     $("audioSelect").value=currentTrack>=0?String(currentTrack):"";
     $("audioNowTitle").textContent=currentTrack>=0?audioTracks[currentTrack].title:"Ninguna pista seleccionada";
   }
-  async function chooseTrack(i,autoplay=false){
-    if(i<0||i>=audioTracks.length)return false;
-    const track=audioTracks[i];currentTrack=i;
-    $("audioStatus").textContent="Preparando "+track.title+"…";
-    updateTrackUI();
-    // Pausar antes de cambiar la fuente evita estados colgados en móviles.
+  function status(msg){$("audioStatus").textContent=msg;}
+  async function chooseTrack(i,autoplay=false,remember=true){
+    if(i<0||i>=audioTracks.length||isChanging)return false;
+    isChanging=true;
+    const track=audioTracks[i];
+    if(remember&&currentTrack>=0&&currentTrack!==i)history.push(currentTrack);
+    currentTrack=i;errorSkipLock=false;
+    updateTrackUI();status("Preparando · "+track.title);
     audioEl.pause();
     audioEl.src=track.url;
     audioEl.load();
-    if(autoplay){
-      try{
-        await audioEl.play();
-        $("audioStatus").textContent="Reproduciendo · "+(i+1)+" de "+audioTracks.length;
-      }catch(e){
-        $("audioStatus").textContent=e?.name==="NotAllowedError"?"El navegador bloqueó el inicio. Pulsa Reproducir.":"No se pudo iniciar esta pista; prueba otra.";
-        return false;
-      }
-    }else $("audioStatus").textContent="Lista lista · pulsa Reproducir";
-    return true;
-  }
-  async function stepTrack(delta,autoplay=true){
-    if(advancing||!audioTracks.length)return;
-    advancing=true;
     try{
-      const start=currentTrack<0?0:currentTrack;
-      for(let n=1;n<=audioTracks.length;n++){
-        const i=(start+delta*n+audioTracks.length)%audioTracks.length;
-        if(await chooseTrack(i,autoplay))return;
-      }
-      $("audioStatus").textContent="No se pudo reproducir ninguna pista. Revisa la conexión con Cloudflare.";
-    }finally{advancing=false;}
+      if(autoplay){
+        await audioEl.play();
+        status("Reproduciendo · "+(i+1)+" de "+audioTracks.length);
+      }else status("Lista · pulsa Reproducir");
+      return true;
+    }catch(err){
+      status(err?.name==="NotAllowedError"?"El navegador requiere que pulses Reproducir.":"No se pudo cargar esta pista; buscando otra…");
+      return false;
+    }finally{isChanging=false;}
+  }
+  async function playRandom(){
+    if(!audioTracks.length)return;
+    for(let tries=0;tries<audioTracks.length;tries++){
+      const i=nextRandomIndex();
+      if(await chooseTrack(i,true))return;
+    }
+    status("No se pudo reproducir el catálogo. Comprueba la conexión.");
+  }
+  async function stepTrack(direction=1,autoplay=true){
+    if(isChanging||!audioTracks.length)return;
+    if(direction<0&&history.length){
+      const previous=history.pop();
+      await chooseTrack(previous,autoplay,false);
+      return;
+    }
+    if(direction>0){await playRandom();return;}
+    const i=(currentTrack-1+audioTracks.length)%audioTracks.length;
+    await chooseTrack(i,autoplay);
   }
   async function loadCloudLibrary(){
-    $("audioStatus").textContent="Conectando con musica.json…";
+    status("Conectando con la biblioteca GT-GELM…");
     try{
       const r=await fetch("./musica.json",{cache:"no-cache"});
       if(!r.ok)throw Error("No se pudo leer musica.json (HTTP "+r.status+").");
       const data=await r.json(),list=Array.isArray(data)?data:(data.songs||data.tracks||[]);
-      audioTracks.push(...list.filter(x=>x.file).map(x=>({title:x.title||x.file,file:x.file,category:x.category||"",url:audioUrl(x.file)})));
-      if(!audioTracks.length)throw Error("El catálogo está vacío.");
+      audioTracks.push(...list.filter(x=>x&&x.file).map(x=>({title:x.title||x.file,file:x.file,category:x.category||"",url:audioUrl(x.file)})));
+      if(!audioTracks.length)throw Error("El catálogo no contiene pistas válidas.");
+      shuffleRefill(-1);
       renderTrackSelect();updateTrackUI();
-      $("audioStatus").textContent="Catálogo conectado · "+audioTracks.length+" canciones";
-    }catch(e){$("audioStatus").textContent=e.message;}
+      $("audioCount").textContent=audioTracks.length+" pistas";
+      status("Biblioteca GT-GELM conectada · "+audioTracks.length+" canciones · modo aleatorio");
+    }catch(e){status(e.message);}
   }
   async function loadLyricsLibrary(){
     try{
       const r=await fetch("./lyrics-index.json",{cache:"no-cache"});
       if(!r.ok)throw Error("No se pudo leer el índice de letras.");
       lyricFiles=await r.json();renderList();
-    }catch(e){$("songCount").textContent="Error";$("songList").textContent=e.message;}
+    }catch(e){$("songCount").textContent="—";$("songList").textContent=e.message;}
   }
-  $("audioSelect").addEventListener("change",e=>{if(e.target.value!=="")chooseTrack(Number(e.target.value),true);});
-  $("audioPlay").addEventListener("click",()=>{
-    if(currentTrack<0){if(audioTracks.length)chooseTrack(0,true);return;}
-    if(audioEl.paused)audioEl.play().catch(()=>{$("audioStatus").textContent="Pulsa Reproducir otra vez para iniciar.";});
-    else audioEl.pause();
+  $("audioSelect").addEventListener("change",e=>{
+    if(e.target.value!==""){
+      const chosen=Number(e.target.value);
+      shuffleBag=shuffleBag.filter(i=>i!==chosen);
+      chooseTrack(chosen,true);
+    }
+  });
+  $("audioPlay").addEventListener("click",async()=>{
+    if(currentTrack<0){await playRandom();return;}
+    if(audioEl.paused){
+      try{await audioEl.play();status("Reproduciendo · "+audioTracks[currentTrack].title);}
+      catch(e){status("El navegador no pudo iniciar el audio. Vuelve a pulsar Reproducir.");}
+    }else audioEl.pause();
   });
   $("audioPrev").addEventListener("click",()=>stepTrack(-1,true));
   $("audioNext").addEventListener("click",()=>stepTrack(1,true));
   audioEl.addEventListener("play",()=>{$("audioPlay").textContent="Ⅱ Pausar";});
   audioEl.addEventListener("pause",()=>{$("audioPlay").textContent="▶ Reproducir";});
-  audioEl.addEventListener("error",()=>{
-    if(currentTrack>=0)$("audioStatus").textContent="No se encontró "+audioTracks[currentTrack].file+" en Cloudflare (error "+(audioEl.error?.code||"desconocido")+"). Usa Siguiente para continuar.";
-  });
-  audioEl.addEventListener("timeupdate",()=>{
-    const f=n=>!Number.isFinite(n)?"00:00":String(Math.floor(n/60)).padStart(2,"0")+":"+String(Math.floor(n%60)).padStart(2,"0");
-    $("audioTime").textContent=f(audioEl.currentTime)+" / "+f(audioEl.duration);
-  });
+  audioEl.addEventListener("loadedmetadata",()=>{$("audioTime").textContent=fmtAudio(audioEl.currentTime)+" / "+fmtAudio(audioEl.duration);});
+  audioEl.addEventListener("timeupdate",()=>{$("audioTime").textContent=fmtAudio(audioEl.currentTime)+" / "+fmtAudio(audioEl.duration);});
   audioEl.addEventListener("ended",()=>stepTrack(1,true));
+  audioEl.addEventListener("error",()=>{
+    if(currentTrack<0||errorSkipLock)return;
+    errorSkipLock=true;
+    status("Pista no disponible · saltando a la siguiente…");
+    setTimeout(()=>{errorSkipLock=false;stepTrack(1,true);},250);
+  });
+  if("mediaSession" in navigator){
+    try{
+      navigator.mediaSession.setActionHandler("play",()=>audioEl.play());
+      navigator.mediaSession.setActionHandler("pause",()=>audioEl.pause());
+      navigator.mediaSession.setActionHandler("nexttrack",()=>stepTrack(1,true));
+      navigator.mediaSession.setActionHandler("previoustrack",()=>stepTrack(-1,true));
+    }catch(e){}
+  }
   loadCloudLibrary();loadLyricsLibrary();
 
-  window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; });
-  $("installBtn").addEventListener("click", async () => {
-    if (deferred) {
-      deferred.prompt();
-      await deferred.userChoice;
-      deferred = null;
-      return;
-    }
-    const ua = navigator.userAgent;
-    let instructions = "Para instalar GELM MUSIC LAB, abre el menú del navegador y elige “Añadir a pantalla de inicio” o “Instalar aplicación”.";
-    if (/SamsungBrowser/i.test(ua)) instructions = "Samsung Internet: abre el menú ☰ del navegador y selecciona “Añadir página a” → “Pantalla Inicio”. Si aparece “Instalar aplicación”, también puedes usar esa opción.";
-    else if (/Android/i.test(ua)) instructions = "Android: abre el menú ⋮ del navegador y selecciona “Instalar aplicación” o “Añadir a pantalla de inicio”.";
-    else if (/iPhone|iPad|iPod/i.test(ua)) instructions = "iPhone/iPad: abre Compartir en Safari y selecciona “Añadir a pantalla de inicio”.";
-    alert(instructions);
+  window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;const b=$("installBtn");if(b){b.hidden=false;b.textContent="⇩ Instalar";b.dataset.ready="1";}});
+  window.addEventListener("appinstalled",()=>{deferred=null;const b=$("installBtn");if(b){b.textContent="✓ Instalada";b.disabled=true;}});
+
+  $("installBtn").addEventListener("click",async()=>{
+    if(deferred){deferred.prompt();const choice=await deferred.userChoice;if(choice?.outcome==="accepted"){$("installBtn").textContent="✓ Instalando";}deferred=null;return;}
+    const ua=navigator.userAgent;
+    let msg="Abre el menú del navegador y elige Instalar aplicación o Añadir a pantalla de inicio.";
+    if(/SamsungBrowser/i.test(ua))msg="Samsung Internet: abre el menú ☰ → Añadir página a → Pantalla Inicio. Confirma Añadir. Si no aparece, actualiza la página desde HTTPS y vuelve a intentarlo.";
+    else if(/Android/i.test(ua))msg="Android: menú ⋮ → Instalar aplicación o Añadir a pantalla de inicio.";
+    else if(/iPhone|iPad|iPod/i.test(ua))msg="Safari → Compartir → Añadir a pantalla de inicio.";
+    alert(msg);
   });
-  if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-    window.addEventListener("load", () =>
-      navigator.serviceWorker.register("./sw.js").catch(() => {}));
+  if("serviceWorker" in navigator&&location.protocol.startsWith("http")){
+    window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
   }
   window.addEventListener("beforeunload", save);
 })();
