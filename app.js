@@ -1,122 +1,137 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
-let tracks=[],current=-1,bag=[],history=[],deferred=null,changing=false,errorLock=false,requestToken=0;
 const audio=$('audioElement');
 const BASE='https://divine-king-c86b.chapin7839.workers.dev/';
-const url=file=>/^https?:\/\//i.test(String(file))?String(file):BASE+String(file).split('/').map(encodeURIComponent).join('/');
+let tracks=[],current=-1,bag=[],history=[],deferredInstall=null,playingRequest=0;
 const time=n=>!Number.isFinite(n)?'00:00':String(Math.floor(n/60)).padStart(2,'0')+':'+String(Math.floor(n%60)).padStart(2,'0');
-function refill(exclude=current){
+const trackURL=file=>file.startsWith('http://')||file.startsWith('https://')?file:BASE+file.split('/').map(encodeURIComponent).join('/');
+function status(message){$('audioStatus').textContent=message;}
+function shuffleBag(exclude=current){
  bag=tracks.map((_,i)=>i).filter(i=>i!==exclude);
  for(let i=bag.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]];}
 }
-function randomIndex(){if(!bag.length)refill();return bag.length?bag.pop():-1;}
-function update(){
+function takeRandom(){
+ if(!bag.length)shuffleBag(current);
+ return bag.length?bag.pop():-1;
+}
+function metadata(track){
+ if(!('mediaSession'in navigator)||!('MediaMetadata'in window))return;
+ try{
+  navigator.mediaSession.metadata=new MediaMetadata({
+   title:track.title,artist:'GT-GELM',album:'Guatemala, tu nombre inmortal',
+   artwork:[{src:'icons/icon-192.png',sizes:'192x192',type:'image/png'},{src:'icons/icon-512.png',sizes:'512x512',type:'image/png'}]
+  });
+  navigator.mediaSession.playbackState=audio.paused?'paused':'playing';
+ }catch(e){}
+}
+function renderCurrent(){
  $('audioSelect').value=current<0?'':String(current);
  $('audioNowTitle').textContent=current<0?'Ninguna pista seleccionada':tracks[current]?.title||'';
 }
-function status(t){$('audioStatus').textContent=t;}
-async function choose(i,autoplay=true,remember=true){
- if(i<0||i>=tracks.length||changing)return false;
- changing=true;const token=++requestToken;
- if(remember&&current>=0&&current!==i)history.push(current);
- current=i;errorLock=false;update();status('Cargando · '+tracks[i].title);
+async function playTrack(index,fromHistory=false){
+ if(index<0||index>=tracks.length)return false;
+ const track=tracks[index],token=++playingRequest;
+ if(current>=0&&current!==index&&!fromHistory)history.push(current);
+ current=index;bag=bag.filter(i=>i!==index);renderCurrent();
+ status('Cargando · '+track.title);
  try{
-  audio.pause();
-  audio.src=tracks[i].url;
-  audio.load();
-  if(autoplay){
-   await audio.play();
-   if(token!==requestToken)return false;
-   status('Reproduciendo · modo aleatorio');
-  }else status('Lista para reproducir');
+  // Mantener un único elemento audio y cambiar únicamente su fuente, como en PLAY.
+  audio.src=track.url;
+  metadata(track);
+  const promise=audio.play();
+  if(promise&&typeof promise.then==='function')await promise;
+  if(token!==playingRequest)return false;
+  status('Reproduciendo · modo aleatorio');
+  metadata(track);
   return true;
- }catch(e){
-  if(token===requestToken)status(e?.name==='NotAllowedError'?'Pulsa Reproducir para iniciar.':'No se pudo cargar: '+tracks[i].title);
+ }catch(error){
+  if(token===playingRequest){
+   status(error?.name==='NotAllowedError'?'Toca Reproducir para iniciar el audio.':'No se pudo reproducir esta pista; prueba otra.');
+   metadata(track);
+  }
   return false;
- }finally{if(token===requestToken)changing=false;}
+ }
 }
 async function nextRandom(){
- if(!tracks.length||changing)return;
- const attempts=tracks.length;
- for(let n=0;n<attempts;n++){
-  const i=randomIndex();if(i<0)break;
-  const ok=await choose(i,true);
-  if(ok)return;
+ if(!tracks.length)return;
+ let tries=tracks.length;
+ while(tries--){
+  const index=takeRandom();if(index<0)return;
+  if(await playTrack(index))return;
  }
- status('No se pudo reproducir ninguna pista. Revisa la conexión con Cloudflare.');
+ status('No se pudo reproducir el catálogo. Comprueba la conexión.');
 }
-async function stepBack(){
- if(changing)return;
- if(history.length){const i=history.pop();await choose(i,true,false);}
+async function previousTrack(){
+ if(history.length){const index=history.pop();await playTrack(index,true);}
  else await nextRandom();
 }
-async function load(){
+async function loadCatalog(){
  try{
-  status('Conectando con la biblioteca GT-GELM…');
-  const response=await fetch('./musica.json?v=1',{cache:'no-store'});
-  if(!response.ok)throw new Error('musica.json respondió HTTP '+response.status);
+  status('Conectando con el catálogo GT-GELM…');
+  const response=await fetch('./musica.json?rev=gtgelm118',{cache:'no-store'});
+  if(!response.ok)throw new Error('HTTP '+response.status);
   const data=await response.json();
-  const list=Array.isArray(data)?data:(data.songs||data.tracks||[]);
-  tracks=list.filter(x=>x&&x.file).map(x=>({title:String(x.title||x.file),file:String(x.file),url:url(x.file)}));
-  if(!tracks.length)throw new Error('El catálogo no contiene pistas válidas.');
-  const select=$('audioSelect');
-  select.innerHTML='';
-  select.add(new Option('Selecciona una canción…',''));
-  tracks.forEach((track,i)=>select.add(new Option(track.title,String(i))));
+  const source=Array.isArray(data)?data:(data.songs||data.tracks||[]);
+  tracks=source.filter(item=>item&&item.file).map(item=>({title:String(item.title||item.file),file:String(item.file),url:trackURL(String(item.file))}));
+  if(!tracks.length)throw new Error('No se encontraron canciones válidas en musica.json.');
+  const select=$('audioSelect');select.replaceChildren(new Option('Selecciona una canción…',''));
+  tracks.forEach((track,index)=>select.add(new Option(track.title,String(index))));
   $('audioCount').textContent=tracks.length+' pistas';
-  refill(-1);
-  status('Catálogo conectado · '+tracks.length+' canciones · modo aleatorio');
- }catch(e){
-  console.error('GT-GELM: error cargando musica.json',e);
-  status('Error al cargar el catálogo: '+e.message);
-  $('audioCount').textContent='0 pistas';
+  shuffleBag(-1);
+  status('Catálogo conectado · '+tracks.length+' canciones');
+ }catch(error){
+  console.error('GT-GELM catalog:',error);
+  $('audioCount').textContent='— pistas';
+  status('No se pudo cargar musica.json: '+error.message);
  }
 }
 $('audioPlay').addEventListener('click',async()=>{
  if(current<0){await nextRandom();return;}
- if(audio.paused){try{await audio.play();}catch(e){status('No se pudo iniciar. Vuelve a tocar Reproducir.');}}
- else audio.pause();
+ if(audio.paused){
+  try{await audio.play();status('Reproduciendo · modo aleatorio');metadata(tracks[current]);}
+  catch(e){status('Toca nuevamente Reproducir para iniciar.');}
+ }else audio.pause();
 });
 $('audioNext').addEventListener('click',nextRandom);
-$('audioPrev').addEventListener('click',stepBack);
-$('audioSelect').addEventListener('change',e=>{
- if(e.target.value!==''){
-  const i=Number(e.target.value);bag=bag.filter(x=>x!==i);choose(i,true);
- }
+$('audioPrev').addEventListener('click',previousTrack);
+$('audioSelect').addEventListener('change',event=>{
+ if(event.target.value==='')return;
+ const index=Number(event.target.value);
+ bag=bag.filter(item=>item!==index);
+ playTrack(index);
 });
-audio.addEventListener('play',()=>{$('audioPlay').textContent='Ⅱ Pausar';});
-audio.addEventListener('pause',()=>{$('audioPlay').textContent='▶ Reproducir';});
-function clock(){$('audioTime').textContent=time(audio.currentTime)+' / '+time(audio.duration);}
-audio.addEventListener('timeupdate',clock);
-audio.addEventListener('loadedmetadata',clock);
-audio.addEventListener('ended',()=>{if(!errorLock)nextRandom();});
+audio.addEventListener('play',()=>{$('audioPlay').textContent='Ⅱ Pausar';if(current>=0)metadata(tracks[current]);});
+audio.addEventListener('pause',()=>{$('audioPlay').textContent='▶ Reproducir';if('mediaSession'in navigator)navigator.mediaSession.playbackState='paused';});
+audio.addEventListener('ended',nextRandom);
 audio.addEventListener('error',()=>{
- if(current<0||errorLock)return;
- errorLock=true;status('Pista no disponible · buscando otra…');
- setTimeout(()=>{errorLock=false;nextRandom();},250);
+ if(current<0)return;
+ status('Pista no disponible · saltando a otra…');
+ setTimeout(()=>nextRandom(),350);
 });
+function updateClock(){$('audioTime').textContent=time(audio.currentTime)+' / '+time(audio.duration);}
+audio.addEventListener('timeupdate',updateClock);audio.addEventListener('loadedmetadata',updateClock);
 $('lyricsBtn').addEventListener('click',()=>window.open('./letras.html','gtGelmLyrics','popup=yes,width=980,height=820,resizable=yes,scrollbars=yes'));
 $('installBtn').addEventListener('click',async()=>{
- if(deferred){
-  const event=deferred;deferred=null;
+ if(deferredInstall){
+  const event=deferredInstall;deferredInstall=null;
   try{await event.prompt();const choice=await event.userChoice;if(choice?.outcome==='accepted')$('installBtn').textContent='✓ Instalada';}
-  catch(e){status('No se pudo abrir la instalación. Usa el menú del navegador.');}
-  return;
+  catch(e){status('No se pudo iniciar la instalación. Usa el menú del navegador.');}
+ }else{
+  alert('En Samsung Internet: abre el menú ⋮ y selecciona “Añadir página a” o “Instalar aplicación”, si aparece disponible.');
  }
- alert('Para instalar GT-GELM, abre el menú del navegador y elige “Instalar aplicación” o “Añadir a pantalla de inicio”.');
 });
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;});
+window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstall=event;});
 window.addEventListener('appinstalled',()=>{$('installBtn').textContent='✓ Instalada';});
 if('mediaSession'in navigator){
  try{
   navigator.mediaSession.setActionHandler('play',()=>audio.play());
   navigator.mediaSession.setActionHandler('pause',()=>audio.pause());
   navigator.mediaSession.setActionHandler('nexttrack',nextRandom);
-  navigator.mediaSession.setActionHandler('previoustrack',stepBack);
+  navigator.mediaSession.setActionHandler('previoustrack',previousTrack);
  }catch(e){}
 }
 if('serviceWorker'in navigator&&location.protocol==='https:'){
- window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).catch(()=>{}));
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).catch(error=>console.warn('SW',error)));
 }
-load();
+loadCatalog();
 })();
