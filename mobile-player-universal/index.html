@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10151d">
+<meta name="description" content="GT-GELM: Guatemala, tu nombre inmortal. Música para todos.">
+<link rel="manifest" href="./manifest.webmanifest">
+<title>GT-GELM · Música para todos</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#10151d;color:#f4f7fb}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:14px;background:#10151d}
+main{width:min(100%,430px);padding:20px;background:#1a222d;border:1px solid #2b3745;border-radius:18px}
+.brand{text-align:center;margin-bottom:18px}
+.brand strong{display:block;font-size:21px;letter-spacing:1.4px}
+.brand span{font-size:12px;color:#aab6c5}
+.disc{width:clamp(125px,38vw,180px);aspect-ratio:1;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;background:#111923;border:8px solid #293746;box-shadow:inset 0 0 0 2px #10151d}
+.disc span{font-size:54px}
+h1{font-size:18px;line-height:1.35;text-align:center;margin:0;overflow-wrap:anywhere}
+.artist{text-align:center;color:#aab6c5;font-size:14px;margin:5px 0 18px}
+.trackline{height:7px;background:#303c49;border-radius:20px;overflow:hidden;touch-action:pan-y;cursor:pointer}
+.progress{height:100%;width:0;background:#22c7b8}
+.times{display:flex;justify-content:space-between;color:#aab6c5;font-size:12px;margin:7px 1px 18px;font-variant-numeric:tabular-nums}
+.controls{display:flex;align-items:center;justify-content:center;gap:18px}
+button{font:inherit;border:0;cursor:pointer;color:#fff;background:#2a3745;min-width:50px;min-height:50px;border-radius:50%;font-size:19px}
+button:focus-visible,.trackline:focus-visible{outline:3px solid #22c7b8;outline-offset:3px}
+#play{width:66px;height:66px;background:#087f78;font-size:25px}
+#shuffle{display:block;width:100%;min-height:42px;margin-top:17px;border-radius:10px;font-size:13px;background:#25313e}
+#shuffle[aria-pressed="false"]{background:#303c49;color:#d0d8e2}
+#status{min-height:34px;margin:14px 0 0;text-align:center;color:#aab6c5;font-size:12px}
+footer{text-align:center;color:#758394;font-size:11px;margin-top:12px}
+@media(max-height:650px){main{padding:14px}.disc{width:105px;margin-bottom:12px}.artist{margin-bottom:12px}.times{margin-bottom:12px}}
+@media(min-width:700px){body{padding:24px}}
+</style>
+</head>
+<body>
+<main>
+  <div class="brand"><strong>GT-GELM</strong><span>GUATEMALA, TU NOMBRE INMORTAL</span></div>
+  <div class="disc" aria-hidden="true"><span>♫</span></div>
+  <h1 id="title">Cargando catálogo…</h1>
+  <div class="artist" id="artist">GT-GELM</div>
+  <div class="trackline" id="seek" role="slider" tabindex="0" aria-label="Posición de reproducción" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress" id="progress"></div></div>
+  <div class="times"><span id="elapsed">0:00</span><span id="duration">0:00</span></div>
+  <div class="controls">
+    <button id="previous" type="button" aria-label="Canción anterior">|◀</button>
+    <button id="play" type="button" aria-label="Reproducir">▶</button>
+    <button id="next" type="button" aria-label="Canción siguiente">▶|</button>
+  </div>
+  <button id="shuffle" type="button" aria-pressed="true">Aleatorio: activado</button>
+  <p id="status" role="status" aria-live="polite">Preparando música…</p>
+  <footer id="count">Reproductor ligero · streaming</footer>
+</main>
+<audio id="audio" preload="none" playsinline></audio>
+<script>
+(function(){
+'use strict';
+var byId=function(id){return document.getElementById(id);};
+var audio=byId('audio'),songs=[],order=[],position=0,shuffle=true,loading=false;
+function say(message){byId('status').textContent=message;}
+function time(value){if(!isFinite(value)||value<0)return '0:00';var m=Math.floor(value/60),s=Math.floor(value%60);return m+':'+(s<10?'0':'')+s;}
+function makeOrder(keepCurrent){
+ var current=order[position],nextOrder=songs.map(function(_,i){return i;});
+ if(shuffle){for(var i=nextOrder.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),tmp=nextOrder[i];nextOrder[i]=nextOrder[j];nextOrder[j]=tmp;}}
+ if(keepCurrent&&typeof current==='number'){var at=nextOrder.indexOf(current);if(at>0){nextOrder.splice(at,1);nextOrder.unshift(current);}}
+ order=nextOrder;position=0;
+}
+function currentSong(){return songs[order[position]];}
+function updateMedia(song){
+ if(!('mediaSession' in navigator)||!song)return;
+ try{
+  navigator.mediaSession.metadata=new MediaMetadata({title:song.titulo||'Sin título',artist:song.artista||'GT-GELM',album:'Guatemala, tu nombre inmortal'});
+  navigator.mediaSession.setActionHandler('play',play);
+  navigator.mediaSession.setActionHandler('pause',function(){audio.pause();});
+  navigator.mediaSession.setActionHandler('nexttrack',next);
+  navigator.mediaSession.setActionHandler('previoustrack',previous);
+ }catch(e){}
+}
+function load(index,autoplay){
+ if(!songs.length)return;
+ position=(index+order.length)%order.length;
+ var song=currentSong();
+ audio.pause();audio.src=song.archivo;audio.load();
+ byId('title').textContent=song.titulo||'Sin título';
+ byId('artist').textContent=song.artista||'GT-GELM';
+ byId('progress').style.width='0%';byId('elapsed').textContent='0:00';byId('duration').textContent='0:00';
+ byId('seek').setAttribute('aria-valuenow','0');
+ updateMedia(song);
+ if(autoplay)play();else{byId('play').textContent='▶';byId('play').setAttribute('aria-label','Reproducir');say('Catálogo listo. Toca reproducir.');}
+}
+function play(){
+ if(!audio.src){say('Selecciona una canción para comenzar.');return;}
+ var promise=audio.play();
+ if(promise&&promise.then){promise.then(function(){say('Reproduciendo');}).catch(function(){say('No se pudo iniciar. Toca reproducir nuevamente o revisa tu conexión.');});}
+}
+function next(){
+ if(!order.length)return;
+ if(position+1>=order.length){makeOrder(false);}
+ else position++;
+ load(position,true);
+}
+function previous(){
+ if(!order.length)return;
+ if(audio.currentTime>3){audio.currentTime=0;return;}
+ if(position>0)position--;else position=order.length-1;
+ load(position,true);
+}
+byId('play').addEventListener('click',function(){if(audio.paused)play();else audio.pause();});
+byId('next').addEventListener('click',next);
+byId('previous').addEventListener('click',previous);
+byId('shuffle').addEventListener('click',function(){
+ shuffle=!shuffle;this.setAttribute('aria-pressed',String(shuffle));
+ this.textContent='Aleatorio: '+(shuffle?'activado':'desactivado');
+ if(songs.length){makeOrder(true);load(0,false);}
+});
+audio.addEventListener('play',function(){byId('play').textContent='Ⅱ';byId('play').setAttribute('aria-label','Pausar');if('mediaSession'in navigator)navigator.mediaSession.playbackState='playing';});
+audio.addEventListener('pause',function(){byId('play').textContent='▶';byId('play').setAttribute('aria-label','Reproducir');if('mediaSession'in navigator)navigator.mediaSession.playbackState='paused';if(!audio.ended)say('En pausa');});
+audio.addEventListener('ended',next);
+audio.addEventListener('timeupdate',function(){
+ if(!isFinite(audio.duration)||audio.duration<=0)return;
+ var percent=audio.currentTime/audio.duration*100;
+ byId('progress').style.width=percent+'%';byId('elapsed').textContent=time(audio.currentTime);
+ byId('seek').setAttribute('aria-valuenow',String(Math.round(percent)));
+});
+audio.addEventListener('loadedmetadata',function(){byId('duration').textContent=time(audio.duration);updateMedia(currentSong());});
+audio.addEventListener('waiting',function(){say('Cargando audio…');});
+audio.addEventListener('playing',function(){say('Reproduciendo');});
+audio.addEventListener('error',function(){say('No se pudo cargar esta pista. Revisa la conexión o prueba la siguiente.');});
+function seekTo(clientX){if(!isFinite(audio.duration)||audio.duration<=0)return;var rect=byId('seek').getBoundingClientRect();audio.currentTime=Math.max(0,Math.min(1,(clientX-rect.left)/rect.width))*audio.duration;}
+byId('seek').addEventListener('click',function(e){seekTo(e.clientX);});
+byId('seek').addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();if(isFinite(audio.duration)){audio.currentTime=Math.max(0,Math.min(audio.duration,audio.currentTime+(e.key==='ArrowRight'?10:-10)));}}});
+fetch('./musica.json').then(function(response){if(!response.ok)throw new Error('No se pudo leer el catálogo.');return response.json();}).then(function(data){
+ if(!Array.isArray(data)||!data.length)throw new Error('El catálogo está vacío.');
+ songs=data.filter(function(song){return song&&song.archivo&&/^https:\/\//i.test(song.archivo);});
+ if(!songs.length)throw new Error('No hay direcciones de audio válidas.');
+ makeOrder(false);byId('count').textContent=songs.length+' canciones disponibles · streaming';
+ load(0,false);say(songs.length+' canciones listas. Toca ▶ para escuchar.');
+}).catch(function(error){byId('title').textContent='No se pudo abrir la música';say(error.message+' Verifica tu conexión.');});
+if('serviceWorker'in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});}
+})();
+</script>
+</body>
+</html>
