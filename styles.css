@@ -9,3 +9,11 @@
 .sync-lyrics .lyric-active{color:#fff;background:#00eaff20;border-radius:5px;padding:3px 6px;text-shadow:0 0 10px #00eaff}
 .audio-foot{line-height:1.5}
 @media(max-width:520px){.audio-library{padding:10px}.audio-imports label{font-size:10px}.audio-select{min-width:100%;order:4}.audio-now{font-size:9px}}
+
+/* Biblioteca de manuscritos independiente del reproductor */
+.lyrics-library{margin-top:10px;padding:11px;border:1px solid #17485c;border-radius:10px;background:#071522}
+.lyrics-library-head{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#00eaff;font-size:12px;margin-bottom:8px}
+.lyrics-library-head span{color:#8ca9bb;font-size:10px}
+.lyrics-search,.lyrics-select{width:100%;box-sizing:border-box;background:#06111d;color:#d7e8f4;border:1px solid #24475e;border-radius:7px;padding:9px;font:inherit;font-size:12px;margin-bottom:7px}
+.lyrics-select{height:38px;cursor:pointer}
+.lyrics-viewer{max-height:260px;min-height:100px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#050f19;color:#c5d7e5;border:1px solid #18384b;border-radius:8px;padding:12px;font:12px/1.75 'DM Mono',monospace;margin:0}
