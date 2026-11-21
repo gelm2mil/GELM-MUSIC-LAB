@@ -12,7 +12,7 @@
       "src": "icons/icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ],
   "description": "Lugares, historias, cuentos y tradiciones hechos canción. Laboratorio de manuscritos GT-GELM."
