@@ -295,7 +295,6 @@ una canción para recordar.
   $("audioPrev").addEventListener("click",()=>stepTrack(-1,true));
   $("audioNext").addEventListener("click",()=>stepTrack(1,true));
   $("audioSearch").addEventListener("input",renderTrackList);
-  $("audioEl" in window? "audioEl":"audioElement");
   audioEl.addEventListener("play",()=>{$("audioPlay").textContent="Ⅱ Pausar";});
   audioEl.addEventListener("pause",()=>{$("audioPlay").textContent="▶ Reproducir";});
   audioEl.addEventListener("error",()=>{
