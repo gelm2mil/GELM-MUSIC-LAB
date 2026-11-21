@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111d">
+<meta name="description" content="GT-GELM · Reproductor móvil">
+<link rel="manifest" href="./manifest.webmanifest">
+<title>GT-GELM · Música</title>
+<style>
+:root{color-scheme:dark;--bg:#07111d;--panel:#0d1d2d;--line:#1d4056;--cyan:#00eaff;--green:#00ffc8;--muted:#91a8ba}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#102c43 0,var(--bg) 58%);color:#eaf5ff;font:16px system-ui,-apple-system,Segoe UI,sans-serif;display:grid;place-items:center;padding:22px 16px}
+main{width:min(100%,440px)}header{display:flex;align-items:center;gap:13px;margin:0 0 28px}.mark{width:48px;height:48px;border:1px solid var(--cyan);border-radius:50%;display:grid;place-items:center;color:var(--cyan);font-size:25px;box-shadow:0 0 18px #00eaff30}.brand{font-weight:900;letter-spacing:3px;font-size:22px}.sub{font-size:10px;color:var(--muted);letter-spacing:1px}
+.player{background:linear-gradient(145deg,#10263a,#091522);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 18px 55px #0005}
+.status{color:var(--green);font-size:12px;font-weight:700;letter-spacing:1px}.title{font-size:20px;font-weight:750;line-height:1.35;min-height:56px;margin:16px 0 7px;overflow-wrap:anywhere}.counter{color:var(--muted);font-size:12px;margin-bottom:22px}
+.controls{display:grid;grid-template-columns:64px 1fr 64px;gap:10px}.btn{border:1px solid #31536b;background:#142d42;color:#eefaff;border-radius:14px;min-height:58px;font-size:24px;font-weight:800;cursor:pointer}.btn.main{background:#006d79;border-color:var(--cyan);font-size:17px}.btn:active{transform:scale(.97)}
+audio{width:100%;margin:22px 0 4px;height:42px}.foot{margin-top:18px;color:var(--muted);font-size:12px;text-align:center}.install{display:block;margin:18px auto 0;background:transparent;border:1px solid var(--green);color:var(--green);border-radius:10px;padding:10px 16px;font-weight:700}
+@media(max-width:360px){.player{padding:17px}.controls{grid-template-columns:54px 1fr 54px}.btn{min-height:54px}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="mark">♫</div><div><div class="brand">GT-GELM</div><div class="sub">GUATEMALA, TU NOMBRE INMORTAL</div></div></header>
+<section class="player" aria-label="Reproductor de música">
+<div class="status" id="status">CARGANDO 118 CANCIONES</div>
+<div class="title" id="title">Preparando música…</div>
+<div class="counter" id="counter">Catálogo GT-GELM</div>
+<div class="controls">
+<button class="btn" id="prev" aria-label="Anterior">|◀</button>
+<button class="btn main" id="toggle">▶ Reproducir</button>
+<button class="btn" id="next" aria-label="Siguiente">▶|</button>
+</div>
+<audio id="audio" controls preload="none" playsinline></audio>
+</section>
+<button class="install" id="install" hidden>＋ Instalar GT-GELM</button>
+<div class="foot">Reproducción aleatoria · 118 pistas</div>
+</main>
+<script src="./player.js"></script>
+</body>
+</html>
