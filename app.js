@@ -191,7 +191,7 @@ una canción para recordar.
   const audioEl=$("audioElement");
   const AUDIO_BASE="https://divine-king-c86b.chapin7839.workers.dev/";
   const LYRIC_BASE="./lirycs/";
-  const audioUrl=file=>/^https?:\\/\\//i.test(file)?file:AUDIO_BASE+String(file).split("/").map(encodeURIComponent).join("/");
+  const audioUrl=file=>/^https?:\/\//i.test(file)?file:AUDIO_BASE+String(file).split("/").map(encodeURIComponent).join("/");
   function parseLrc(text){
     const out=[],re=/\\[(\\d{1,2}):(\\d{2})(?:[.:](\\d{1,3}))?\\](.*)/g;let m;
     while((m=re.exec(text))!==null){const f=(m[3]||"0").padEnd(3,"0");out.push({time:+m[1]*60 + +m[2] + +f/1000,text:m[4].trim()});}
