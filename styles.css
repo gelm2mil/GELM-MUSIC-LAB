@@ -90,3 +90,62 @@
  .audio-select{font-size:12px;padding:10px}
  .audio-now{font-size:9px}
 }
+
+/* IDENTIDAD GT-GELM · cabecera compacta y biblioteca plegable */
+.topbar{height:66px;padding-inline:clamp(16px,5vw,76px)}
+.brand{gap:0}
+.brand-mark{display:none}
+.brand b{font-size:20px;letter-spacing:.17em;color:var(--cyan);line-height:1.2}
+.brand small{font-size:10px;letter-spacing:.16em;color:#c4d6e4;margin-top:3px}
+.hero{min-height:0;padding:13px 0 15px;align-items:center}
+.hero .eyebrow{font-size:10px;letter-spacing:.16em;margin:0 0 4px}
+.hero h1{font-size:clamp(18px,2.2vw,25px);line-height:1.15;margin:0;font-weight:800}
+.hero h1 span{color:var(--green);letter-spacing:.025em}
+.hero .muted{display:none}
+.workspace{grid-template-columns:minmax(0,1fr)}
+.sidebar{padding:0;overflow:hidden}
+.library-details{width:100%}
+.library-summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;cursor:pointer;user-select:none}
+.library-summary::-webkit-details-marker{display:none}
+.library-summary-title{display:flex;align-items:center;gap:11px;min-width:0}
+.library-icon{width:34px;height:34px;display:grid;place-items:center;border:1px solid #00eaff66;border-radius:10px;color:var(--cyan);font-size:19px;background:#00eaff0c}
+.library-summary-title b,.library-summary-title small{display:block}
+.library-summary-title b{font-size:13px;letter-spacing:.025em}
+.library-summary-title small{font-size:10px;color:var(--muted);margin-top:2px}
+.library-summary-meta{display:flex;align-items:center;gap:12px;color:var(--cyan);font:12px 'DM Mono',monospace}
+.library-chevron{font-size:20px;transition:transform .2s ease;color:var(--muted)}
+.library-details[open] .library-chevron{transform:rotate(180deg)}
+.library-content{padding:0 15px 13px;border-top:1px solid #ffffff0c}
+.library-content .search{margin-top:12px}
+.library-content .song-list{max-height:260px;grid-template-columns:repeat(3,minmax(0,1fr));}
+.library-content .song-item{min-width:0}
+.editor{min-width:0}
+@media(max-width:800px){
+ .topbar{height:59px;padding-inline:15px}
+ .brand b{font-size:17px}.brand small{font-size:9px;letter-spacing:.1em}
+ .hero{padding:11px 0 12px}
+ .hero h1{font-size:19px}
+ .library-content .song-list{grid-template-columns:repeat(2,minmax(0,1fr));max-height:230px}
+ .workspace{display:flex;flex-direction:column;gap:8px}
+ .editor{order:1}.sidebar{order:2}
+}
+@media(max-width:520px){
+ .topbar{height:54px;padding-inline:13px}
+ .brand b{font-size:15px;letter-spacing:.15em}
+ .brand small{font-size:8px;letter-spacing:.07em}
+ .hero{display:block;padding:8px 0 10px}
+ .hero .eyebrow{font-size:8px;letter-spacing:.11em}
+ .hero h1{font-size:17px}
+ .toolbar{margin-bottom:8px}
+ .library-summary{padding:10px 11px}
+ .library-icon{width:30px;height:30px}
+ .library-summary-title b{font-size:12px}
+ .library-summary-title small{font-size:9px}
+ .library-content{padding:0 9px 9px}
+ .library-content .song-list{grid-template-columns:1fr 1fr;max-height:210px}
+ .library-content .song-item{padding:7px}
+ .library-content .song-item b{font-size:9px}
+ .library-content .song-item small{font-size:8px}
+ .editor{order:1}
+ .sidebar{order:2}
+}
