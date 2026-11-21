@@ -1,0 +1,25 @@
+​[Bridge]
+​(Aquí la música baja de intensidad de forma natural por el cambio de ritmo en la letra)
+Hoy los campos han cambiado, ya no te vemos volar,
+las luces de las ciudades te han querido apagar.
+¿A dónde te fuiste, amiga? Tu pueblo te extraña hoy,
+hace falta tu luz limpia en el suelo donde voy.
+Regresa al bosque sagrado, vuelve a encender el pinar,
+que los niños del mañana te quieren ver alumbrar.
+​[Chorus]
+​¡Vuela, vuela, Ch’upil, destello de libertad!
+¡Brilla, brilla, K’atb’äl, venciendo a la oscuridad!
+Luciérnaga de mi pueblo, guardiana de la ilusión,
+con tu colita encendida nos diste la dirección.
+Una pequeña luz... ¡que a todo el pueblo alumbró!
+​[Outro]
+​(Esta estructura le avisa a Suno que es el cierre. Las repeticiones ayudan a que la IA vaya cerrando sola)
+Luciérnaga de mi pueblo...
+Ch’upil de mi corazón...
+No apagues tu luz...
+No apagues tu luz...
+Luz de mi pueblo...
+Ch’upil...
+K’atb’äl...
+​[Fade Out]
+​[End]
