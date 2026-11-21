@@ -2,7 +2,7 @@
   "use strict";
   const $ = id => document.getElementById(id);
   const KEY = "gelm_music_lab_v1";
-  let songs = [], activeId = null, pos = 0, auto = null, deferred = null;
+  let songs = [], activeId = null, pos = 0, auto = null, deferred = null, lyricFiles = [];
 
   const sample = `¡Esta es la tierra que me vio nacer!
 
@@ -32,20 +32,35 @@ una canción para recordar.
   }
 
   function renderList() {
-    const q = $("searchInput").value.toLowerCase();
+    const q = $("searchInput").value.toLocaleLowerCase("es");
     $("songList").innerHTML = "";
-    $("songCount").textContent = songs.length;
-    songs.filter(s => s.title.toLowerCase().includes(q)).forEach(s => {
+    const found = lyricFiles.filter(x => x.name.toLocaleLowerCase("es").includes(q));
+    $("songCount").textContent = found.length;
+    found.forEach(item => {
       const b = document.createElement("button");
       b.className = "song-item" + (s.id === activeId ? " active" : "");
       const title = document.createElement("b");
       const meta = document.createElement("small");
-      title.textContent = s.title;
-      meta.textContent = (s.content || "").split("\n").length + " líneas";
+      title.textContent = item.name;
+      meta.textContent = "Abrir manuscrito";
       b.append(title, meta);
-      b.addEventListener("click", () => { save(); loadSong(s); });
+      b.addEventListener("click", () => openLibraryManuscript(item));
       $("songList").append(b);
     });
+  }
+
+  function openLibraryManuscript(item) {
+    const existing = songs.find(x => x.id === "library:" + item.file);
+    if (existing) { save(); loadSong(existing); return; }
+    fetch("./lirycs/" + encodeURIComponent(item.file), {cache:"no-cache"})
+      .then(r => { if (!r.ok) throw new Error("No se pudo abrir el manuscrito."); return r.text(); })
+      .then(content => {
+        save();
+        const s = { id:"library:" + item.file, title:item.name, content, position:0, mark:null, updated:Date.now() };
+        songs.unshift(s); loadSong(s); save();
+        $("saveStatus").textContent = "● Manuscrito cargado · copia local editable";
+      })
+      .catch(e => { $("saveStatus").textContent = e.message; });
   }
 
   function loadSong(s) {
@@ -187,53 +202,23 @@ una canción para recordar.
 
   // Reproductor GT-GELM: catálogo Cloudflare y biblioteca completa de letras.
   const audioTracks=[];
-  let currentTrack=-1, lyricFiles=[], lyricsToken=0, advancing=false;
+  let currentTrack=-1, advancing=false;
   const audioEl=$("audioElement");
   const AUDIO_BASE="https://divine-king-c86b.chapin7839.workers.dev/";
-  const LYRIC_BASE="./lirycs/";
   const audioUrl=file=>/^https?:\/\//i.test(file)?file:AUDIO_BASE+String(file).split("/").map(encodeURIComponent).join("/");
   function renderTrackSelect(){
     const sel=$("audioSelect");sel.innerHTML='<option value="">Selecciona una canción…</option>';
     audioTracks.forEach((t,i)=>sel.add(new Option(t.title+(t.category?" · "+t.category:""),String(i))));
     $("audioCount").textContent=audioTracks.length+" pistas";
-    renderTrackList();
   }
-  function renderTrackList(){
-    const box=$("audioTrackList");if(!box)return;
-    const q=($("audioSearch")?.value||"").trim().toLocaleLowerCase("es");
-    box.innerHTML="";
-    audioTracks.filter(t=>(t.title+" "+t.category).toLocaleLowerCase("es").includes(q)).forEach(t=>{
-      const i=audioTracks.indexOf(t),b=document.createElement("button");
-      b.type="button";b.className="track-item"+(i===currentTrack?" active":"");
-      b.textContent=t.title+(t.category?" · "+t.category:"");
-      b.addEventListener("click",()=>chooseTrack(i,true));
-      box.append(b);
-    });
-    $("audioListCount").textContent=(box.children.length)+" canciones";
-  }
+
   function renderLyricsOptions(){
-    const sel=$("lyricsSelect"),q=$("lyricsSearch").value.trim().toLocaleLowerCase("es");
-    const found=lyricFiles.filter(x=>x.name.toLocaleLowerCase("es").includes(q));
-    sel.innerHTML="";
-    if(!found.length){sel.add(new Option("No se encontraron letras",""));$("lyricsCount").textContent="0 manuscritos";$("lyricsViewer").textContent="Prueba con otro título.";return;}
-    found.forEach(x=>sel.add(new Option(x.name,x.file)));
-    $("lyricsCount").textContent=found.length+" de "+lyricFiles.length+" manuscritos";
-    if(!found.some(x=>x.file===sel.value))sel.value=found[0].file;
-    loadLibraryLyric(sel.value);
+
   }
-  async function loadLibraryLyric(file){
-    if(!file)return;const token=++lyricsToken;
-    $("lyricsViewer").textContent="Abriendo manuscrito…";
-    try{
-      const r=await fetch(LYRIC_BASE+encodeURIComponent(file),{cache:"no-cache"});
-      if(!r.ok)throw Error("No se pudo abrir la letra (HTTP "+r.status+").");
-      const txt=await r.text();if(token===lyricsToken)$("lyricsViewer").textContent=txt;
-    }catch(e){if(token===lyricsToken)$("lyricsViewer").textContent=e.message;}
-  }
+
   function updateTrackUI(){
     $("audioSelect").value=currentTrack>=0?String(currentTrack):"";
     $("audioNowTitle").textContent=currentTrack>=0?audioTracks[currentTrack].title:"Ninguna pista seleccionada";
-    renderTrackList();
   }
   async function chooseTrack(i,autoplay=false){
     if(i<0||i>=audioTracks.length)return false;
@@ -283,7 +268,7 @@ una canción para recordar.
     try{
       const r=await fetch("./lyrics-index.json",{cache:"no-cache"});
       if(!r.ok)throw Error("No se pudo leer el índice de letras.");
-      lyricFiles=await r.json();renderLyricsOptions();
+      lyricFiles=await r.json();renderList();
     }catch(e){$("lyricsCount").textContent="Error";$("lyricsViewer").textContent=e.message;}
   }
   $("audioSelect").addEventListener("change",e=>{if(e.target.value!=="")chooseTrack(Number(e.target.value),true);});
@@ -294,7 +279,6 @@ una canción para recordar.
   });
   $("audioPrev").addEventListener("click",()=>stepTrack(-1,true));
   $("audioNext").addEventListener("click",()=>stepTrack(1,true));
-  $("audioSearch").addEventListener("input",renderTrackList);
   audioEl.addEventListener("play",()=>{$("audioPlay").textContent="Ⅱ Pausar";});
   audioEl.addEventListener("pause",()=>{$("audioPlay").textContent="▶ Reproducir";});
   audioEl.addEventListener("error",()=>{
@@ -305,21 +289,22 @@ una canción para recordar.
     $("audioTime").textContent=f(audioEl.currentTime)+" / "+f(audioEl.duration);
   });
   audioEl.addEventListener("ended",()=>stepTrack(1,true));
-  $("lyricsSearch").addEventListener("input",renderLyricsOptions);
-  $("lyricsSelect").addEventListener("change",e=>loadLibraryLyric(e.target.value));
   loadCloudLibrary();loadLyricsLibrary();
 
-  window.addEventListener("beforeinstallprompt", e => {
-    e.preventDefault();
-    deferred = e;
-    $("installBtn").hidden = false;
-  });
+  window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; });
   $("installBtn").addEventListener("click", async () => {
-    if (!deferred) return;
-    deferred.prompt();
-    await deferred.userChoice;
-    deferred = null;
-    $("installBtn").hidden = true;
+    if (deferred) {
+      deferred.prompt();
+      await deferred.userChoice;
+      deferred = null;
+      return;
+    }
+    const ua = navigator.userAgent;
+    let instructions = "Para instalar GELM MUSIC LAB, abre el menú del navegador y elige “Añadir a pantalla de inicio” o “Instalar aplicación”.";
+    if (/SamsungBrowser/i.test(ua)) instructions = "Samsung Internet: abre el menú ☰ del navegador y selecciona “Añadir página a” → “Pantalla Inicio”. Si aparece “Instalar aplicación”, también puedes usar esa opción.";
+    else if (/Android/i.test(ua)) instructions = "Android: abre el menú ⋮ del navegador y selecciona “Instalar aplicación” o “Añadir a pantalla de inicio”.";
+    else if (/iPhone|iPad|iPod/i.test(ua)) instructions = "iPhone/iPad: abre Compartir en Safari y selecciona “Añadir a pantalla de inicio”.";
+    alert(instructions);
   });
   if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
     window.addEventListener("load", () =>
