@@ -205,7 +205,7 @@ una canción para recordar.
   const audioEl=$("audioElement");
   const AUDIO_BASE="https://divine-king-c86b.chapin7839.workers.dev/";
   let currentTrack=-1, shuffleBag=[], history=[], isChanging=false, errorSkipLock=false;
-  const audioUrl=file=>/^https?:\\/\\//i.test(file)?file:AUDIO_BASE+String(file).split("/").map(encodeURIComponent).join("/");
+  const audioUrl=file=>(String(file).startsWith("http://")||String(file).startsWith("https://"))?file:AUDIO_BASE+String(file).split("/").map(encodeURIComponent).join("/");
   const fmtAudio=n=>!Number.isFinite(n)? "00:00":String(Math.floor(n/60)).padStart(2,"0")+":"+String(Math.floor(n%60)).padStart(2,"0");
   function shuffleRefill(exclude=currentTrack){
     const pool=audioTracks.map((_,i)=>i).filter(i=>i!==exclude);
