@@ -185,80 +185,86 @@ una canción para recordar.
   loadSong(songs[0]);
 
 
-  // Reproductor compacto: archivos importados permanecen en memoria de esta sesión.
-  const audioTracks = [];
-  const audioUrls = [];
-  let currentTrack = -1, currentLyrics = [], timedLyrics = false;
-  const audioEl = $("audioElement");
-  function cleanName(s) { return (s || "").toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").replace(/\\.[^.]+$/,"").replace(/^\\d+[-_ ]*/,"").replace(/[^a-z0-9]+/g," ").trim(); }
-  function renderTrackSelect() {
-    const sel=$("audioSelect"); sel.innerHTML='<option value="">Selecciona una canción…</option>';
-    audioTracks.forEach((t,i)=>{const o=document.createElement("option");o.value=i;o.textContent=t.title;sel.append(o);});
-    $("audioCount").textContent=audioTracks.length+" pistas";
-  }
-  function parseLrc(text) {
-    const out=[]; const re=/\\[(\\d{1,2}):(\\d{2})(?:[.:](\\d{1,3}))?\\](.*)/g; let m;
-    while((m=re.exec(text))!==null){const frac=(m[3]||"0").padEnd(3,"0");out.push({time:Number(m[1])*60+Number(m[2])+Number(frac)/1000,text:m[4].trim()});}
+  // Reproductor GT-GELM conectado al catálogo y audios de Cloudflare.
+  const audioTracks=[];
+  let currentTrack=-1,currentLyrics=[],timedLyrics=false;
+  const audioEl=$("audioElement");
+  const AUDIO_BASE="https://divine-king-c86b.chapin7839.workers.dev/";
+  const LYRIC_BASE="./lyrics/";
+  function parseLrc(text){
+    const out=[],re=/\[(\d{1,2}):(\d{2})(?:[.:](\d{1,3}))?\](.*)/g;let m;
+    while((m=re.exec(text))!==null){const f=(m[3]||"0").padEnd(3,"0");out.push({time:+m[1]*60 + +m[2] + +f/1000,text:m[4].trim()});}
     return out.sort((a,b)=>a.time-b.time);
   }
-  function showLyricsAt(time) {
+  function renderTrackSelect(){
+    const sel=$("audioSelect");sel.innerHTML='<option value="">Selecciona una canción…</option>';
+    audioTracks.forEach((t,i)=>{const o=document.createElement("option");o.value=i;o.textContent=t.title+(t.category?" · "+t.category:"");sel.append(o);});
+    $("audioCount").textContent=audioTracks.length+" pistas";
+  }
+  function showLyricsAt(time){
     const box=$("syncLyrics");
-    if(!currentLyrics.length){box.textContent="No hay letra asociada a esta pista. Importa su TXT o LRC.";return;}
+    if(!currentLyrics.length){box.textContent="No hay letra asociada a esta canción en la carpeta lyrics.";return;}
     let idx=0;
     if(timedLyrics){for(let i=0;i<currentLyrics.length;i++){if(currentLyrics[i].time<=time)idx=i;else break;}}
-    else if(audioEl.duration){idx=Math.min(currentLyrics.length-1,Math.floor(time/audioEl.duration*currentLyrics.length));}
+    else if(audioEl.duration)idx=Math.min(currentLyrics.length-1,Math.floor(time/audioEl.duration*currentLyrics.length));
     box.innerHTML="";
-    const start=Math.max(0,idx-1),end=Math.min(currentLyrics.length,idx+3);
-    for(let i=start;i<end;i++){const d=document.createElement("div");d.textContent=currentLyrics[i].text; if(i===idx)d.className="lyric-active";box.append(d);}
-    const active=box.querySelector(".lyric-active"); if(active)active.scrollIntoView({block:"nearest"});
-  }
-  function chooseTrack(i,play=false) {
-    if(i<0||i>=audioTracks.length)return;
-    currentTrack=i; const t=audioTracks[i]; audioEl.src=t.url;
-    $("audioSelect").value=String(i); $("audioNowTitle").textContent=t.title;
-    currentLyrics=t.lyrics||[];timedLyrics=!!t.timed;showLyricsAt(0);
-    if(play)audioEl.play().then(()=>$("audioPlay").textContent="Ⅱ Pausar").catch(()=>$("audioStatus").textContent="El navegador bloqueó la reproducción; pulsa Play.");
-  }
-  $("catalogInput").addEventListener("change",async e=>{
-    const f=e.target.files[0];if(!f)return;
-    try{const data=JSON.parse(await f.text());const arr=Array.isArray(data)?data:(data.songs||data.tracks||[]);
-      $("audioStatus").textContent=arr.length+" registros de catálogo cargados. Ahora importa la carpeta MP3.";
-      window.gelmCatalog=arr;
-    }catch(err){$("audioStatus").textContent="No se pudo leer el JSON. Revisa su formato.";}
-    e.target.value="";
-  });
-  $("audioFilesInput").addEventListener("change",e=>{
-    audioUrls.forEach(URL.revokeObjectURL);audioUrls.length=0;audioTracks.length=0;
-    const files=Array.from(e.target.files||[]).filter(f=>f.type.startsWith("audio/")||/\\.mp3$/i.test(f.name));
-    const catalog=window.gelmCatalog||[];
-    files.forEach(f=>{
-      const stem=f.name.replace(/\\.[^.]+$/,"");
-      const match=catalog.find(x=>cleanName(x.file)===cleanName(f.name))||catalog.find(x=>cleanName(x.title)===cleanName(stem));
-      const url=URL.createObjectURL(f);audioUrls.push(url);
-      audioTracks.push({title:match?.title||stem.replace(/^\\d+[-_ ]*/,"").replace(/[-_]/g," "),file:f.name,url,lyrics:[],timed:false});
-    });
-    renderTrackSelect();$("audioStatus").textContent=audioTracks.length+" MP3 listos en este navegador.";
-    if(audioTracks.length)chooseTrack(0,false);
-    e.target.value="";
-  });
-  $("lyricFilesInput").addEventListener("change",async e=>{
-    const files=Array.from(e.target.files||[]);
-    for(const f of files){const stem=cleanName(f.name);const track=audioTracks.find(t=>cleanName(t.file)===stem||cleanName(t.title)===stem);if(!track)continue;
-      const text=await f.text();track.timed=/\\.lrc$/i.test(f.name);track.lyrics=track.timed?parseLrc(text):text.replace(/\\r/g,"").split("\\n").filter(x=>x.trim()).map(x=>({text:x}));
+    for(let i=Math.max(0,idx-1);i<Math.min(currentLyrics.length,idx+3);i++){
+      const d=document.createElement("div");d.textContent=currentLyrics[i].text;if(i===idx)d.className="lyric-active";box.append(d);
     }
-    if(currentTrack>=0){currentLyrics=audioTracks[currentTrack].lyrics;timedLyrics=audioTracks[currentTrack].timed;showLyricsAt(audioEl.currentTime||0);}
-    $("audioStatus").textContent="Letras asociadas cuando coincide el nombre del archivo.";
-    e.target.value="";
-  });
+    box.querySelector(".lyric-active")?.scrollIntoView({block:"nearest"});
+  }
+  async function loadTrackLyrics(track){
+    currentLyrics=[];timedLyrics=false;
+    const stem=(track.file||"").replace(/\.[^.]+$/,"");
+    const names=[stem+".lrc",stem+".txt"];
+    for(const name of names){
+      try{
+        const res=await fetch(LYRIC_BASE+encodeURIComponent(name),{cache:"no-cache"});
+        if(!res.ok)continue;
+        const txt=await res.text(),lrc=/\.lrc$/i.test(name);
+        const parsed=lrc?parseLrc(txt):txt.replace(/\r/g,"").split("\n").map(x=>x.trim()).filter(Boolean).map(text=>({text}));
+        if(parsed.length){currentLyrics=parsed;timedLyrics=lrc;return;}
+      }catch(e){}
+    }
+  }
+  async function chooseTrack(i,play=false){
+    if(i<0||i>=audioTracks.length)return;
+    currentTrack=i;const t=audioTracks[i];audioEl.src=t.url;
+    $("audioSelect").value=String(i);$("audioNowTitle").textContent=t.title;
+    $("audioStatus").textContent="Cargando canción y letra…";
+    currentLyrics=[];showLyricsAt(0);await loadTrackLyrics(t);showLyricsAt(0);
+    $("audioStatus").textContent="Cloudflare conectado · "+audioTracks.length+" canciones";
+    if(play){try{await audioEl.play();}catch(e){$("audioStatus").textContent="Pulsa Reproducir para iniciar.";}}
+  }
+  async function loadCloudLibrary(){
+    $("audioStatus").textContent="Conectando con musica.json…";
+    try{
+      const res=await fetch("./musica.json",{cache:"no-cache"});if(!res.ok)throw Error("HTTP "+res.status);
+      const data=await res.json(),list=Array.isArray(data)?data:(data.songs||data.tracks||[]);
+      if(!list.length)throw Error("El catálogo está vacío.");
+      audioTracks.push(...list.filter(x=>x.file).map(x=>({title:x.title||x.file,file:x.file,category:x.category||"",url:AUDIO_BASE+encodeURIComponent(x.file)})));
+      renderTrackSelect();$("audioStatus").textContent="Biblioteca Cloudflare conectada · "+audioTracks.length+" canciones";
+      $("syncLyrics").textContent="Selecciona una canción. La letra se buscará en /lyrics usando el nombre exacto del MP3.";
+      if(audioTracks.length)await chooseTrack(0,false);
+    }catch(e){$("audioStatus").textContent="No se pudo cargar musica.json: "+e.message;}
+  }
   $("audioSelect").addEventListener("change",e=>chooseTrack(Number(e.target.value),false));
-  $("audioPlay").addEventListener("click",()=>{if(!audioEl.src&&audioTracks.length)chooseTrack(0,false);if(audioEl.paused)audioEl.play().then(()=>$("audioPlay").textContent="Ⅱ Pausar").catch(()=>{});else audioEl.pause();});
+  $("audioPlay").addEventListener("click",async()=>{
+    if(currentTrack<0&&audioTracks.length)await chooseTrack(0,false);
+    if(audioEl.paused){try{await audioEl.play();}catch(e){}}else audioEl.pause();
+  });
   $("audioPrev").addEventListener("click",()=>{if(audioTracks.length)chooseTrack((currentTrack-1+audioTracks.length)%audioTracks.length,true);});
   $("audioNext").addEventListener("click",()=>{if(audioTracks.length)chooseTrack((currentTrack+1)%audioTracks.length,true);});
   audioEl.addEventListener("play",()=>$("audioPlay").textContent="Ⅱ Pausar");
   audioEl.addEventListener("pause",()=>$("audioPlay").textContent="▶ Reproducir");
-  audioEl.addEventListener("timeupdate",()=>{const fmt=n=>{if(!Number.isFinite(n))return "00:00";return String(Math.floor(n/60)).padStart(2,"0")+":"+String(Math.floor(n%60)).padStart(2,"0");};$("audioTime").textContent=fmt(audioEl.currentTime)+" / "+fmt(audioEl.duration);showLyricsAt(audioEl.currentTime);});
+  audioEl.addEventListener("timeupdate",()=>{
+    const f=n=>!Number.isFinite(n)?"00:00":String(Math.floor(n/60)).padStart(2,"0")+":"+String(Math.floor(n%60)).padStart(2,"0");
+    $("audioTime").textContent=f(audioEl.currentTime)+" / "+f(audioEl.duration);showLyricsAt(audioEl.currentTime);
+  });
   audioEl.addEventListener("ended",()=>{if(audioTracks.length)chooseTrack((currentTrack+1)%audioTracks.length,true);});
-\n  window.addEventListener("beforeinstallprompt", e => {
+  loadCloudLibrary();
+
+  window.addEventListener("beforeinstallprompt", e => {
     e.preventDefault();
     deferred = e;
     $("installBtn").hidden = false;
