@@ -18,7 +18,15 @@
   </div>
   <audio id="audioElement" controls preload="metadata"></audio>
   <div class="audio-now"><span id="audioNowTitle">Ninguna pista seleccionada</span><span id="audioTime">00:00 / 00:00</span></div>
-  <div id="syncLyrics" class="sync-lyrics">La biblioteca GT-GELM se carga automáticamente desde Cloudflare. Las letras disponibles se buscan en la carpeta privada del laboratorio.</div>
+  <div id="syncLyrics" class="sync-lyrics">La letra vinculada al MP3 aparecerá aquí cuando esté disponible.</div>
+  <section class="lyrics-library">
+    <div class="lyrics-library-head"><b>♫ Biblioteca de letras GT-GELM</b><span id="lyricsCount">150 manuscritos</span></div>
+    <input id="lyricsSearch" class="lyrics-search" type="search" placeholder="Buscar letra por título…">
+    <select id="lyricsSelect" class="lyrics-select" aria-label="Seleccionar manuscrito">
+      <option value="">Cargando letras…</option>
+    </select>
+    <pre id="lyricsViewer" class="lyrics-viewer">Selecciona un título para leer su manuscrito completo.</pre>
+  </section>
   <div class="audio-foot">Los MP3 y manuscritos importados se guardan en este navegador. No se publican en GitHub.</div>
 </div>
 <div class="progress-wrap"><div id="progressBar"></div></div><div class="footmeta"><span id="progressText">0% recorrido</span><span id="bookmarkText">Sin marcador</span></div><p class="muted tiny">Toca una línea para seleccionarla. Usa ↑ y ↓ para moverte. Tu posición se conserva automáticamente.</p></section></section>
