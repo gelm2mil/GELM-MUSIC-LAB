@@ -17,7 +17,7 @@ input,select,button{font:inherit;color:var(--text);border:1px solid #2c5069;bord
 button{background:#132b40;cursor:pointer;font-weight:700}button.primary{background:#006d76;border-color:var(--cyan)}button:active{transform:translateY(1px)}
 .title{font-size:clamp(17px,3vw,25px);font-weight:800;margin:8px 0 3px;overflow-wrap:anywhere}.sub{color:var(--muted);font-size:11px}
 .reader{margin-top:14px;padding:clamp(10px,2vw,22px);height:min(68vh,760px);min-height:320px;overflow:auto;background:#050f19;border:1px solid #18384b;border-radius:11px;font:clamp(13px,1.6vw,16px)/2 'DM Mono',monospace}
-.line{display:block;padding:3px 10px;border-left:3px solid transparent;white-space:pre-wrap;overflow-wrap:anywhere;cursor:pointer;border-radius:3px;min-height:1.8em}
+.line{display:block;user-select:text;-webkit-user-select:text;touch-action:pan-y;padding:3px 10px;border-left:3px solid transparent;white-space:pre-wrap;overflow-wrap:anywhere;cursor:pointer;border-radius:3px;min-height:1.8em}
 .line.current{background:linear-gradient(90deg,#00eaff28,#00ffc80d);border-left-color:var(--cyan);color:#fff;text-shadow:0 0 12px #00eaff35}
 .line.section{color:var(--gold)}
 .status{display:flex;justify-content:space-between;gap:10px;margin-top:10px;color:var(--muted);font-size:11px}.progress{height:4px;background:#1a3042;border-radius:9px;margin-top:10px;overflow:hidden}.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--green))}
@@ -47,18 +47,43 @@ let catalog=[],current=null,lines=[],position=0,timer=null;
 function stateSave(){try{localStorage.setItem(KEY,JSON.stringify({file:current?.file||'',position}));}catch(e){}}
 function paint(){
  const box=$('reader');box.innerHTML='';
- lines.forEach((txt,i)=>{const el=document.createElement('div');el.className='line'+(i===position?' current':'')+( /^\\s*\\[.+\\]\\s*$/.test(txt)?' section':'');el.textContent=txt||' ';el.addEventListener('click',()=>select(i));box.append(el);});
- const active=box.querySelector('.current');active?.scrollIntoView({block:'center',behavior:'smooth'});
- const pct=lines.length?Math.round((position+1)/lines.length*100):0;
- $('lineInfo').textContent='Línea '+(lines.length?position+1:0)+' / '+lines.length+' · Toca una línea para marcar tu avance';
- $('percent').textContent=pct+'% recorrido';$('bar').style.width=pct+'%';stateSave();
+ lines.forEach((txt,i)=>{
+  const el=document.createElement('div');
+  el.className='line'+(i===position?' current':'')+( /^\s*\[.+\]\s*$/.test(txt)?' section':'');
+  el.textContent=txt||' ';
+  el.addEventListener('click',()=>{
+   const selected=window.getSelection?.().toString();
+   if(selected)return;
+   select(i,false);
+  });
+  box.append(el);
+ });
+ updateInfo();stateSave();
 }
-function select(i){position=Math.max(0,Math.min(lines.length-1,i));paint();}
+function updateInfo(){
+ const pct=lines.length?Math.round((position+1)/lines.length*100):0;
+ $('lineInfo').textContent='Línea '+(lines.length?position+1:0)+' / '+lines.length+' · Selecciona texto libremente o toca un verso para marcar tu avance';
+ $('percent').textContent=pct+'% recorrido';$('bar').style.width=pct+'%';
+}
+function select(i,scroll=true){
+ if(!lines.length)return;
+ const old=position;position=Math.max(0,Math.min(lines.length-1,i));
+ const box=$('reader'),oldEl=box.children[old],newEl=box.children[position];
+ oldEl?.classList.remove('current');newEl?.classList.add('current');
+ updateInfo();stateSave();
+ if(scroll)newEl?.scrollIntoView({block:'nearest',behavior:'smooth'});
+}
 async function openFile(file){
  const item=catalog.find(x=>x.file===file);if(!item)return;
  $('reader').textContent='Abriendo manuscrito…';$('title').textContent=item.name;
- try{const r=await fetch('./lirycs/'+encodeURIComponent(item.file),{cache:'no-cache'});if(!r.ok)throw Error('No se pudo abrir este archivo.');const content=await r.text();current=item;lines=content.replace(/\\r/g,'').split('\\n');position=0;try{const s=JSON.parse(localStorage.getItem(KEY)||'{}');if(s.file===file)position=Math.min(Number(s.position)||0,lines.length-1);}catch(e){}paint();}
- catch(e){$('reader').textContent=e.message;}
+ try{
+  const r=await fetch('./lirycs/'+encodeURIComponent(item.file),{cache:'no-cache'});
+  if(!r.ok)throw Error('No se pudo abrir este archivo.');
+  const content=await r.text();current=item;
+  lines=content.replace(/\r/g,'').split('\n');position=0;
+  try{const s=JSON.parse(localStorage.getItem(KEY)||'{}');if(s.file===file)position=Math.min(Number(s.position)||0,lines.length-1);}catch(e){}
+  paint();
+ }catch(e){$('reader').textContent=e.message;}
 }
 function fill(list){const sel=$('songSelect'),old=sel.value;sel.innerHTML='<option value="">Selecciona una letra…</option>';list.forEach(x=>sel.add(new Option(x.name,x.file)));if(old&&list.some(x=>x.file===old))sel.value=old;}
 $('search').addEventListener('input',()=>{const q=$('search').value.toLocaleLowerCase('es');fill(catalog.filter(x=>x.name.toLocaleLowerCase('es').includes(q)));});
@@ -66,7 +91,7 @@ $('songSelect').addEventListener('change',e=>{if(e.target.value)openFile(e.targe
 $('prev').addEventListener('click',()=>select(position-1));$('next').addEventListener('click',()=>select(position+1));
 function stop(){if(timer)clearInterval(timer);timer=null;$('auto').textContent='▶ Avance';}
 $('auto').addEventListener('click',()=>{if(timer){stop();return;}if(!lines.length)return;$('auto').textContent='Ⅱ Pausar';timer=setInterval(()=>{if(position>=lines.length-1){stop();return;}select(position+1);},2200);});
-$('reader').addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();select(position+1);}if(e.key==='ArrowUp'){e.preventDefault();select(position-1);}});
+// Las flechas del teclado conservan el comportamiento nativo para desplazarse y seleccionar texto.
 window.addEventListener('storage',e=>{if(e.key===KEY&&current){try{const s=JSON.parse(e.newValue||'{}');if(s.file===current.file&&Number.isFinite(s.position)){position=Math.min(s.position,lines.length-1);paint();}}catch(err){}}});
 fetch('./lyrics-index.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error();return r.json();}).then(data=>{catalog=data;fill(catalog);$('total').textContent=catalog.length+' manuscritos';let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){}const first=catalog.find(x=>x.file===saved.file)||catalog[0];if(first){$('songSelect').value=first.file;openFile(first.file);}}).catch(()=>$('reader').textContent='No se pudo cargar la biblioteca de letras.');
 })();
