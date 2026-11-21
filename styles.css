@@ -71,3 +71,22 @@
  .song-list{grid-template-columns:repeat(2,minmax(0,1fr));max-height:28vh}
  .bottom-grid{display:none}
 }
+
+/* GT-GELM LAB PRO · pulido visual, compacto y mobile-first */
+.brand b{font-size:14px;letter-spacing:.16em;color:var(--cyan)}
+.brand small{letter-spacing:.035em}
+.hero{padding-top:2px;padding-bottom:18px}
+.audio-library{box-shadow:0 10px 28px #0003}
+.audio-controls .btn{min-height:42px}
+#audioElement{display:block}
+@media(max-width:600px){
+ .topbar{height:50px;padding:0 10px}
+ .brand{gap:8px}.brand-mark{width:36px;height:36px;display:grid;place-items:center;padding:0;border-radius:10px}
+ .brand b{font-size:12px}.brand small{font-size:8px}
+ .toolbar{gap:6px}.toolbar #saveStatus{font-size:10px}
+ .audio-head b{font-size:12px}.audio-head small{font-size:9px}
+ .audio-controls{grid-template-columns:42px minmax(0,1fr) 42px}
+ .audio-controls .btn{min-height:40px}
+ .audio-select{font-size:12px;padding:10px}
+ .audio-now{font-size:9px}
+}
