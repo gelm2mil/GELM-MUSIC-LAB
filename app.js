@@ -129,6 +129,7 @@ una canción para recordar.
   }
 
   $("newBtn").addEventListener("click", newSong);
+  $("lyricsWindowBtn").addEventListener("click", () => { window.open("./letras.html", "gtGelmLyrics", "popup=yes,width=980,height=820,resizable=yes,scrollbars=yes"); });
   $("openBtn").addEventListener("click", () => $("fileInput").click());
   $("fileInput").addEventListener("change", async e => {
     const file = e.target.files[0];
