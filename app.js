@@ -193,7 +193,7 @@ una canción para recordar.
   const LYRIC_BASE="./lirycs/";
   const audioUrl=file=>/^https?:\/\//i.test(file)?file:AUDIO_BASE+String(file).split("/").map(encodeURIComponent).join("/");
   function parseLrc(text){
-    const out=[],re=/\\[(\\d{1,2}):(\\d{2})(?:[.:](\\d{1,3}))?\\](.*)/g;let m;
+    const out=[],re=/\[(\d{1,2}):(\d{2})(?:[.:](\d{1,3}))?\](.*)/g;let m;
     while((m=re.exec(text))!==null){const f=(m[3]||"0").padEnd(3,"0");out.push({time:+m[1]*60 + +m[2] + +f/1000,text:m[4].trim()});}
     return out.sort((a,b)=>a.time-b.time);
   }
@@ -213,10 +213,10 @@ una canción para recordar.
   }
   async function loadTrackLyrics(track){
     currentLyrics=[];timedLyrics=false;
-    const stem=String(track.file||"").replace(/\\.[^.]+$/,"");
+    const stem=String(track.file||"").replace(/\.[^.]+$/,"");
     const match=lyricFiles.find(x=>x.file.toLowerCase()===stem.toLowerCase()+".txt");
     if(!match)return;
-    try{const r=await fetch(LYRIC_BASE+encodeURIComponent(match.file),{cache:"no-cache"});if(r.ok){const txt=await r.text();currentLyrics=txt.replace(/\\r/g,"").split("\\n").map(x=>x.trim()).filter(Boolean).map(text=>({text}));}}
+    try{const r=await fetch(LYRIC_BASE+encodeURIComponent(match.file),{cache:"no-cache"});if(r.ok){const txt=await r.text();currentLyrics=txt.replace(/\r/g,"").split("\n").map(x=>x.trim()).filter(Boolean).map(text=>({text}));}}
     catch(e){console.debug("Letra vinculada no disponible",e);}
   }
   async function chooseTrack(i,autoplay=false){
