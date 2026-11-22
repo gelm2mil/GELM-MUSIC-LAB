@@ -1,47 +1,171 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07111d">
-<meta name="description" content="GT-GELM · Guatemala, tu nombre inmortal">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon.svg">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111d"><meta name="description" content="Biblioteca musical y de manuscritos GT-GELM. Lee y escucha Guatemala."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icons/icon.svg"><title>GT-GELM · Biblioteca musical</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;700;800&display=swap');
+:root{color-scheme:dark;--bg:#07111d;--panel:#0d1b2a;--line:#1e3b51;--text:#eaf5ff;--muted:#91a9bd;--cyan:#00eaff;--green:#00ffc8;--gold:#ffc857}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#10304a,transparent 38%),var(--bg);color:var(--text);font-family:Manrope,Arial,sans-serif}
+header{position:sticky;top:0;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px clamp(14px,4vw,42px);background:#07111df2;border-bottom:1px solid #ffffff18}
+.brand b,.brand small{display:block}.brand b{color:var(--cyan);font-size:15px;letter-spacing:.15em}.brand small{font-size:9px;color:var(--muted);letter-spacing:.06em;margin-top:3px}
+main{width:min(1100px,100%);margin:auto;padding:clamp(12px,3vw,28px)}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.eyebrow{color:var(--green);font-size:10px;font-weight:800;letter-spacing:.16em}.counter{font:12px 'DM Mono';color:var(--cyan)}
+.panel{background:linear-gradient(145deg,#102338,#0a1725);border:1px solid var(--line);border-radius:15px;padding:14px;box-shadow:0 12px 34px #0003}
+.controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(170px,1fr) auto auto auto;gap:8px;margin-bottom:12px}
+input,select,button{font:inherit;color:var(--text);border:1px solid #2c5069;border-radius:9px;background:#071522;padding:10px;min-width:0}
+button{background:#132b40;cursor:pointer;font-weight:700}button.primary{background:#006d76;border-color:var(--cyan)}button:active{transform:translateY(1px)}
+.title{font-size:clamp(17px,3vw,25px);font-weight:800;margin:8px 0 3px;overflow-wrap:anywhere}.sub{color:var(--muted);font-size:11px}.install-btn{border-color:var(--green);color:var(--green);background:#073b39;min-height:40px;white-space:nowrap}.songhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}.songheading{min-width:0;flex:1}.songheading .title{margin:0 0 3px}.audio-toggle{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:9px 13px;border-color:var(--cyan);color:#eafcff;background:#07515d;white-space:nowrap}.audio-toggle:disabled{opacity:.4;cursor:not-allowed}.audio-toggle.playing{background:#086b53;border-color:var(--green)}.audio-library{display:flex;align-items:center;gap:8px;margin-top:10px}.audio-library label{font-size:10px;color:var(--muted);white-space:nowrap}.audio-library select{flex:1}.audio-strip{display:flex;justify-content:space-between;margin:8px 2px 0;color:var(--green);font:11px 'DM Mono',monospace}.audio-strip[hidden]{display:none}
+.songhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}.songheading{min-width:0;flex:1}.songheading .title{margin:0 0 3px}.audio-toggle{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:9px 13px;border-color:#00eaff;color:#eafcff;background:#07515d;white-space:nowrap}.audio-toggle:disabled{opacity:.4;cursor:not--allowed}.audio-toggle.playing{background:#086b53;border-color:#00ffc8}.audio-strip{display:flex;justify-content:space-between;margin:8px 2px 0;color:var(--green);font:11px 'DM Mono',monospace}.audio-strip[hidden]{display:none}
 
-<link rel="stylesheet" href="styles.css">
-<title>GT-GELM · Reproductor oficial</title>
-</head>
+.reader{margin-top:14px;padding:clamp(10px,2vw,22px);height:min(68vh,760px);min-height:320px;overflow:auto;background:#050f19;border:1px solid #18384b;border-radius:11px;font:clamp(13px,1.6vw,16px)/2 'DM Mono',monospace}
+.line{display:block;user-select:text;-webkit-user-select:text;touch-action:pan-y;padding:3px 10px;border-left:3px solid transparent;white-space:pre-wrap;overflow-wrap:anywhere;cursor:pointer;border-radius:3px;min-height:1.8em}
+.line.current{background:linear-gradient(90deg,#00eaff55,#00ffc82b);border-left:4px solid var(--green);color:#fff;text-shadow:0 0 14px #00eaff75,0 0 24px #00ffc840;box-shadow:inset 0 0 18px #00eaff12;outline:1px solid #00eaff55}
+.line.section{color:var(--gold)}
+.reader:focus{outline:2px solid #00eaff66;outline-offset:2px}
+.status{display:flex;justify-content:space-between;gap:10px;margin-top:10px;color:var(--muted);font-size:11px}.progress{height:4px;background:#1a3042;border-radius:9px;margin-top:10px;overflow:hidden}.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--green))}
+.hint{font-size:10px;color:var(--muted);line-height:1.6;margin:10px 2px 0}
+@media(max-width:650px){header{padding:10px 12px}.brand b{font-size:13px}.controls{grid-template-columns:1fr 1fr}.controls input{grid-column:1/-1}.controls select{grid-column:1/-1}.controls button{padding:10px 7px;font-size:12px}.panel{padding:10px}.reader{height:65vh;min-height:280px;padding:9px;font-size:13px;line-height:1.85}.status{font-size:10px}.songhead{align-items:flex-start}.audio-toggle{min-height:40px;padding:8px 10px}.audio-toggle span{display:none}}
+</style></head>
 <body>
-<header class="topbar">
- <a class="brand" href="./" aria-label="GT-GELM inicio">
-  <span class="brand-note" aria-hidden="true">♫</span>
-  <span class="brand-name">GT-GELM</span>
-  <span class="brand-tag">GUATEMALA, TU NOMBRE INMORTAL</span>
- </a>
- <nav class="head-actions">
-  <button id="lyricsBtn" class="btn">♫ Letras</button>
-  <button id="installBtn" class="btn install">⇩ Instalar</button>
- </nav>
-</header>
-<main class="shell">
- <p class="tagline">Lugares, historias y tradiciones hechos canción.</p>
- <section class="player panel" aria-label="Reproductor GT-GELM">
-  <div class="audio-head">
-   <div><b>♫ Reproductor GT-GELM</b><small id="audioStatus">Preparando catálogo…</small></div>
-   <span id="audioCount" class="count">118 pistas</span>
-  </div>
-  <div class="controls">
-   <button id="audioPrev" class="btn control" aria-label="Anterior" title="Anterior">|◀</button>
-   <button id="audioPlay" class="btn primary play">▶ Reproducir</button>
-   <button id="audioNext" class="btn control" aria-label="Siguiente aleatoria" title="Siguiente aleatoria">▶|</button>
-  </div>
-  <label class="select-label" for="audioSelect">Seleccionar canción</label>
-  <select id="audioSelect" class="audio-select"><option value="">Cargando catálogo…</option></select>
-  <audio id="audioElement" controls preload="none" playsinline></audio>
-  <div class="now"><span id="audioNowTitle">Ninguna pista seleccionada</span><span id="audioTime">00:00 / 00:00</span></div>
-  <p class="note">Reproducción aleatoria sin repetir canciones hasta recorrer el catálogo. También puedes elegir una pista manualmente.</p>
- </section>
- <footer>GT-GELM · Guatemala, tu nombre inmortal.</footer>
-</main>
-<script src="app.js"></script>
-</body></html>
+<header><div class="brand"><b>GT-GELM</b><small>GUATEMALA, TU NOMBRE INMORTAL</small></div><div style="display:flex;align-items:center;gap:10px"><span class="eyebrow">BIBLIOTECA MUSICAL</span><button id="installBtn" class="install-btn" type="button" hidden>⇩ Instalar</button></div></header>
+<main>
+<div class="topline"><span class="eyebrow">LUGARES · HISTORIAS · CUENTOS · TRADICIONES HECHOS CANCIÓN</span><span id="total" class="counter">Cargando…</span></div>
+<section class="panel">
+<div class="controls">
+<input id="search" type="search" placeholder="Buscar una letra…">
+<select id="songSelect" aria-label="Seleccionar manuscrito"><option value="">Selecciona una letra…</option></select>
+<button id="prev">↑ Anterior</button><button id="next" class="primary">↓ Siguiente</button><button id="auto">▶ Avance</button>
+</div>
+<div class="songhead"><div class="songheading"><div class="songhead"><div class="songheading"><div class="title" id="title">Selecciona un manuscrito</div><div class="sub" id="lineInfo">Toca una línea para marcar dónde vas copiando</div></div><button id="audioToggle" class="audio-toggle" type="button" disabled>▶ Escuchar canción</button></div><div class="audio-library"><label for="audioLibrary">TODAS LAS CANCIONES</label><select id="audioLibrary"><option value="">Cargando catálogo musical…</option></select></div><div class="audio-strip" id="audioStrip" hidden><span id="audioState">LISTO</span><span id="audioTime">0:00</span></div><audio id="songAudio" preload="none" playsinline></audio></div><button id="audioToggle" class="audio-toggle" type="button" disabled aria-label="Reproducir canción" title="Reproducir canción">▶ <span>Escuchar canción</span></button></div>
+<div class="audio-strip" id="audioStrip" hidden><span id="audioState">LISTO</span><span id="audioTime">0:00</span></div><audio id="songAudio" preload="none" playsinline></audio>
+<div id="reader" class="reader" tabindex="0"><div class="sub">Cargando biblioteca de letras GT-GELM…</div></div>
+<div class="progress"><div id="bar"></div></div>
+<div class="status"><span id="percent">0% recorrido</span><span id="saved">Tu avance se guarda en este dispositivo</span></div>
+<p class="hint">Haz clic en el texto y usa ↑ / ↓ para moverte línea por línea; Re Pág / Av Pág avanza 10 líneas. Inicio / Fin va al principio o al final. ← / → cambia de manuscrito. El resaltado neón indica dónde vas. Puedes seleccionar y copiar texto normalmente.</p>
+</section></main>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),KEY='gelm_lyrics_reader_state';
+let catalog=[],current=null,lines=[],position=0,timer=null;
+function stateSave(){try{localStorage.setItem(KEY,JSON.stringify({file:current?.file||'',position}));}catch(e){}}
+function paint(){
+ const box=$('reader');box.innerHTML='';
+ lines.forEach((txt,i)=>{
+  const el=document.createElement('div');
+  el.className='line'+(i===position?' current':'')+( /^\s*\[.+\]\s*$/.test(txt)?' section':'');
+  el.textContent=txt||' ';
+  el.addEventListener('click',()=>{
+   const selected=window.getSelection?.().toString();
+   if(selected)return;
+   select(i,false);
+  });
+  box.append(el);
+ });
+ updateInfo();stateSave();
+}
+function updateInfo(){
+ const pct=lines.length?Math.round((position+1)/lines.length*100):0;
+ $('lineInfo').textContent='Línea '+(lines.length?position+1:0)+' / '+lines.length+' · Selecciona texto libremente o toca un verso para marcar tu avance';
+ $('percent').textContent=pct+'% recorrido';$('bar').style.width=pct+'%';
+}
+function select(i,scroll=true){
+ if(!lines.length)return;
+ const old=position;position=Math.max(0,Math.min(lines.length-1,i));
+ const box=$('reader'),oldEl=box.children[old],newEl=box.children[position];
+ oldEl?.classList.remove('current');newEl?.classList.add('current');
+ updateInfo();stateSave();
+ if(scroll)newEl?.scrollIntoView({block:'center',behavior:'smooth'});
+}
+function prepareAudio(item){
+ const audio=$('songAudio'),button=$('audioToggle'),strip=$('audioStrip');
+ audio.pause();audio.removeAttribute('src');audio.load();
+ button.classList.remove('playing');button.textContent='▶ Escuchar canción';
+ button.disabled=!item.audio;button.setAttribute('aria-label','Reproducir canción');
+ strip.hidden=true;$('audioState').textContent='LISTO';$('audioTime').textContent='0:00';
+ if(item.audio){audio.src=item.audio;strip.hidden=false;}
+}
+$('audioToggle').addEventListener('click',()=>{
+ const audio=$('songAudio'),button=$('audioToggle');
+ if(!audio.src)return;
+ if(audio.paused){audio.play().then(()=>{button.classList.add('playing');button.textContent='Ⅱ Pausar canción';$('audioState').textContent='REPRODUCIENDO';}).catch(()=>{$('audioState').textContent='TOCA PARA REINTENTAR';});}
+ else audio.pause();
+});
+$('songAudio').addEventListener('play',()=>{$('audioToggle').classList.add('playing');$('audioToggle').textContent='Ⅱ Pausar canción';$('audioState').textContent='REPRODUCIENDO';});
+$('songAudio').addEventListener('pause',()=>{$('audioToggle').classList.remove('playing');$('audioToggle').textContent='▶ Escuchar canción';if(!$('songAudio').ended)$('audioState').textContent='EN PAUSA';});
+$('songAudio').addEventListener('timeupdate',()=>{$('audioTime').textContent=Math.floor($('songAudio').currentTime/60)+':'+String(Math.floor($('songAudio').currentTime%60)).padStart(2,'0');});
+$('songAudio').addEventListener('ended',()=>{$('audioState').textContent='CANCIÓN FINALIZADA';});
+$('songAudio').addEventListener('error',()=>{$('audioState').textContent='NO SE PUDO CARGAR EL AUDIO';});
+let audioCatalog=[],installPrompt=null;
+const songAudio=$('songAudio');
+function setAudio(url,autoplay,title){
+ songAudio.pause();songAudio.src=url||'';songAudio.load();
+ $('audioStrip').hidden=!url;$('audioState').textContent='LISTO';$('audioTime').textContent='0:00';
+ $('audioToggle').disabled=!url;$('audioToggle').classList.remove('playing');$('audioToggle').textContent='▶ Escuchar canción';
+ if(title)$('audioState').textContent=title;
+ if(autoplay&&url)songAudio.play().catch(()=>{$('audioState').textContent='TOCA ESCUCHAR PARA INICIAR';});
+}
+$('audioToggle').addEventListener('click',()=>{if(!songAudio.src)return;if(songAudio.paused)songAudio.play().catch(()=>{$('audioState').textContent='NO SE PUDO INICIAR';});else songAudio.pause();});
+songAudio.addEventListener('play',()=>{$('audioToggle').classList.add('playing');$('audioToggle').textContent='Ⅱ Pausar canción';$('audioState').textContent='REPRODUCIENDO';});
+songAudio.addEventListener('pause',()=>{$('audioToggle').classList.remove('playing');$('audioToggle').textContent='▶ Escuchar canción';if(!songAudio.ended)$('audioState').textContent='EN PAUSA';});
+songAudio.addEventListener('timeupdate',()=>{$('audioTime').textContent=Math.floor(songAudio.currentTime/60)+':'+String(Math.floor(songAudio.currentTime%60)).padStart(2,'0');});
+songAudio.addEventListener('ended',()=>{$('audioState').textContent='CANCIÓN FINALIZADA';});
+$('audioLibrary').addEventListener('change',e=>{const song=audioCatalog[Number(e.target.value)];if(song)setAudio(song.url,true,song.title);});
+fetch('./audio-index.json').then(r=>{if(!r.ok)throw Error();return r.json();}).then(data=>{audioCatalog=data;const select=$('audioLibrary');select.innerHTML='<option value="">Selecciona cualquiera de las '+data.length+' canciones…</option>';data.forEach((s,i)=>select.add(new Option(s.title,String(i))));}).catch(()=>{$('audioLibrary').innerHTML='<option value="">Catálogo musical no disponible</option>';});
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').hidden=false;});
+$('installBtn').addEventListener('click',async()=>{if(!installPrompt){$('installBtn').textContent='Usa el menú del navegador · Añadir a pantalla de inicio';return;}installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('installBtn').hidden=true;});
+async function openFile(file){
+ const item=catalog.find(x=>x.file===file);if(!item)return;
+ setAudio(item.audio||item.audios?.[0]?.url||'',false);
+ prepareAudio(item);
+ $('reader').textContent='Abriendo manuscrito…';$('title').textContent=item.name;
+ try{
+  const r=await fetch('./lirycs/'+encodeURIComponent(item.file),{cache:'no-cache'});
+  if(!r.ok)throw Error('No se pudo abrir este archivo.');
+  const content=await r.text();current=item;
+  lines=content.replace(/\r/g,'').split('\n');position=0;
+  try{const s=JSON.parse(localStorage.getItem(KEY)||'{}');if(s.file===file)position=Math.min(Number(s.position)||0,lines.length-1);}catch(e){}
+  paint();
+ }catch(e){$('reader').textContent=e.message;}
+}
+function fill(list){const sel=$('songSelect'),old=sel.value;sel.innerHTML='<option value="">Selecciona una letra…</option>';list.forEach(x=>sel.add(new Option(x.name,x.file)));if(old&&list.some(x=>x.file===old))sel.value=old;}
+$('search').addEventListener('input',()=>{const q=$('search').value.toLocaleLowerCase('es');fill(catalog.filter(x=>x.name.toLocaleLowerCase('es').includes(q)));});
+$('songSelect').addEventListener('change',e=>{if(e.target.value)openFile(e.target.value);});
+$('prev').addEventListener('click',()=>select(position-1));$('next').addEventListener('click',()=>select(position+1));
+function stop(){if(timer)clearInterval(timer);timer=null;$('auto').textContent='▶ Avance';}
+$('auto').addEventListener('click',()=>{if(timer){stop();return;}if(!lines.length)return;$('auto').textContent='Ⅱ Pausar';timer=setInterval(()=>{if(position>=lines.length-1){stop();return;}select(position+1);},2200);});
+// Navegación de teclado: solo actúa cuando el lector tiene el foco.
+window.addEventListener('keydown',e=>{
+ const target=e.target;
+ if(target&&(/INPUT|SELECT|TEXTAREA|BUTTON/.test(target.tagName)))return;
+ const reader=$('reader');
+ const focused=target===reader||reader.contains(target);
+ if(!focused)return;
+ if(window.getSelection?.().toString())return;
+ let handled=true;
+ switch(e.key){
+  case 'ArrowDown': select(position+1); break;
+  case 'ArrowUp': select(position-1); break;
+  case 'PageDown': select(position+10); break;
+  case 'PageUp': select(position-10); break;
+  case 'Home': select(0); break;
+  case 'End': select(lines.length-1); break;
+  case 'ArrowRight': changeManuscript(1); break;
+  case 'ArrowLeft': changeManuscript(-1); break;
+  default: handled=false;
+ }
+ if(handled)e.preventDefault();
+});
+function changeManuscript(direction){
+ if(!catalog.length||!current)return;
+ const i=catalog.findIndex(x=>x.file===current.file);
+ const nextIndex=(i+direction+catalog.length)%catalog.length;
+ const item=catalog[nextIndex];
+ $('songSelect').value=item.file;
+ openFile(item.file);
+}
+$('reader').addEventListener('click',()=>$('reader').focus({preventScroll:true}));
+window.addEventListener('storage',e=>{if(e.key===KEY&&current){try{const s=JSON.parse(e.newValue||'{}');if(s.file===current.file&&Number.isFinite(s.position)){position=Math.min(s.position,lines.length-1);paint();}}catch(err){}}});
+fetch('./lyrics-index.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error();return r.json();}).then(data=>{catalog=data;fill(catalog);$('total').textContent=catalog.length+' manuscritos';let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){}const first=catalog.find(x=>x.file===saved.file)||catalog[0];if(first){$('songSelect').value=first.file;openFile(first.file);}}).catch(()=>$('reader').textContent='No se pudo cargar la biblioteca de letras.');
+})();
+</script></body></html>
