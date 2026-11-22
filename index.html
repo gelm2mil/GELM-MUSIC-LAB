@@ -28,7 +28,7 @@ button{background:#132b40;cursor:pointer;font-weight:700}button.primary{backgrou
 @media(max-width:650px){header{padding:10px 12px}.brand b{font-size:13px}.controls{grid-template-columns:1fr 1fr}.controls input{grid-column:1/-1}.controls select{grid-column:1/-1}.controls button{padding:10px 7px;font-size:12px}.panel{padding:10px}.reader{height:65vh;min-height:280px;padding:9px;font-size:13px;line-height:1.85}.status{font-size:10px}.songhead{align-items:flex-start}.audio-toggle{min-height:40px;padding:8px 10px}.audio-toggle span{display:none}}
 </style></head>
 <body>
-<header><div class="brand"><b>GT-GELM</b><small>GUATEMALA, TU NOMBRE INMORTAL</small></div><div style="display:flex;align-items:center;gap:10px"><span class="eyebrow">BIBLIOTECA MUSICAL</span><button id="installBtn" class="install-btn" type="button" hidden>⇩ Instalar</button></div></header>
+<header><div class="brand"><b>GT-GELM</b><small>GUATEMALA, TU NOMBRE INMORTAL</small></div><div style="display:flex;align-items:center;gap:10px"><span class="eyebrow">BIBLIOTECA MUSICAL</span><button id="installBtn" class="install-btn" type="button">⇩ Instalar</button></div></header>
 <main>
 <div class="topline"><span class="eyebrow">LUGARES · HISTORIAS · CUENTOS · TRADICIONES HECHOS CANCIÓN</span><span id="total" class="counter">Cargando…</span></div>
 <section class="panel">
@@ -113,7 +113,7 @@ songAudio.addEventListener('ended',()=>{$('audioState').textContent='CANCIÓN FI
 $('audioLibrary').addEventListener('change',e=>{const song=audioCatalog[Number(e.target.value)];if(song)setAudio(song.url,true,song.title);});
 fetch('./audio-index.json').then(r=>{if(!r.ok)throw Error();return r.json();}).then(data=>{audioCatalog=data;const select=$('audioLibrary');select.innerHTML='<option value="">Selecciona cualquiera de las '+data.length+' canciones…</option>';data.forEach((s,i)=>select.add(new Option(s.title,String(i))));}).catch(()=>{$('audioLibrary').innerHTML='<option value="">Catálogo musical no disponible</option>';});
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').hidden=false;});
-$('installBtn').addEventListener('click',async()=>{if(!installPrompt){$('installBtn').textContent='Usa el menú del navegador · Añadir a pantalla de inicio';return;}installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('installBtn').hidden=true;});
+$('installBtn').addEventListener('click',async()=>{if(!installPrompt){$('audioState').textContent='En el menú del navegador elige “Añadir a pantalla de inicio” o “Instalar aplicación”.';return;}installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('installBtn').hidden=true;});
 async function openFile(file){
  const item=catalog.find(x=>x.file===file);if(!item)return;
  setAudio(item.audio||item.audios?.[0]?.url||'',false);
@@ -167,5 +167,6 @@ function changeManuscript(direction){
 $('reader').addEventListener('click',()=>$('reader').focus({preventScroll:true}));
 window.addEventListener('storage',e=>{if(e.key===KEY&&current){try{const s=JSON.parse(e.newValue||'{}');if(s.file===current.file&&Number.isFinite(s.position)){position=Math.min(s.position,lines.length-1);paint();}}catch(err){}}});
 fetch('./lyrics-index.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error();return r.json();}).then(data=>{catalog=data;fill(catalog);$('total').textContent=catalog.length+' manuscritos';let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){}const first=catalog.find(x=>x.file===saved.file)||catalog[0];if(first){$('songSelect').value=first.file;openFile(first.file);}}).catch(()=>$('reader').textContent='No se pudo cargar la biblioteca de letras.');
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
 })();
 </script></body></html>
