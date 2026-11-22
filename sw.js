@@ -1,21 +1,10 @@
-const CACHE='gt-gelm-player-v13';
-const ASSETS=['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./icons/icon.svg','./letras.html','./musica.json','./lyrics-index.json'];
-self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',event=>{
- const request=event.request;if(request.method!=='GET')return;
- const url=new URL(request.url);if(url.origin!==location.origin)return;
- const path=url.pathname;
- const networkFirst=['/app.js','/musica.json','/index.html','/styles.css','/manifest.webmanifest'].some(item=>path.endsWith(item));
- if(networkFirst){
-  event.respondWith(fetch(request,{cache:'no-store'}).then(response=>{
-   if(response.ok)caches.open(CACHE).then(cache=>cache.put(request,response.clone()));
-   return response;
-  }).catch(()=>caches.match(request).then(cached=>cached||Response.error())));
-  return;
- }
- event.respondWith(caches.match(request).then(cached=>cached||fetch(request).then(response=>{
-  if(response.ok)caches.open(CACHE).then(cache=>cache.put(request,response.clone()));
-  return response;
- }).catch(()=>caches.match('./index.html'))));
+const CACHE='gt-gelm-library-pwa-v1';
+const APP=['./','./index.html','./letras.html','./lyrics-index.json','./audio-index.json','./manifest.webmanifest','./icons/icon.svg'];
+self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(APP)).then(()=>self.skipWaiting())));
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+self.addEventListener('fetch',e=>{
+ const r=e.request;if(r.method!=='GET')return;
+ const u=new URL(r.url);if(u.origin!==self.location.origin)return;
+ if(r.destination==='audio')return;
+ e.respondWith(caches.match(r).then(cached=>cached||fetch(r).then(res=>{if(res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(r,copy));}return res;}).catch(()=>caches.match('./index.html'))));
 });
