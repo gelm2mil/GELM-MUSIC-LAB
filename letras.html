@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07111d"><title>GT-GELM · Letras y manuscritos</title>
+<meta name="theme-color" content="#07111d"><meta name="description" content="Biblioteca musical y de manuscritos GT-GELM. Lee y escucha Guatemala."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icons/icon.svg"><title>GT-GELM · Biblioteca musical</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;700;800&display=swap');
 :root{color-scheme:dark;--bg:#07111d;--panel:#0d1b2a;--line:#1e3b51;--text:#eaf5ff;--muted:#91a9bd;--cyan:#00eaff;--green:#00ffc8;--gold:#ffc857}
@@ -15,7 +15,7 @@ main{width:min(1100px,100%);margin:auto;padding:clamp(12px,3vw,28px)}
 .controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(170px,1fr) auto auto auto;gap:8px;margin-bottom:12px}
 input,select,button{font:inherit;color:var(--text);border:1px solid #2c5069;border-radius:9px;background:#071522;padding:10px;min-width:0}
 button{background:#132b40;cursor:pointer;font-weight:700}button.primary{background:#006d76;border-color:var(--cyan)}button:active{transform:translateY(1px)}
-.title{font-size:clamp(17px,3vw,25px);font-weight:800;margin:8px 0 3px;overflow-wrap:anywhere}.sub{color:var(--muted);font-size:11px}
+.title{font-size:clamp(17px,3vw,25px);font-weight:800;margin:8px 0 3px;overflow-wrap:anywhere}.sub{color:var(--muted);font-size:11px}.install-btn{border-color:var(--green);color:var(--green);background:#073b39;min-height:40px;white-space:nowrap}.songhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}.songheading{min-width:0;flex:1}.songheading .title{margin:0 0 3px}.audio-toggle{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:9px 13px;border-color:var(--cyan);color:#eafcff;background:#07515d;white-space:nowrap}.audio-toggle:disabled{opacity:.4;cursor:not-allowed}.audio-toggle.playing{background:#086b53;border-color:var(--green)}.audio-library{display:flex;align-items:center;gap:8px;margin-top:10px}.audio-library label{font-size:10px;color:var(--muted);white-space:nowrap}.audio-library select{flex:1}.audio-strip{display:flex;justify-content:space-between;margin:8px 2px 0;color:var(--green);font:11px 'DM Mono',monospace}.audio-strip[hidden]{display:none}
 .songhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}.songheading{min-width:0;flex:1}.songheading .title{margin:0 0 3px}.audio-toggle{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:9px 13px;border-color:#00eaff;color:#eafcff;background:#07515d;white-space:nowrap}.audio-toggle:disabled{opacity:.4;cursor:not--allowed}.audio-toggle.playing{background:#086b53;border-color:#00ffc8}.audio-strip{display:flex;justify-content:space-between;margin:8px 2px 0;color:var(--green);font:11px 'DM Mono',monospace}.audio-strip[hidden]{display:none}
 
 .reader{margin-top:14px;padding:clamp(10px,2vw,22px);height:min(68vh,760px);min-height:320px;overflow:auto;background:#050f19;border:1px solid #18384b;border-radius:11px;font:clamp(13px,1.6vw,16px)/2 'DM Mono',monospace}
@@ -28,7 +28,7 @@ button{background:#132b40;cursor:pointer;font-weight:700}button.primary{backgrou
 @media(max-width:650px){header{padding:10px 12px}.brand b{font-size:13px}.controls{grid-template-columns:1fr 1fr}.controls input{grid-column:1/-1}.controls select{grid-column:1/-1}.controls button{padding:10px 7px;font-size:12px}.panel{padding:10px}.reader{height:65vh;min-height:280px;padding:9px;font-size:13px;line-height:1.85}.status{font-size:10px}.songhead{align-items:flex-start}.audio-toggle{min-height:40px;padding:8px 10px}.audio-toggle span{display:none}}
 </style></head>
 <body>
-<header><div class="brand"><b>GT-GELM</b><small>GUATEMALA, TU NOMBRE INMORTAL</small></div><span class="eyebrow">LECTOR DE MANUSCRITOS</span></header>
+<header><div class="brand"><b>GT-GELM</b><small>GUATEMALA, TU NOMBRE INMORTAL</small></div><div style="display:flex;align-items:center;gap:10px"><span class="eyebrow">BIBLIOTECA MUSICAL</span><button id="installBtn" class="install-btn" type="button" hidden>⇩ Instalar</button></div></header>
 <main>
 <div class="topline"><span class="eyebrow">LUGARES · HISTORIAS · CUENTOS · TRADICIONES HECHOS CANCIÓN</span><span id="total" class="counter">Cargando…</span></div>
 <section class="panel">
@@ -37,7 +37,7 @@ button{background:#132b40;cursor:pointer;font-weight:700}button.primary{backgrou
 <select id="songSelect" aria-label="Seleccionar manuscrito"><option value="">Selecciona una letra…</option></select>
 <button id="prev">↑ Anterior</button><button id="next" class="primary">↓ Siguiente</button><button id="auto">▶ Avance</button>
 </div>
-<div class="songhead"><div class="songheading"><div class="title" id="title">Selecciona un manuscrito</div><div class="sub" id="lineInfo">Toca una línea para marcar dónde vas copiando</div></div><button id="audioToggle" class="audio-toggle" type="button" disabled aria-label="Reproducir canción" title="Reproducir canción">▶ <span>Escuchar canción</span></button></div>
+<div class="songhead"><div class="songheading"><div class="songhead"><div class="songheading"><div class="title" id="title">Selecciona un manuscrito</div><div class="sub" id="lineInfo">Toca una línea para marcar dónde vas copiando</div></div><button id="audioToggle" class="audio-toggle" type="button" disabled>▶ Escuchar canción</button></div><div class="audio-library"><label for="audioLibrary">TODAS LAS CANCIONES</label><select id="audioLibrary"><option value="">Cargando catálogo musical…</option></select></div><div class="audio-strip" id="audioStrip" hidden><span id="audioState">LISTO</span><span id="audioTime">0:00</span></div><audio id="songAudio" preload="none" playsinline></audio></div><button id="audioToggle" class="audio-toggle" type="button" disabled aria-label="Reproducir canción" title="Reproducir canción">▶ <span>Escuchar canción</span></button></div>
 <div class="audio-strip" id="audioStrip" hidden><span id="audioState">LISTO</span><span id="audioTime">0:00</span></div><audio id="songAudio" preload="none" playsinline></audio>
 <div id="reader" class="reader" tabindex="0"><div class="sub">Cargando biblioteca de letras GT-GELM…</div></div>
 <div class="progress"><div id="bar"></div></div>
@@ -96,8 +96,27 @@ $('songAudio').addEventListener('pause',()=>{$('audioToggle').classList.remove('
 $('songAudio').addEventListener('timeupdate',()=>{$('audioTime').textContent=Math.floor($('songAudio').currentTime/60)+':'+String(Math.floor($('songAudio').currentTime%60)).padStart(2,'0');});
 $('songAudio').addEventListener('ended',()=>{$('audioState').textContent='CANCIÓN FINALIZADA';});
 $('songAudio').addEventListener('error',()=>{$('audioState').textContent='NO SE PUDO CARGAR EL AUDIO';});
+let audioCatalog=[],installPrompt=null;
+const songAudio=$('songAudio');
+function setAudio(url,autoplay,title){
+ songAudio.pause();songAudio.src=url||'';songAudio.load();
+ $('audioStrip').hidden=!url;$('audioState').textContent='LISTO';$('audioTime').textContent='0:00';
+ $('audioToggle').disabled=!url;$('audioToggle').classList.remove('playing');$('audioToggle').textContent='▶ Escuchar canción';
+ if(title)$('audioState').textContent=title;
+ if(autoplay&&url)songAudio.play().catch(()=>{$('audioState').textContent='TOCA ESCUCHAR PARA INICIAR';});
+}
+$('audioToggle').addEventListener('click',()=>{if(!songAudio.src)return;if(songAudio.paused)songAudio.play().catch(()=>{$('audioState').textContent='NO SE PUDO INICIAR';});else songAudio.pause();});
+songAudio.addEventListener('play',()=>{$('audioToggle').classList.add('playing');$('audioToggle').textContent='Ⅱ Pausar canción';$('audioState').textContent='REPRODUCIENDO';});
+songAudio.addEventListener('pause',()=>{$('audioToggle').classList.remove('playing');$('audioToggle').textContent='▶ Escuchar canción';if(!songAudio.ended)$('audioState').textContent='EN PAUSA';});
+songAudio.addEventListener('timeupdate',()=>{$('audioTime').textContent=Math.floor(songAudio.currentTime/60)+':'+String(Math.floor(songAudio.currentTime%60)).padStart(2,'0');});
+songAudio.addEventListener('ended',()=>{$('audioState').textContent='CANCIÓN FINALIZADA';});
+$('audioLibrary').addEventListener('change',e=>{const song=audioCatalog[Number(e.target.value)];if(song)setAudio(song.url,true,song.title);});
+fetch('./audio-index.json').then(r=>{if(!r.ok)throw Error();return r.json();}).then(data=>{audioCatalog=data;const select=$('audioLibrary');select.innerHTML='<option value="">Selecciona cualquiera de las '+data.length+' canciones…</option>';data.forEach((s,i)=>select.add(new Option(s.title,String(i))));}).catch(()=>{$('audioLibrary').innerHTML='<option value="">Catálogo musical no disponible</option>';});
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('installBtn').hidden=false;});
+$('installBtn').addEventListener('click',async()=>{if(!installPrompt){$('installBtn').textContent='Usa el menú del navegador · Añadir a pantalla de inicio';return;}installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('installBtn').hidden=true;});
 async function openFile(file){
  const item=catalog.find(x=>x.file===file);if(!item)return;
+ setAudio(item.audio||item.audios?.[0]?.url||'',false);
  prepareAudio(item);
  $('reader').textContent='Abriendo manuscrito…';$('title').textContent=item.name;
  try{
