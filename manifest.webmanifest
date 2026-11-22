@@ -1,5 +1,5 @@
 {
-  "name": "GT-GELM — Guatemala, tu nombre inmortal",
+  "name": "GT-GELM · Biblioteca musical",
   "short_name": "GT-GELM",
   "start_url": "./",
   "scope": "./",
@@ -7,13 +7,13 @@
   "orientation": "any",
   "background_color": "#07111d",
   "theme_color": "#07111d",
+  "description": "Lee y escucha las canciones, historias y tradiciones de Guatemala.",
   "icons": [
     {
-      "src": "icons/icon.svg",
+      "src": "./icons/icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ],
-  "description": "Lugares, historias, cuentos y tradiciones hechos canción. Laboratorio de manuscritos GT-GELM."
+  ]
 }
