@@ -2,7 +2,13 @@
   {
     "file": "1-GUATEMALA-22-CORAZONES.txt",
     "name": "1-GUATEMALA-22-CORAZONES",
-    "audio": "https://divine-king-c86b.chapin7839.workers.dev/056-historia-de-mi-tierra-al-sabor.mp3"
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/056-historia-de-mi-tierra-al-sabor.mp3",
+    "audios": [
+      {
+        "title": "056 Historia de mi tierra (Al sabor)",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/056-historia-de-mi-tierra-al-sabor.mp3"
+      }
+    ]
   },
   {
     "file": "10-ANTIGUA-DE-MI-VIDA.txt",
@@ -30,11 +36,29 @@
   },
   {
     "file": "16-EL-ZUMBIDO-DEL-RIEL.txt",
-    "name": "16-EL-ZUMBIDO-DEL-RIEL"
+    "name": "16-EL-ZUMBIDO-DEL-RIEL",
+    "audios": [
+      {
+        "title": "036 EL Zumbido Del Riel",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/036-el-zumbido-del-riel.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/036-el-zumbido-del-riel.mp3"
   },
   {
     "file": "17-LAS-QUINCE-JORNADAS-DEL-VIEJO-1.txt",
-    "name": "17-LAS-QUINCE-JORNADAS-DEL-VIEJO-1"
+    "name": "17-LAS-QUINCE-JORNADAS-DEL-VIEJO-1",
+    "audios": [
+      {
+        "title": "070 Las Quince Jornadas Del Viejo 1",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/070-las-quince-jornadas-del-viejo-1.mp3"
+      },
+      {
+        "title": "071 Las Quince Jornadas Del Viejo",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/071-las-quince-jornadas-del-viejo.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/070-las-quince-jornadas-del-viejo-1.mp3"
   },
   {
     "file": "18-LAS-QUINCE-JORNADAS-DEL-VIEJO-2.txt",
@@ -50,7 +74,18 @@
   },
   {
     "file": "2-RECORDANDO-EL-ROCK-NACIONAL.txt",
-    "name": "2-RECORDANDO-EL-ROCK-NACIONAL"
+    "name": "2-RECORDANDO-EL-ROCK-NACIONAL",
+    "audios": [
+      {
+        "title": "082 Recordando EL Rock Nacional AL Sabor 1",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/082-recordando-el-rock-nacional-al-sabor-1.mp3"
+      },
+      {
+        "title": "083 Recordando EL Rock Nacional AL Sabor",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/083-recordando-el-rock-nacional-al-sabor.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/082-recordando-el-rock-nacional-al-sabor-1.mp3"
   },
   {
     "file": "20-EL-IXCAN-INDOMABLE.txt",
@@ -70,7 +105,18 @@
   },
   {
     "file": "24 de junio 2026 dia de la esposa de don chente (lyrics) - usesuno.com.txt",
-    "name": "24 de junio 2026 dia de la esposa de don chente (lyrics) - usesuno.com"
+    "name": "24 de junio 2026 dia de la esposa de don chente (lyrics) - usesuno.com",
+    "audios": [
+      {
+        "title": "005 24 DE Junio 2026 Dia DE LA Esposa DE Don Chente 1",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/005-24-de-junio-2026-dia-de-la-esposa-de-don-chente-1.mp3"
+      },
+      {
+        "title": "006 24 DE Junio 2026 Dia DE LA Esposa DE Don Chente",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/006-24-de-junio-2026-dia-de-la-esposa-de-don-chente.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/005-24-de-junio-2026-dia-de-la-esposa-de-don-chente-1.mp3"
   },
   {
     "file": "24-ORIENTE-QUERIDO-POZAS-VIVAS.txt",
@@ -154,7 +200,14 @@
   },
   {
     "file": "41-RIO-ENCANTADO-HIJO-DE-LEMOA.txt",
-    "name": "41-RIO-ENCANTADO-HIJO-DE-LEMOA"
+    "name": "41-RIO-ENCANTADO-HIJO-DE-LEMOA",
+    "audios": [
+      {
+        "title": "033 EL Rio Encantado EL Hijo DE Lemoa",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/033-el-rio-encantado-el-hijo-de-lemoa.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/033-el-rio-encantado-el-hijo-de-lemoa.mp3"
   },
   {
     "file": "42-MADRE-VIEJA-EL-MISTERIO-DE-MADRE-VIEJA.txt",
@@ -206,7 +259,14 @@
   },
   {
     "file": "8-EL-CALLEJON-DEL-MISTERIO.txt",
-    "name": "8-EL-CALLEJON-DEL-MISTERIO"
+    "name": "8-EL-CALLEJON-DEL-MISTERIO",
+    "audios": [
+      {
+        "title": "029 EL Callejon Del Misterio",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/029-el-callejon-del-misterio.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/029-el-callejon-del-misterio.mp3"
   },
   {
     "file": "9-EL-CANTO-DE-LOS-BOHEMIOS.txt",
@@ -238,11 +298,25 @@
   },
   {
     "file": "Amatitlán – Capítulo II _ Cuando la Vida Despertó en sus Orillas 🇬🇹 (lyrics) - usesuno.com.txt",
-    "name": "Amatitlán – Capítulo II _ Cuando la Vida Despertó en sus Orillas 🇬🇹 (lyrics) - usesuno.com"
+    "name": "Amatitlán – Capítulo II _ Cuando la Vida Despertó en sus Orillas 🇬🇹 (lyrics) - usesuno.com",
+    "audios": [
+      {
+        "title": "011 Amatitlan Capitulo II Cuando LA Vida Desperto EN Sus Orillas",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/011-amatitlan-capitulo-ii-cuando-la-vida-desperto-en-sus-orillas.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/011-amatitlan-capitulo-ii-cuando-la-vida-desperto-en-sus-orillas.mp3"
   },
   {
     "file": "Amatitlán – Capítulo III _ Donde un Pueblo Encontró su Hogar 🇬🇹 (lyrics) - usesuno.com.txt",
-    "name": "Amatitlán – Capítulo III _ Donde un Pueblo Encontró su Hogar 🇬🇹 (lyrics) - usesuno.com"
+    "name": "Amatitlán – Capítulo III _ Donde un Pueblo Encontró su Hogar 🇬🇹 (lyrics) - usesuno.com",
+    "audios": [
+      {
+        "title": "013 Amatitlan Capitulo Iii Donde UN Pueblo Encontro SU Hogar",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/013-amatitlan-capitulo-iii-donde-un-pueblo-encontro-su-hogar.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/013-amatitlan-capitulo-iii-donde-un-pueblo-encontro-su-hogar.mp3"
   },
   {
     "file": "Aprendiendo Guatemala (lyrics) - usesuno.com.txt",
@@ -278,7 +352,14 @@
   },
   {
     "file": "Con amor a todos los padres del mundo (lyrics) - usesuno.com.txt",
-    "name": "Con amor a todos los padres del mundo (lyrics) - usesuno.com"
+    "name": "Con amor a todos los padres del mundo (lyrics) - usesuno.com",
+    "audios": [
+      {
+        "title": "025 Con Amor A Todos Los Padres Del Mundo",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/025-con-amor-a-todos-los-padres-del-mundo.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/025-con-amor-a-todos-los-padres-del-mundo.mp3"
   },
   {
     "file": "Crique pablo (lyrics) - usesuno.com.txt",
@@ -398,7 +479,14 @@
   },
   {
     "file": "LA LAGUNA DEL MACHETE _ El Encanto de Madre Vieja (lyrics) - usesuno.com.txt",
-    "name": "LA LAGUNA DEL MACHETE _ El Encanto de Madre Vieja (lyrics) - usesuno.com"
+    "name": "LA LAGUNA DEL MACHETE _ El Encanto de Madre Vieja (lyrics) - usesuno.com",
+    "audios": [
+      {
+        "title": "061 LA Laguna Del Machete EL Encanto DE Madre Vieja",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/061-la-laguna-del-machete-el-encanto-de-madre-vieja.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/061-la-laguna-del-machete-el-encanto-de-madre-vieja.mp3"
   },
   {
     "file": "LA RUTA DE LOS RECUERDOS (lyrics) - usesuno.com.txt",
@@ -478,7 +566,14 @@
   },
   {
     "file": "Suchiate – Capítulo I _ El Río de las Flores 🇬🇹 (lyrics) - usesuno.com.txt",
-    "name": "Suchiate – Capítulo I _ El Río de las Flores 🇬🇹 (lyrics) - usesuno.com"
+    "name": "Suchiate – Capítulo I _ El Río de las Flores 🇬🇹 (lyrics) - usesuno.com",
+    "audios": [
+      {
+        "title": "088 Suchiate Capitulo I EL Rio DE Las Flores",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/088-suchiate-capitulo-i-el-rio-de-las-flores.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/088-suchiate-capitulo-i-el-rio-de-las-flores.mp3"
   },
   {
     "file": "TITÁN DE BARRO Y MEMORIA GT-GELM (lyrics) - usesuno.com.txt",
@@ -510,7 +605,14 @@
   },
   {
     "file": "Title_ 🇬🇹 Aprendiendo de Nuestra Bella Guatemala (lyrics) - usesuno.com.txt",
-    "name": "Title_ 🇬🇹 Aprendiendo de Nuestra Bella Guatemala (lyrics) - usesuno.com"
+    "name": "Title_ 🇬🇹 Aprendiendo de Nuestra Bella Guatemala (lyrics) - usesuno.com",
+    "audios": [
+      {
+        "title": "095 Title GT Aprendiendo DE Nuestra Bella Guatemala",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/095-title-gt-aprendiendo-de-nuestra-bella-guatemala.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/095-title-gt-aprendiendo-de-nuestra-bella-guatemala.mp3"
   },
   {
     "file": "Tulate (lyrics) - usesuno.com.txt",
@@ -558,7 +660,14 @@
   },
   {
     "file": "🇬🇹 GUATEMALA PROFUNDA _ El Mapa Secreto de Nuestra Tierra _ GT - GELM (lyrics) - usesuno.com.txt",
-    "name": "🇬🇹 GUATEMALA PROFUNDA _ El Mapa Secreto de Nuestra Tierra _ GT - GELM (lyrics) - usesuno.com"
+    "name": "🇬🇹 GUATEMALA PROFUNDA _ El Mapa Secreto de Nuestra Tierra _ GT - GELM (lyrics) - usesuno.com",
+    "audios": [
+      {
+        "title": "105 Guatemala Profunda EL Mapa Secreto DE Nuestra Tierra GT Gelm",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/105-guatemala-profunda-el-mapa-secreto-de-nuestra-tierra-gt-gelm.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/105-guatemala-profunda-el-mapa-secreto-de-nuestra-tierra-gt-gelm.mp3"
   },
   {
     "file": "🇬🇹 LA RUTA DE LA LÍNEA (lyrics) - usesuno.com.txt",
@@ -586,7 +695,14 @@
   },
   {
     "file": "🏔️ LOS GUARDIANES DE LOS CUCHUMATANES _ Tradiciones de Todos Santos _ GT-GELM (lyrics) - usesuno.com.txt",
-    "name": "🏔️ LOS GUARDIANES DE LOS CUCHUMATANES _ Tradiciones de Todos Santos _ GT-GELM (lyrics) - usesuno.com"
+    "name": "🏔️ LOS GUARDIANES DE LOS CUCHUMATANES _ Tradiciones de Todos Santos _ GT-GELM (lyrics) - usesuno.com",
+    "audios": [
+      {
+        "title": "111 Los Guardianes DE Los Cuchumatanes Tradiciones DE Todos Santos GT Gelm",
+        "url": "https://divine-king-c86b.chapin7839.workers.dev/111-los-guardianes-de-los-cuchumatanes-tradiciones-de-todos-santos-gt-gelm.mp3"
+      }
+    ],
+    "audio": "https://divine-king-c86b.chapin7839.workers.dev/111-los-guardianes-de-los-cuchumatanes-tradiciones-de-todos-santos-gt-gelm.mp3"
   },
   {
     "file": "🏺 SAMABAJ _ La Ciudad Perdida Bajo Atitlán _ GT - GELM (lyrics) - usesuno.com.txt",
